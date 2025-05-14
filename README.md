@@ -14,11 +14,13 @@
   - [2.2 ICC OpenSSL](#22-icc-openssl)   
   - [2.3 OpenVPN](#23-openvpn)   
   - [2.4 Hyperledger Besu](#24-hyperledger-besu)   
-  - [2.5 ICCHSM](#25-icchsm)   
+  - [2.5 ICCHSM](#25-icchsm)
+    
 [3. Architecture](#3-architecture)   
   - [3.1 High-Level Architecture Diagram](#31-high-level-architecture-diagram)   
   - [3.2 PQC Blockchain Structure](#32-pqc-blockchain-structure)   
-    - [Blockchain Framework Structure Diagram](#blockchain-framework-structure-diagram)   
+  - [Blockchain Framework Structure Diagram](#blockchain-framework-structure-diagram)
+    
 [4. Implementation Details](#4-implementation-details)   
   - [4.1 Installing ICC OpenSSL](#41-installing-icc-openssl)   
   - [4.2 Installing and Configuring ICCHSM](#42-installing-and-configuring-icchsm)   
@@ -32,13 +34,15 @@
     - [4.4.1 Install Besu](#441-install-besu)   
     - [4.4.2 Integrate ICC OpenSSL for Transaction Signing](#442-integrate-icc-openssl-for-transaction-signing)   
     - [4.4.3 Integrate ICCHSM for PQC Multi-Signature Operations](#443-integrate-icchsm-for-pqc-multi-signature-operations)   
-    - [4.4.4 Configure Besu P2P over OpenVPN](#444-configure-besu-p2p-over-openvpn)   
+    - [4.4.4 Configure Besu P2P over OpenVPN](#444-configure-besu-p2p-over-openvpn)
+      
 [5. ICCHSM PQC Methods](#5-icchsm-pqc-methods)   
 [6. System Requirements](#6-system-requirements)   
 [7. Demonstration Programs with Solidity Smart Contracts](#7-demonstration-programs-with-solidity-smart-contracts)   
   - [7.1 ICOToken and LockingContract on Hyperledger Besu](#71-icotoken-and-lockingcontract-on-hyperledger-besu)   
   - [7.2 WrappedICOToken and MintingContract on Ethereum](#72-wrappedicotoken-and-mintingcontract-on-ethereum)   
-  - [7.3 Cross-Chain Bridge DApp with PQC Multi-Signature](#73-cross-chain-bridge-dapp-with-pqc-multi-signature)   
+  - [7.3 Cross-Chain Bridge DApp with PQC Multi-Signature](#73-cross-chain-bridge-dapp-with-pqc-multi-signature)
+    
 [8. Security Analysis](#8-security-analysis)   
 [9. Performance Considerations](#9-performance-considerations)   
 [10. Sandbox Implementation](#10-sandbox-implementation)   
