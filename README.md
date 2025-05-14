@@ -1,5 +1,49 @@
 # PQC/2035: Sandbox - Initiating a Post-Quantum Secure Permissioned Blockchain with ICC OpenSSL and ICCHSM
 
+---
+
+# Table of Contents
+
+- [Abstract](#abstract)
+- [1. Introduction](#1-introduction)
+- [2. Background](#2-background)
+  - [2.1 Post-Quantum Cryptography (PQC)](#21-post-quantum-cryptography-pqc)
+  - [2.2 ICC OpenSSL](#22-icc-openssl)
+  - [2.3 OpenVPN](#23-openvpn)
+  - [2.4 Hyperledger Besu](#24-hyperledger-besu)
+  - [2.5 ICCHSM](#25-icchsm)
+- [3. Architecture](#3-architecture)
+  - [3.1 High-Level Architecture Diagram](#31-high-level-architecture-diagram)
+  - [3.2 PQC Blockchain Structure](#32-pqc-blockchain-structure)
+    - [Blockchain Framework Structure Diagram](#blockchain-framework-structure-diagram)
+- [4. Implementation Details](#4-implementation-details)
+  - [4.1 Installing ICC OpenSSL](#41-installing-icc-openssl)
+  - [4.2 Installing and Configuring ICCHSM](#42-installing-and-configuring-icchsm)
+  - [4.3 Configuring OpenVPN with ICC OpenSSL](#43-configuring-openvpn-with-icc-openssl)
+    - [4.3.1 Generate PQC Keys and Certificates](#431-generate-pqc-keys-and-certificates)
+    - [4.3.2 OpenVPN Configuration](#432-openvpn-configuration)
+    - [4.3.3 Framework Diagram 1: OpenVPN Initialization and TLS Handshake with Besu Context](#433-framework-diagram-1-openvpn-initialization-and-tls-handshake-with-besu-context)
+    - [4.3.4 Framework Diagram 2: OpenVPN Data Channel and ICC OpenSSL with Besu](#434-framework-diagram-2-openvpn-data-channel-and-icc-openssl-with-besu)
+    - [4.3.5 Start OpenVPN](#435-start-openvpn)
+  - [4.4 Configuring Hyperledger Besu with ICC OpenSSL and ICCHSM](#44-configuring-hyperledger-besu-with-icc-openssl-and-icchsm)
+    - [4.4.1 Install Besu](#441-install-besu)
+    - [4.4.2 Integrate ICC OpenSSL for Transaction Signing](#442-integrate-icc-openssl-for-transaction-signing)
+    - [4.4.3 Integrate ICCHSM for PQC Multi-Signature Operations](#443-integrate-icchsm-for-pqc-multi-signature-operations)
+    - [4.4.4 Configure Besu P2P over OpenVPN](#444-configure-besu-p2p-over-openvpn)
+- [5. ICCHSM PQC Methods](#5-icchsm-pqc-methods)
+- [6. System Requirements](#6-system-requirements)
+- [7. Demonstration Programs with Solidity Smart Contracts](#7-demonstration-programs-with-solidity-smart-contracts)
+  - [7.1 ICOToken and LockingContract on Hyperledger Besu](#71-icotoken-and-lockingcontract-on-hyperledger-besu)
+  - [7.2 WrappedICOToken and MintingContract on Ethereum](#72-wrappedicotoken-and-mintingcontract-on-ethereum)
+  - [7.3 Cross-Chain Bridge DApp with PQC Multi-Signature](#73-cross-chain-bridge-dapp-with-pqc-multi-signature)
+- [8. Security Analysis](#8-security-analysis)
+- [9. Performance Considerations](#9-performance-considerations)
+- [10. Sandbox Implementation](#10-sandbox-implementation)
+- [Conclusion](#conclusion)
+- [Technology Partners](#technology-partners)
+
+---
+
 ## Abstract
 
 Quantum computing advancements threaten the cryptographic foundations of blockchain systems, particularly traditional algorithms like RSA and ECC. Permissioned blockchains, vital for enterprise applications due to their controlled access and privacy, require quantum-resistant solutions to protect sensitive data. This whitepaper presents a robust framework for constructing a post-quantum secure (PQC) permissioned blockchain using **Hyperledger Besu** as the blockchain platform, **ICC OpenSSL** for quantum-resistant cryptography, **ICCHSM** for PQC encryption and multi-signature operations, and **OpenVPN** for secure node communication. We provide detailed reference procedures, framework diagrams, and Solidity smart contract examples to demonstrate practical implementation, ensuring enterprises can future-proof their blockchain deployments against quantum threats through a dedicated Sandbox “PQC/2035” initiative.
@@ -925,6 +969,8 @@ This whitepaper presents a comprehensive framework for a PQC-enabled permissione
 - **Sandbox Testing**: Validates efficiency, security, and ICO feasibility in a controlled environment.
 
 This framework enables enterprises to deploy secure, quantum-resistant blockchain systems, ensuring long-term trust and resilience.
+
+---
 
 ## Technology Partners
 
