@@ -451,28 +451,28 @@ Hyperledger Besu                     Bridge                        Ethereum
 | User Wallet      |                                           | User Wallet      |
 | (MetaMask)       |                                           | (MetaMask)       |
 +--------+---------+                                           +--------+---------+
-         | 1. Approve ICOToken                                         |
-         |    (ICOToken.approve)                                       |
-         v                                                             |
+         | 1. Approve ICOToken                                          |
+         |    (ICOToken.approve)                                        |
+         v                                                              |
 +------------------+                                           +------------------+
 | ICOToken         |                                           | WrappedICOToken  |
 | (ERC-20)         |                                           | (wICO, ERC-20)   |
 +------------------+                                           +------------------+
-         | 2. Lock Tokens                                              |
-         |    (LockingContract.lockTokens)                             |
-         v                                                             |
+         | 2. Lock Tokens                                               |
+         |    (LockingContract.lockTokens)                              |
+         v                                                              |
 +------------------+          +-------------------+            +------------------+
 | LockingContract  |--------->| TokensLocked Event|----------->| MintingContract  |
 |                  |          |                   |            |                  |
 +------------------+          +-------------------+            +------------------+
-         |                       | Validators/Relayers                 |
-         |                       | Generate Proof (e.g., VAA)          |
-         |                       | Submit to Ethereum                  |
-         |                       +->                                   |
+         |                       | Validators/Relayers                  |
+         |                       | Generate Proof (e.g., VAA)           |
+         |                       | Submit to Ethereum                   |
+         |                       +->                                    |
          |                                                  3. Mint Wrapped Tokens
          |                                                     (MintingContract.mintTokens)
-         |                                                             |
-         |                                                             v
+         |                                                              |
+         |                                                              v
          |                                                     +------------------+
          |                                                     | WrappedICOToken  |
          |                                                     | Receives wICO    |
