@@ -22,9 +22,9 @@ PQC encompasses cryptographic algorithms designed to withstand both classical an
 
 ```info
 - **ML-DSA (Dilithium)**: A lattice-based digital signature scheme for authentication and signing.
-- **ML-KEM (Kyber)**: A lattice-based key encapsulation mechanism for secure key exchanges.
+- **ML-KEM (Kyber)**:     A lattice-based key encapsulation mechanism for secure key exchanges.
 - **SLH-DSA (Sphincs+)**: A stateless hash-based signature scheme.
-- **FALCON**: A lattice-based signature scheme using the hash-and-sign paradigm.
+- **FALCON**:             A lattice-based signature scheme using the hash-and-sign paradigm.
 ```
 
 ### 2.2 ICC OpenSSL
@@ -341,16 +341,16 @@ ICCHSM supports a variety of PQC mechanisms via its PKCS#11 interface, ensuring 
 
 - **Key Encapsulation Mechanisms (KEM)**:
   ```info
-  - **ML-KEM (Kyber)**: Lattice-based KEM for secure key exchanges (NIST FIPS 203).
+  - **ML-KEM (Kyber)**:   Lattice-based KEM for secure key exchanges (NIST FIPS 203).
   - **Classic McEliece**: Code-based KEM using binary Goppa codes (NIST candidate).
-  - **Modern McEliece**: Proprietary code-based KEM with optimized key size and performance (US Patent No. 11,271,715).
+  - **Modern McEliece**:  Proprietary code-based KEM with optimized key size and performance (US Patent No. 11,271,715).
   ```
   
 - **Digital Signature Algorithms**:
   ```info
   - **ML-DSA (Dilithium)**: Lattice-based signature scheme for authentication and signing (NIST FIPS 204).
   - **SLH-DSA (Sphincs+)**: Stateless hash-based signature scheme (NIST FIPS 205).
-  - **FALCON**: Lattice-based signature scheme using the hash-and-sign paradigm (NIST standardized).
+  - **FALCON**:             Lattice-based signature scheme using the hash-and-sign paradigm (NIST standardized).
   ```
 
 - **Dual-Purpose Keys**: Combinations like Kyber-Dilithium, enabling key encapsulation and digital signatures in a single entity, ideal for multi-signature operations.
