@@ -278,24 +278,24 @@ cd /path/to/icc-openssl/bin
 
 ```note
 Initialization Phase:
-[OpenVPN Server]                       [OpenVPN Client]
-  |                                       |
-  | Load CA, Server Cert/Key              | Load CA, Client Cert/Key
-  | (ICC OpenSSL: PQC ML-DSA/Kyber)       | (ICC OpenSSL: PQC ML-DSA/Kyber)
-  | [Besu Node Prep: P2P Config]          | [Besu Node Prep: P2P Config]
-  |                                       |
+[OpenVPN Server]                              [OpenVPN Client]
+  |                                              |
+  | Load CA, Server Cert/Key                     | Load CA, Client Cert/Key
+  | (ICC OpenSSL: PQC ML-DSA/Kyber)              | (ICC OpenSSL: PQC ML-DSA/Kyber)
+  | [Besu Node Prep: P2P Config]                 | [Besu Node Prep: P2P Config]
+  |                                              |
 
 TLS Handshake (Quantum-Safe):
-[OpenVPN Server]                       [OpenVPN Client]
-  |                                       |
-  | <--- ClientHello -------------------> | Send PQC ciphersuites (ML-KEM/DSA)
-  | Send ServerHello, Cert -------------> | Present server cert (ML-DSA)
-  |                                       | Verify cert (ML-DSA)
-  | <--- Client Cert, KeyEx ------------> | Send client cert, KeyEx (ML-KEM)
-  | Verify client cert (ML-DSA)           |
-  | Complete key exchange --------------> | Derive session key (AES-256-GCM)
-  | [Besu P2P: Secure Tunnel Ready]       | [Besu P2P: Secure Tunnel Ready]
-  |                                       |
+[OpenVPN Server]                               [OpenVPN Client]
+  |                                              |
+  | <--- ClientHello --------------------------> | Send PQC ciphersuites (ML-KEM/DSA)
+  | --- Send ServerHello, Cert ----------------> | Present server cert (ML-DSA)
+  |                                              | Verify cert (ML-DSA)
+  | <--- Client Cert, KeyEx -------------------> | Send client cert, KeyEx (ML-KEM)
+  | Verify client cert (ML-DSA)                  |
+  | --- Complete key exchange -----------------> | Derive session key (AES-256-GCM)
+  | [Besu P2P: Secure Tunnel Ready]              | [Besu P2P: Secure Tunnel Ready]
+  |                                              |
 ```
 
 This diagram integrates Besu by showing how the OpenVPN handshake prepares a secure tunnel for Besu’s P2P communication.
