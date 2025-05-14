@@ -71,7 +71,6 @@ The Sandbox “PQC/2035” is a controlled testing environment designed to valid
 | **Token ICO Feasibility**  | Assess the viability of a primary market token Initial Coin Offering (ICO) connected via the blockchain bridge (Section 7.2). Test cross-chain token transfers, PQC multi-signature validation, and regulatory compliance to ensure a secure and scalable ICO process. |
 
 The Sandbox leverages the demonstration programs (Section 7) to simulate real-world scenarios, providing data to refine the blockchain for enterprise deployment.
-This table will render nicely in a GitHub README with two columns: "Task" and "Description".
 
 ---
 
