@@ -1,4 +1,4 @@
-# PQC/2035: Sandbox - Initiating a Post-Quantum Secure Permissioned Blockchain with Hyperledger Besu, ICC OpenSSL, ICCHSM, and OpenVPN
+# PQC/2035: Sandbox - Initiating a Post-Quantum Secure Permissioned Blockchain with ICC OpenSSL and ICCHSM
 
 ## Abstract
 
@@ -10,7 +10,7 @@ Quantum computing advancements threaten the cryptographic foundations of blockch
 
 Blockchain technology ensures security, integrity, and authenticity through cryptographic mechanisms. Permissioned blockchains, with restricted access and governance, are ideal for enterprise use cases such as supply chain management, financial systems, and healthcare. However, quantum computing advancements, particularly Shor’s algorithm, threaten to break traditional cryptographic schemes like RSA and ECC, exposing these systems to future risks.
 
-Post-Quantum Cryptography (PQC) offers algorithms resistant to quantum attacks, ensuring long-term security. The primary goal of this project is to complete a Sandbox initiative named **“PQC/2035”**, designed to test the efficiency, security, and feasibility of a PQC-enabled blockchain. The Sandbox will evaluate the performance of a PQC VPN blockchain, assess security risks, provide a platform for hacker testing, and explore the viability of a primary market token Initial Coin Offering (ICO) connected via a blockchain bridge. This whitepaper outlines a comprehensive approach to building a PQC-enabled permissioned blockchain by integrating **ICC OpenSSL** for quantum-safe cryptography, **ICCHSM** for PQC encryption and multi-signature operations, **OpenVPN** for secure communication, and **Hyperledger Besu** as the blockchain platform. Enhanced framework diagrams, detailed procedures, and Solidity/JavaScript examples provide a practical roadmap for implementation within the Sandbox “PQC/2035” framework.
+Post-Quantum Cryptography (PQC) offers algorithms resistant to quantum attacks, ensuring long-term security. The primary goal of this project is to complete a Sandbox initiative named **“PQC/2035”**, designed to test the efficiency, security, and feasibility of a PQC-enabled blockchain. The Sandbox will evaluate the performance of a PQC VPN blockchain, assess security risks, provide a platform for hacker testing, and explore the viability of Initial Coin Offering (ICO) in the primary token market connected via a blockchain bridge. This whitepaper outlines a comprehensive approach to building a PQC-enabled permissioned blockchain by integrating **ICC OpenSSL** for quantum-safe cryptography, **ICCHSM** for PQC encryption and multi-signature operations, **OpenVPN** for secure communication, and **Hyperledger Besu** as the permissioned blockchain platform. Enhanced framework diagrams, detailed procedures, and smart contracts woth DApp examples provide a practical roadmap for implementation within the Sandbox “PQC/2035” framework.
 
 ---
 
@@ -27,19 +27,19 @@ PQC encompasses cryptographic algorithms designed to withstand both classical an
 
 ### 2.2 ICC OpenSSL
 
-**ICC OpenSSL** extends the OpenSSL library by integrating PQC algorithms, enabling quantum-resistant key generation, encryption, and signing. It serves as the cryptographic backbone for OpenVPN and supports Besu’s transaction signing.
+**ICC OpenSSL** extends the OpenSSL library by integrating <a href="https://www.ironcap.ca">IronCAP</a>'s PQC algorithms, enabling quantum-resistant key generation, encryption, and signing. It serves as the cryptographic backbone for OpenVPN and supports Besu’s transaction signing.
 
 ### 2.3 OpenVPN
 
-**OpenVPN** is an open-source VPN solution that secures point-to-point and site-to-site connections. Configured with ICC OpenSSL, it uses PQC algorithms to establish quantum-safe tunnels, protecting Besu’s peer-to-peer (P2P) communication.
+**OpenVPN** is an open-source VPN solution that secures point-to-point and site-to-site connections. Configured with <a href="https://www.ironcap.ca">IronCAP</a>'s ICC OpenSSL, it uses PQC algorithms to establish quantum-safe tunnels, protecting Besu’s peer-to-peer (P2P) communication.
 
 ### 2.4 Hyperledger Besu
 
-**Hyperledger Besu**, an open-source Ethereum client under the Hyperledger project, supports permissioned networks tailored for enterprise needs. It handles transaction signing, consensus (e.g., IBFT 2.0), and P2P communication, which we enhance with PQC via ICC OpenSSL and ICCHSM.
+**Hyperledger Besu**, an open-source Ethereum client under the Hyperledger project, supports permissioned networks tailored for enterprise needs. It handles transaction signing, consensus (e.g., IBFT 2.0), and P2P communication, which we enhance with PQC via <a href="https://www.ironcap.ca">IronCAP</a>'s ICC OpenSSL and ICCHSM.
 
 ### 2.5 ICCHSM
 
-**ICCHSM** is a software implementation of a cryptographic Hardware Security Module (HSM) with a PKCS#11 interface, providing PQC encryption and signing capabilities. It supports single-purpose and dual-purpose keys for key encapsulation and digital signatures, including multi-signature operations for blockchain root hashes and smart contracts. ICCHSM enables Besu decentralized applications (DApps) to implement PQC multi-signatures, enhancing security for critical operations.
+**ICCHSM** is a software implementation of the <a href="https://www.ironcap.ca">IronCAP</a>'s cryptographic Hardware Security Module (HSM) with a PKCS#11 interface, providing PQC encryption and signing capabilities. It supports single-purpose and dual-purpose keys for key encapsulation and digital signatures, including multi-signature operations for blockchain root hashes and smart contracts. ICCHSM enables Besu decentralized applications (DApps) to implement PQC multi-signatures, enhancing security for critical operations.
 
 ---
 
