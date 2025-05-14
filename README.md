@@ -1,6 +1,5 @@
-# PQC/2035: Sandbox - Initiating a Post-Quantum Secure Permissioned Blockchain with ICC OpenSSL and ICCHSM
-
----
+# PQC/2035: 
+# Sandbox - Initiating a Post-Quantum Secure Permissioned Blockchain with ICC OpenSSL and ICCHSM
 
 # Table of Contents
 
