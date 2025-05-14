@@ -68,10 +68,10 @@ Post-Quantum Cryptography (PQC) offers algorithms resistant to quantum attacks, 
 PQC encompasses cryptographic algorithms designed to withstand both classical and quantum attacks. Unlike RSA or ECC, PQC relies on problems such as lattice-based or code-based mathematics, believed to resist quantum algorithms. Key NIST-standardized candidates include:
 
 ```info
-- **ML-DSA (Dilithium)**: A lattice-based digital signature scheme for authentication and signing.
-- **ML-KEM (Kyber)**:     A lattice-based key encapsulation mechanism for secure key exchanges.
-- **SLH-DSA (Sphincs+)**: A stateless hash-based signature scheme.
-- **FALCON**:             A lattice-based signature scheme using the hash-and-sign paradigm.
+ML-DSA (Dilithium): A lattice-based digital signature scheme for authentication and signing.
+ML-KEM (Kyber):     A lattice-based key encapsulation mechanism for secure key exchanges.
+SLH-DSA (Sphincs+): A stateless hash-based signature scheme.
+FALCON:             A lattice-based signature scheme using the hash-and-sign paradigm.
 ```
 
 ### 2.2 ICC OpenSSL
@@ -388,16 +388,16 @@ ICCHSM supports a variety of PQC mechanisms via its PKCS#11 interface, ensuring 
 
 - **Key Encapsulation Mechanisms (KEM)**:
   ```info
-  - **ML-KEM (Kyber)**:   Lattice-based KEM for secure key exchanges (NIST FIPS 203).
-  - **Classic McEliece**: Code-based KEM using binary Goppa codes (NIST candidate).
-  - **Modern McEliece**:  Proprietary code-based KEM with optimized key size and performance (US Patent No. 11,271,715).
+  ML-KEM (Kyber):   Lattice-based KEM for secure key exchanges (NIST FIPS 203).
+  Classic McEliece: Code-based KEM using binary Goppa codes (NIST candidate).
+  Modern McEliece:  Proprietary code-based KEM with optimized key size and performance (US Patent No. 11,271,715).
   ```
   
 - **Digital Signature Algorithms**:
   ```info
-  - **ML-DSA (Dilithium)**: Lattice-based signature scheme for authentication and signing (NIST FIPS 204).
-  - **SLH-DSA (Sphincs+)**: Stateless hash-based signature scheme (NIST FIPS 205).
-  - **FALCON**:             Lattice-based signature scheme using the hash-and-sign paradigm (NIST standardized).
+  ML-DSA (Dilithium): Lattice-based signature scheme for authentication and signing (NIST FIPS 204).
+  SLH-DSA (Sphincs+): Stateless hash-based signature scheme (NIST FIPS 205).
+  FALCON:             Lattice-based signature scheme using the hash-and-sign paradigm (NIST standardized).
   ```
 
 - **Dual-Purpose Keys**: Combinations like Kyber-Dilithium, enabling key encapsulation and digital signatures in a single entity, ideal for multi-signature operations.
@@ -415,12 +415,12 @@ To deploy this PQC-enabled blockchain within the Sandbox “PQC/2035”, the fol
 - **Network**: 100 Mbps internet connection for VPN and blockchain synchronization.
 - **Software Dependencies**:
   ```info
-  - ICC OpenSSL (v6.0+)
-  - ICCHSM (v6.0+)
-  - OpenVPN (v2.5+)
-  - Hyperledger Besu (v24.1+)
-  - Java 17+ for Besu
-  - PKCS#11 libraries for ICCHSM integration
+  ICC OpenSSL (v6.0+)
+  ICCHSM (v6.0+)
+  OpenVPN (v2.5+)
+  Hyperledger Besu (v24.1+)
+  Java 17+ for Besu
+  PKCS#11 libraries for ICCHSM integration
   ```
 
 These requirements ensure efficient execution of the blockchain infrastructure.
