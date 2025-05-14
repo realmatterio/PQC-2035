@@ -910,7 +910,7 @@ The Sandbox leverages the demonstration programs (Section 7) to simulate real-wo
 
 ---
 
-## 11. Conclusion
+## Conclusion
 
 This whitepaper presents a comprehensive framework for a PQC-enabled permissioned blockchain, validated through the Sandbox “PQC/2035”. Key features include:
 
@@ -926,4 +926,16 @@ This whitepaper presents a comprehensive framework for a PQC-enabled permissione
 
 This framework enables enterprises to deploy secure, quantum-resistant blockchain systems, ensuring long-term trust and resilience.
 
+## Technology Partners
+
+This sandbox initiative is a collaboration between:
+- **01 Communique Laboratory** - Provider of IronCAP™ Quantum-Safe cryptography
+- **Real Matter Technology** - Provider of Chip-Level Blockchain technology
+
+For more information, visit:
+- [IronCAP™](https://ironcap.ca)
+- [Real Matter Technology](https://www.realmatter.io)
+- [Quantumatter Blockchain](https://quantumatter-blockchain.web.app)
+
+> Seamless Integration of Quantum-Safe HSM Module & Lattice-Based Chip Entropy for PQC Next-Gen Security
 
