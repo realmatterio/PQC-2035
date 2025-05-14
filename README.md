@@ -59,7 +59,7 @@ The architecture integrates Hyperledger Besu, ICC OpenSSL, ICCHSM, and OpenVPN t
 +-----------------------------------+          +-----------------------------------+
          |                                          |
          | [OpenVPN Tunnel (PQC)]                   | [OpenVPN Tunnel (PQC)]
-         | - PQC SSL (ICC OpenSSL)                  | - PQC SSL (ICC OpenSSL)
+         | - PQC-SSL (ICC OpenSSL)                  | - PQC-SSL (ICC OpenSSL)
          | - Key Exchange (ML-KEM)                  | - Key Exchange (ML-KEM)
          | - Authentication (ML-DSA)                | - Authentication (ML-DSA)
          | - Encrypted Data (AES-256-GCM)          | - Encrypted Data (AES-256-GCM)
@@ -67,7 +67,8 @@ The architecture integrates Hyperledger Besu, ICC OpenSSL, ICCHSM, and OpenVPN t
                       [Internet]
 ```
 
-This diagram shows Besu nodes communicating securely over OpenVPN tunnels, with PQC algorithms (ML-KEM and ML-DSA) ensuring quantum resistance. ICCHSM provides PQC multi-signature capabilities for securing root hashes and smart contracts.
+This diagram shows Besu nodes communicating securely over OpenVPN tunnels, with PQC algorithms (ML-KEM and ML-DSA) ensuring quantum resistance. ICC OpenSSL is an OpenSSL extension 
+supporting PQC internet workflow. ICCHSM provides PQC multi-signature capabilities for securing root hashes and smart contracts.
 
 ### 3.2 PQC Blockchain Structure
 
