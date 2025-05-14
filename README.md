@@ -100,6 +100,7 @@ The blockchain structure leverages PQC for both communication and core operation
 | +-------------------------+ |
 | | P2P Communication       | |
 | | - OpenVPN (PQC Tunnel)  | |
+| | - PQC-SSL (ICC OpenSSL)  | |
 | | - ICCHSM (Multi-Sig)    | |
 | +-------------------------+ |
 +-----------------------------+
