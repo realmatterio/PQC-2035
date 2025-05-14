@@ -52,21 +52,24 @@ The architecture integrates Hyperledger Besu, ICC OpenSSL, ICCHSM, and OpenVPN t
 ### 3.1 High-Level Architecture Diagram
 
 ```note
+                     PERMISSIONED BLOCKCHAIN NETWORK (ETHEREUM)
+
 +-----------------------------------+          +-----------------------------------+
 | Hyperledger Besu Node (Site A)    |          | Hyperledger Besu Node (Site B)    |
+| --------------------------------- |          | --------------------------------- |
 | - Transaction Signing (ML-DSA)    |          | - Transaction Signing (ML-DSA)    |
 | - Consensus (e.g., IBFT 2.0)      |          | - Consensus (e.g., IBFT 2.0)      |
 | - P2P Comm. (via OpenVPN)         |          | - P2P Comm. (via OpenVPN)         |
 | - ICCHSM (PQC Multi-Sig)          |          | - ICCHSM (PQC Multi-Sig)          |
 +-----------------------------------+          +-----------------------------------+
-         |                                          |
-         | [OpenVPN Tunnel (PQC)]                   | [OpenVPN Tunnel (PQC)]
-         | - PQC-SSL (ICC OpenSSL)                  | - PQC-SSL (ICC OpenSSL)
-         | - Key Exchange (ML-KEM)                  | - Key Exchange (ML-KEM)
-         | - Authentication (ML-DSA)                | - Authentication (ML-DSA)
-         | - Encrypted Data (AES-256-GCM)          | - Encrypted Data (AES-256-GCM)
-         +------------------------------------------+
-                      [Internet]
+         |                                              |
+         | [OpenVPN Tunnel (PQC)]                       | [OpenVPN Tunnel (PQC)]
+         | - PQC-SSL (ICC OpenSSL)                      | - PQC-SSL (ICC OpenSSL)
+         | - Key Exchange (ML-KEM)                      | - Key Exchange (ML-KEM)
+         | - Authentication (ML-DSA)                    | - Authentication (ML-DSA)
+         | - Encrypted Data (AES-256-GCM)               | - Encrypted Data (AES-256-GCM)
+         +----------------------------------------------+
+                                 [Secure Internet]
 ```
 
 This diagram shows Besu nodes communicating securely over OpenVPN tunnels, with PQC algorithms (ML-KEM and ML-DSA) ensuring quantum resistance. ICC OpenSSL is an OpenSSL extension 
@@ -85,11 +88,12 @@ The blockchain structure leverages PQC for both communication and core operation
 ```note
 +-----------------------------+
 | Hyperledger Besu Blockchain |
+|   (Permissioned Ethereum)   |
 |                             |
 | +-------------------------+ |
 | | Block Structure         | |
 | | - Root Hash (ML-DSA)    | |
-| | - Transactions (ML-DSA)  | |
+| | - Transactions (ML-DSA) | |
 | | - Smart Contracts       | |
 | |   (PQC Multi-Sig)       | |
 | +-------------------------+ |
@@ -102,7 +106,7 @@ The blockchain structure leverages PQC for both communication and core operation
 | +-------------------------+ |
 | | P2P Communication       | |
 | | - OpenVPN (PQC Tunnel)  | |
-| | - PQC-SSL (ICC OpenSSL)  | |
+| | - PQC-SSL (ICC OpenSSL) | |
 | | - Key Exchange (ICCHSM) | |
 | +-------------------------+ |
 +-----------------------------+
@@ -216,21 +220,21 @@ cd /path/to/icc-openssl/bin
 Initialization Phase:
 [OpenVPN Server]                       [OpenVPN Client]
   |                                       |
-  | Load CA, Server Cert/Key             | Load CA, Client Cert/Key
-  | (ICC OpenSSL: PQC ML-DSA/Kyber)      | (ICC OpenSSL: PQC ML-DSA/Kyber)
-  | [Besu Node Prep: P2P Config]         | [Besu Node Prep: P2P Config]
+  | Load CA, Server Cert/Key              | Load CA, Client Cert/Key
+  | (ICC OpenSSL: PQC ML-DSA/Kyber)       | (ICC OpenSSL: PQC ML-DSA/Kyber)
+  | [Besu Node Prep: P2P Config]          | [Besu Node Prep: P2P Config]
   |                                       |
 
 TLS Handshake (Quantum-Safe):
 [OpenVPN Server]                       [OpenVPN Client]
   |                                       |
-  | <--- ClientHello ------------------> | Send PQC ciphersuites (ML-KEM/DSA)
-  | Send ServerHello, Cert -----------> | Present server cert (ML-DSA)
+  | <--- ClientHello -------------------> | Send PQC ciphersuites (ML-KEM/DSA)
+  | Send ServerHello, Cert -------------> | Present server cert (ML-DSA)
   |                                       | Verify cert (ML-DSA)
-  | <--- Client Cert, KeyEx -----------> | Send client cert, KeyEx (ML-KEM)
-  | Verify client cert (ML-DSA)          |
-  | Complete key exchange -------------> | Derive session key (AES-256-GCM)
-  | [Besu P2P: Secure Tunnel Ready]      | [Besu P2P: Secure Tunnel Ready]
+  | <--- Client Cert, KeyEx ------------> | Send client cert, KeyEx (ML-KEM)
+  | Verify client cert (ML-DSA)           |
+  | Complete key exchange --------------> | Derive session key (AES-256-GCM)
+  | [Besu P2P: Secure Tunnel Ready]       | [Besu P2P: Secure Tunnel Ready]
   |                                       |
 ```
 
@@ -239,19 +243,19 @@ This diagram integrates Besu by showing how the OpenVPN handshake prepares a sec
 #### 4.3.4 Framework Diagram 2: OpenVPN Data Channel and ICC OpenSSL with Besu
 
 ```note
-[OpenVPN Server]                            [OpenVPN Client]
-+--------------------+                      +--------------------+
-| OpenVPN Server     |                      | OpenVPN Client     |
-| - Config (PQC Cert)| <--- TLS Handshake--> | - Config (PQC Cert)|
-| - TLS (ML-KEM/DSA) |   (PQC: Kyber/DSA)  | - TLS (ML-KEM/DSA) |
-| - Data (AES-256)   | <--- Data Channel--> | - Data (AES-256)   |
-| [Besu P2P Traffic] |   (AES-256-GCM)     | [Besu P2P Traffic] |
-+--------------------+                      +--------------------+
-| ICC OpenSSL        |                      | ICC OpenSSL        |
-| - genicc (PQC Keys)|                      | - genicc (PQC Keys)|
-| - iccutl (Enc/Dec) |                      | - iccutl (Enc/Dec) |
-| - Sign/Verify      |                      | - Sign/Verify      |
-+--------------------+                      +--------------------+
+[OpenVPN Server]                               [OpenVPN Client]
++--------------------+                         +--------------------+
+| OpenVPN Server     |                         | OpenVPN Client     |
+| - Config (PQC Cert)| <--- TLS Handshake ---> | - Config (PQC Cert)|
+| - TLS (ML-KEM/DSA) |   (PQC: Kyber/DSA)      | - TLS (ML-KEM/DSA) |
+| - Data (AES-256)   | <--- Data Channel ----> | - Data (AES-256)   |
+| [Besu P2P Traffic] |   (AES-256-GCM)         | [Besu P2P Traffic] |
++--------------------+                         +--------------------+
+| ICC OpenSSL        |                         | ICC OpenSSL        |
+| - genicc (PQC Keys)|                         | - genicc (PQC Keys)|
+| - iccutl (Enc/Dec) |                         | - iccutl (Enc/Dec) |
+| - Sign/Verify      |                         | - Sign/Verify      |
++--------------------+                         +--------------------+
 ```
 
 This diagram emphasizes Besu’s P2P traffic flowing through the quantum-safe OpenVPN tunnel, supported by ICC OpenSSL’s PQC capabilities.
@@ -382,7 +386,7 @@ The Sandbox “PQC/2035” includes demonstration programs to validate the PQC-e
 
 ```note
 Hyperledger Besu                     Bridge                        Ethereum
- (Primary ICO Market)            (Cross-Chain)              (Secondary DEX Market)
+(Primary ICO Market)              (Cross-Chain)                (Secondary DEX Market)
 +------------------+                                           +------------------+
 | User Wallet      |                                           | User Wallet      |
 | (MetaMask)       |                                           | (MetaMask)       |
@@ -404,15 +408,15 @@ Hyperledger Besu                     Bridge                        Ethereum
          |                       | Validators/Relayers                |
          |                       | Generate Proof (e.g., VAA)         |
          |                       | Submit to Ethereum                 |
-         |                       v                                  |
+         |                       v                                    |
          |                                                  3. Mint Wrapped Tokens
          |                                                     (MintingContract.mintTokens)
-         |                                                        |
-         |                                                        v
-         |                                                  +------------------+
-         |                                                  | WrappedICOToken  |
-         |                                                  | Receives wICO    |
-         |                                                  +------------------+
+         |                                                            |
+         |                                                            v
+         |                                                     +------------------+
+         |                                                     | WrappedICOToken  |
+         |                                                     | Receives wICO    |
+         |                                                     +------------------+
          |
          | Reverse Flow (Ethereum to Besu)
          |
@@ -427,15 +431,15 @@ Hyperledger Besu                     Bridge                        Ethereum
          |                                                        |
          |                                                        v
 +------------------+          +-------------------+            +------------------+
-| LockingContract  |<---------| TokensBurned Event|<----------| MintingContract  |
+| LockingContract  |<---------| TokensBurned Event|<-----------| MintingContract  |
 |                  |          |                   |            |                  |
 +------------------+          +-------------------+            +------------------+
-         |                       | Validators/Relayers                |
-         |                       | Generate Proof (e.g., VAA)         |
-         |                       | Submit to Besu                    |
-         |                       v                                  |
-         | 5. Unlock Tokens                                        |
-         |    (LockingContract.releaseTokens)                      |
+         |                       | Validators/Relayers            |
+         |                       | Generate Proof (e.g., VAA)     |
+         |                       | Submit to Besu                 |
+         |                       v                                |
+         | 5. Unlock Tokens                                       |
+         |    (LockingContract.releaseTokens)                     |
          v                                                        |
 +------------------+                                           +------------------+
 | ICOToken         |                                           | WrappedICOToken  |
@@ -872,12 +876,10 @@ Below are the demonstration programs implementing this flowchart.
 
 ## 8. Security Analysis
 
-```caution
 - **Transaction Security**: ML-DSA and ICCHSM’s multi-signature capabilities ensure quantum-resistant transaction signing and root hash validation.
 - **Communication Security**: OpenVPN’s ML-KEM and ML-DSA secure P2P traffic against quantum eavesdropping.
 - **Smart Contract Security**: PQC multi-signatures protect smart contract deployment and execution.
 - **Hashing**: SHA-3 provides quantum-resistant hashing for blockchain operations.
-```
 
 This multi-layered approach ensures comprehensive post-quantum security, rigorously tested in the Sandbox “PQC/2035”.
 
@@ -899,12 +901,10 @@ These optimizations are evaluated for efficiency within the Sandbox “PQC/2035�
 
 The Sandbox “PQC/2035” is a controlled testing environment designed to validate the PQC-enabled blockchain framework. Its objectives are:
 
-```info
 - **Efficiency Testing**: Measure the performance of the PQC VPN blockchain, including transaction throughput, latency, and PQC multi-signature processing times. Benchmarks compare PQC algorithms (e.g., ML-DSA, ML-KEM) against traditional cryptography under various network conditions.
 - **Security Risk Assessment**: Identify vulnerabilities in the PQC implementation, focusing on cryptographic strength, key management, and smart contract security. Conduct penetration testing to evaluate resistance to quantum and classical attacks.
 - **Hacker Testing Platform**: Provide a secure environment for ethical hackers to stress-test the blockchain, simulating quantum-enabled attacks on PQC algorithms and VPN tunnels to validate robustness.
 - **Token ICO Feasibility**: Assess the viability of a primary market token Initial Coin Offering (ICO) connected via the blockchain bridge (Section 7.2). Test cross-chain token transfers, PQC multi-signature validation, and regulatory compliance to ensure a secure and scalable ICO process.
-```
 
 The Sandbox leverages the demonstration programs (Section 7) to simulate real-world scenarios, providing data to refine the blockchain for enterprise deployment.
 
