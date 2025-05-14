@@ -121,7 +121,7 @@ ICC OpenSSL provides the foundation for PQC cryptography.
 #### On Linux (Ubuntu/Debian):
 1. **Download**:
    ```bash
-   wget https://example.com/icc-openssl_6.0.y-z_amd64.deb
+   wget icc-openssl_6.0.y-z_amd64.deb
    ```
 2. **Install**:
    ```bash
