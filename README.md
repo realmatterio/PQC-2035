@@ -59,6 +59,7 @@ The architecture integrates Hyperledger Besu, ICC OpenSSL, ICCHSM, and OpenVPN t
 +-----------------------------------+          +-----------------------------------+
          |                                          |
          | [OpenVPN Tunnel (PQC)]                   | [OpenVPN Tunnel (PQC)]
+         | - PQC SSL (ICC OpenSSL)                  | - PQC SSL (ICC OpenSSL)
          | - Key Exchange (ML-KEM)                  | - Key Exchange (ML-KEM)
          | - Authentication (ML-DSA)                | - Authentication (ML-DSA)
          | - Encrypted Data (AES-256-GCM)          | - Encrypted Data (AES-256-GCM)
