@@ -1,7 +1,7 @@
 <div align="center">
   <img src="PQCyear2035_505x449.png" alt="Logo" width="100%">
-  <h2><strong>PQC/2035:</strong></h2><br>
-  <h2><strong>Sandbox - Initiating a Post-Quantum Secure Permissioned Blockchain with ICC OpenSSL and ICCHSM</strong></h2><br>
+  <h2><strong>PQC/2035:</strong></h2>
+  <h2><strong>Sandbox - Initiating a Post-Quantum Secure Permissioned Blockchain with ICC OpenSSL and ICCHSM</strong></h2>
 </div>
 <br>
 
