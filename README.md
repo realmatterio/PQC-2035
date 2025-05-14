@@ -7,21 +7,20 @@
 
 ## Table of Contents
 
-[Abstract](#abstract)   
-[1. Introduction](#1-introduction)   
-[2. Background](#2-background)    
+- [Abstract](#abstract)   
+- [1. Introduction](#1-introduction)
+  - [Sandbox Implementation](#sandbox-implementation)   
+- [2. Background](#2-background)    
   - [2.1 Post-Quantum Cryptography (PQC)](#21-post-quantum-cryptography-pqc)   
   - [2.2 ICC OpenSSL](#22-icc-openssl)   
   - [2.3 OpenVPN](#23-openvpn)   
   - [2.4 Hyperledger Besu](#24-hyperledger-besu)   
-  - [2.5 ICCHSM](#25-icchsm)
-    
-[3. Architecture](#3-architecture)   
+  - [2.5 ICCHSM](#25-icchsm)  
+- [3. Architecture](#3-architecture)   
   - [3.1 High-Level Architecture Diagram](#31-high-level-architecture-diagram)   
   - [3.2 PQC Blockchain Structure](#32-pqc-blockchain-structure)   
-  - [Blockchain Framework Structure Diagram](#blockchain-framework-structure-diagram)
-    
-[4. Implementation Details](#4-implementation-details)   
+  - [Blockchain Framework Structure Diagram](#blockchain-framework-structure-diagram)  
+- [4. Implementation Details](#4-implementation-details)   
   - [4.1 Installing ICC OpenSSL](#41-installing-icc-openssl)   
   - [4.2 Installing and Configuring ICCHSM](#42-installing-and-configuring-icchsm)   
   - [4.3 Configuring OpenVPN with ICC OpenSSL](#43-configuring-openvpn-with-icc-openssl)   
@@ -34,20 +33,17 @@
     - [4.4.1 Install Besu](#441-install-besu)   
     - [4.4.2 Integrate ICC OpenSSL for Transaction Signing](#442-integrate-icc-openssl-for-transaction-signing)   
     - [4.4.3 Integrate ICCHSM for PQC Multi-Signature Operations](#443-integrate-icchsm-for-pqc-multi-signature-operations)   
-    - [4.4.4 Configure Besu P2P over OpenVPN](#444-configure-besu-p2p-over-openvpn)
-      
-[5. ICCHSM PQC Methods](#5-icchsm-pqc-methods)   
-[6. System Requirements](#6-system-requirements)   
-[7. Demonstration Programs with Solidity Smart Contracts](#7-demonstration-programs-with-solidity-smart-contracts)   
+    - [4.4.4 Configure Besu P2P over OpenVPN](#444-configure-besu-p2p-over-openvpn)      
+- [5. ICCHSM PQC Methods](#5-icchsm-pqc-methods)   
+- [6. System Requirements](#6-system-requirements)   
+- [7. Demonstration Programs with Solidity Smart Contracts](#7-demonstration-programs-with-solidity-smart-contracts)   
   - [7.1 ICOToken and LockingContract on Hyperledger Besu](#71-icotoken-and-lockingcontract-on-hyperledger-besu)   
   - [7.2 WrappedICOToken and MintingContract on Ethereum](#72-wrappedicotoken-and-mintingcontract-on-ethereum)   
-  - [7.3 Cross-Chain Bridge DApp with PQC Multi-Signature](#73-cross-chain-bridge-dapp-with-pqc-multi-signature)
-    
-[8. Security Analysis](#8-security-analysis)   
-[9. Performance Considerations](#9-performance-considerations)   
-[10. Sandbox Implementation](#10-sandbox-implementation)   
-[Conclusion](#conclusion)   
-[Technology Partners](#technology-partners)   
+  - [7.3 Cross-Chain Bridge DApp with PQC Multi-Signature](#73-cross-chain-bridge-dapp-with-pqc-multi-signature)  
+- [8. Security Analysis](#8-security-analysis)   
+- [9. Performance Considerations](#9-performance-considerations)   
+- [Conclusion](#conclusion)   
+- [Technology Partners](#technology-partners)   
 
 ---
 
@@ -62,6 +58,20 @@ Quantum computing advancements threaten the cryptographic foundations of blockch
 Blockchain technology ensures security, integrity, and authenticity through cryptographic mechanisms. Permissioned blockchains, with restricted access and governance, are ideal for enterprise use cases such as supply chain management, financial systems, and healthcare. However, quantum computing advancements, particularly Shor’s algorithm, threaten to break traditional cryptographic schemes like RSA and ECC, exposing these systems to future risks.
 
 Post-Quantum Cryptography (PQC) offers algorithms resistant to quantum attacks, ensuring long-term security. The primary goal of this project is to complete a Sandbox initiative named **“PQC/2035”**, designed to test the efficiency, security, and feasibility of a PQC-enabled blockchain. The Sandbox will evaluate the performance of a PQC VPN blockchain, assess security risks, provide a platform for hacker testing, and explore the viability of Initial Coin Offering (ICO) in the primary token market connected via a blockchain bridge. This whitepaper outlines a comprehensive approach to building a PQC-enabled permissioned blockchain by integrating **ICC OpenSSL** for quantum-safe cryptography, **ICCHSM** for PQC encryption and multi-signature operations, **OpenVPN** for secure communication, and **Hyperledger Besu** as the permissioned blockchain platform. Enhanced framework diagrams, detailed procedures, and smart contracts woth DApp examples provide a practical roadmap for implementation within the Sandbox “PQC/2035” framework.
+
+### Sandbox Implementation
+
+The Sandbox “PQC/2035” is a controlled testing environment designed to validate the PQC-enabled blockchain framework. Its objectives are:
+
+| Task                       | Description                                                                                                                    |
+|----------------------------|-------------------------------------------------------------------------------------------------------------------------------|
+| **Efficiency Testing**     | Measure the performance of the PQC VPN blockchain, including transaction throughput, latency, and PQC multi-signature processing times. Benchmarks compare PQC algorithms (e.g., ML-DSA, ML-KEM) against traditional cryptography under various network conditions. |
+| **Security Risk Assessment** | Identify vulnerabilities in the PQC implementation, focusing on cryptographic strength, key management, and smart contract security. Conduct penetration testing to evaluate resistance to quantum and classical attacks. |
+| **Hacker Testing Platform** | Provide a secure environment for ethical hackers to stress-test the blockchain, simulating quantum-enabled attacks on PQC algorithms and VPN tunnels to validate robustness. |
+| **Token ICO Feasibility**  | Assess the viability of a primary market token Initial Coin Offering (ICO) connected via the blockchain bridge (Section 7.2). Test cross-chain token transfers, PQC multi-signature validation, and regulatory compliance to ensure a secure and scalable ICO process. |
+
+The Sandbox leverages the demonstration programs (Section 7) to simulate real-world scenarios, providing data to refine the blockchain for enterprise deployment.
+This table will render nicely in a GitHub README with two columns: "Task" and "Description".
 
 ---
 
@@ -945,19 +955,6 @@ PQC algorithms (e.g., ML-DSA, ML-KEM) introduce higher computational overhead an
 - **Caching**: Store frequently used PQC keys in ICCHSM for efficient access.
 
 These optimizations are evaluated for efficiency within the Sandbox “PQC/2035”.
-
----
-
-## 10. Sandbox Implementation
-
-The Sandbox “PQC/2035” is a controlled testing environment designed to validate the PQC-enabled blockchain framework. Its objectives are:
-
-- **Efficiency Testing**: Measure the performance of the PQC VPN blockchain, including transaction throughput, latency, and PQC multi-signature processing times. Benchmarks compare PQC algorithms (e.g., ML-DSA, ML-KEM) against traditional cryptography under various network conditions.
-- **Security Risk Assessment**: Identify vulnerabilities in the PQC implementation, focusing on cryptographic strength, key management, and smart contract security. Conduct penetration testing to evaluate resistance to quantum and classical attacks.
-- **Hacker Testing Platform**: Provide a secure environment for ethical hackers to stress-test the blockchain, simulating quantum-enabled attacks on PQC algorithms and VPN tunnels to validate robustness.
-- **Token ICO Feasibility**: Assess the viability of a primary market token Initial Coin Offering (ICO) connected via the blockchain bridge (Section 7.2). Test cross-chain token transfers, PQC multi-signature validation, and regulatory compliance to ensure a secure and scalable ICO process.
-
-The Sandbox leverages the demonstration programs (Section 7) to simulate real-world scenarios, providing data to refine the blockchain for enterprise deployment.
 
 ---
 
