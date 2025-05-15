@@ -69,6 +69,7 @@ The Sandbox “PQC/2035” is a controlled testing environment designed to valid
 | **Security Risk Assessment** | Identify vulnerabilities in the PQC implementation, focusing on cryptographic strength, key management, and smart contract security. Conduct penetration testing to evaluate resistance to quantum and classical attacks. |
 | **Hacker Testing Platform** | Provide a secure environment for ethical hackers to stress-test the blockchain, simulating quantum-enabled attacks on PQC algorithms and VPN tunnels to validate robustness. |
 | **Token ICO Feasibility**  | Assess the viability of a primary market token Initial Coin Offering (ICO) connected via the blockchain bridge (Section 7.2). Test cross-chain token transfers, PQC multi-signature validation, and regulatory compliance to ensure a secure and scalable ICO process. |
+| **Future Plan**  | PQC Certificate Authority, QKD Layer 2 Credential Ledger |
 
 The Sandbox leverages the demonstration programs (Section 7) to simulate real-world scenarios, providing data to refine the blockchain for enterprise deployment.
 
