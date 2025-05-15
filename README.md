@@ -117,12 +117,12 @@ The architecture integrates Hyperledger Besu, ICC OpenSSL, ICCHSM, and OpenVPN t
 
 +-----------------------------------+          +-----------------------------------+
 | Hyperledger Besu Node (Site A)    |          | Hyperledger Besu Node (Site B)    |
-| Ethereum EVM Compatible           |          | Ethereum EVM Compatible           |
+| # Ethereum EVM Compatible         |          | # Ethereum EVM Compatible         |
 | --------------------------------- |          | --------------------------------- |
-| - Transaction Signing (ML-DSA)    |          | - Transaction Signing (ML-DSA)    |
-| - Consensus (e.g., IBFT 2.0)      |          | - Consensus (e.g., IBFT 2.0)      |
+| - Root Hashes, Smart Contracts &  |          | - Root Hashes, Smart Contracts &  |
+|   Transaction MultiSig (ICCHSM)   |          |   Transaction MultiSig (ICCHSM)   |
+| - Consensus (QBFT/IBFT 2.0)       |          | - Consensus (QBFT/IBFT 2.0)       |
 | - P2P Comm. (via OpenVPN)         |          | - P2P Comm. (via OpenVPN)         |
-| - ICCHSM (PQC Multi-Sig)          |          | - ICCHSM (PQC Multi-Sig)          |
 +-----------------------------------+          +-----------------------------------+
          |                                              |
          | [OpenVPN Tunnel (PQC)]                       | [OpenVPN Tunnel (PQC)]
@@ -134,8 +134,7 @@ The architecture integrates Hyperledger Besu, ICC OpenSSL, ICCHSM, and OpenVPN t
                                  [Secure Internet]
 ```
 
-This diagram shows Besu nodes communicating securely over OpenVPN tunnels, with PQC algorithms (ML-KEM and ML-DSA) ensuring quantum resistance. ICC OpenSSL is an OpenSSL extension 
-supporting PQC internet workflow. ICCHSM provides PQC multi-signature capabilities for securing root hashes and smart contracts.
+This diagram shows Besu nodes communicating securely over OpenVPN tunnels, with PQC algorithms (e.g., ML-KEM and ML-DSA) ensuring quantum resistance. ICC OpenSSL is an OpenSSL extension supporting PQC internet workflow. ICCHSM provides PQC multi-signature capabilities for securing root hashes, transactions and smart contracts.
 
 ### 3.2 PQC Blockchain Structure
 
