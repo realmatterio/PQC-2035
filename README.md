@@ -113,7 +113,7 @@ The architecture integrates Hyperledger Besu, ICC OpenSSL, ICCHSM, and OpenVPN t
 ### 3.1 High-Level Architecture Diagram
 
 ```note
-                     [QUANTUM-SAFE RWA BLOCKCHAIN AFCHITECTURE]
+                     [QUANTUM-SAFE RWA BLOCKCHAIN ARCHITECTURE]
 
 +-----------------------------------+          +-----------------------------------+
 | Hyperledger Besu Node (Site A)    |          | Hyperledger Besu Node (Site B)    |
