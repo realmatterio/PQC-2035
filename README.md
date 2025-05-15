@@ -98,7 +98,7 @@ FALCON:             A lattice-based signature scheme using the hash-and-sign par
 
 ### 2.4 Hyperledger Besu
 
-**Hyperledger Besu**, an open-source Ethereum client under the Hyperledger project, supports permissioned networks tailored for enterprise needs. It handles transaction signing, consensus (e.g., IBFT 2.0), and P2P communication, which we enhance with PQC via <a href="https://www.ironcap.ca">IronCAP</a>'s ICC OpenSSL and ICCHSM.
+**Hyperledger Besu**, an open-source Ethereum client under the Hyperledger project, supports permissioned networks tailored for enterprise needs. It handles transaction signing, consensus (e.g., QBFT or IBFT 2.0), and P2P communication, which we enhance with PQC via <a href="https://www.ironcap.ca">IronCAP</a>'s ICC OpenSSL and ICCHSM.
 
 ### 2.5 ICCHSM
 
@@ -113,7 +113,7 @@ The architecture integrates Hyperledger Besu, ICC OpenSSL, ICCHSM, and OpenVPN t
 ### 3.1 High-Level Architecture Diagram
 
 ```note
-                         QUANTUM-SAFE RWA BLOCKCHAIN NETWORK
+                     [QUANTUM-SAFE RWA BLOCKCHAIN AFCHITECTURE]
 
 +-----------------------------------+          +-----------------------------------+
 | Hyperledger Besu Node (Site A)    |          | Hyperledger Besu Node (Site B)    |
