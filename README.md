@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="PQCyear2035_505x449.png" alt="Logo" width="25%">
+  <img src="PQC-2035_figur_0.png" alt="Figure 0" width="100%">
   <h1><strong>PQC/2035::Sandbox</strong></h1>
   <h2><strong>Initiating a Quantum-Safe RWA Blockchain with ICC OpenSSL & ICCHSM</strong></h2>
 </div>
