@@ -1,7 +1,7 @@
 <div align="center">
   <img src="PQCyear2035_505x449.png" alt="Logo" width="25%">
   <h1><strong>PQC/2035::Sandbox</strong></h1>
-  <h2><strong>Initiating a Post-Quantum Secure Permissioned Blockchain with ICC OpenSSL & ICCHSM</strong></h2>
+  <h2><strong>Initiating a Quantum-Safe RWA Blockchain with ICC OpenSSL & ICCHSM</strong></h2>
 </div>
 <br>
 
@@ -61,7 +61,7 @@ Post-Quantum Cryptography (PQC) offers algorithms resistant to quantum attacks, 
 
 ### Sandbox Implementation
 
-The Sandbox “PQC/2035” is a controlled testing environment designed to validate the PQC-enabled blockchain framework. Its objectives are:
+The Sandbox “PQC/2035” is a controlled testing environment designed to validate the quantum-safe RWA blockchain framework. Its objectives are:
 
 | Task                       | Description                                                                                                                    |
 |----------------------------|-------------------------------------------------------------------------------------------------------------------------------|
@@ -112,10 +112,11 @@ The architecture integrates Hyperledger Besu, ICC OpenSSL, ICCHSM, and OpenVPN t
 ### 3.1 High-Level Architecture Diagram
 
 ```note
-                     PERMISSIONED BLOCKCHAIN NETWORK (ETHEREUM)
+                         QUANTUM-SAFE RWA BLOCKCHAIN NETWORK
 
 +-----------------------------------+          +-----------------------------------+
 | Hyperledger Besu Node (Site A)    |          | Hyperledger Besu Node (Site B)    |
+| Ethereum EVM Compatible           |          | Ethereum EVM Compatible           |
 | --------------------------------- |          | --------------------------------- |
 | - Transaction Signing (ML-DSA)    |          | - Transaction Signing (ML-DSA)    |
 | - Consensus (e.g., IBFT 2.0)      |          | - Consensus (e.g., IBFT 2.0)      |
@@ -143,7 +144,7 @@ The blockchain structure leverages PQC for both communication and core operation
 - **PQC Smart Contract Signing**: Smart contracts are signed with PQC multi-signatures via ICCHSM, securing deployment and execution.
 - **PQC Communication**: OpenVPN tunnels, configured with ICC OpenSSL, protect Besu’s P2P traffic with ML-KEM key exchanges and ML-DSA authentication.
 
-#### Blockchain Framework Structure Diagram
+#### RWA Blockchain Framework Structure Diagram
 
 ```note
 +-----------------------------+
@@ -172,7 +173,7 @@ The blockchain structure leverages PQC for both communication and core operation
 +-----------------------------+
 ```
 
-This diagram illustrates the blockchain’s structure, highlighting PQC integration in block signing, smart contracts, consensus, and communication, all of which are tested in the Sandbox “PQC/2035”.
+This diagram illustrates the RWA blockchain’s structure, highlighting PQC integration in block signing, smart contracts, consensus, and communication, all of which are tested in the Sandbox “PQC/2035”.
 
 ---
 
