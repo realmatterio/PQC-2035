@@ -161,7 +161,7 @@ The architecture integrates Hyperledger Besu, ICC OpenSSL, ICCHSM, and OpenVPN t
 | # Hyperledger Besu (EVM)          |          | # Hyperledger Besu (EVM)          |
 | --------------------------------- |          | --------------------------------- |
 | - Smart Contract Interaction      |          | - Validates Transactions          |
-| - DApp API Access & Submission    |          | - Signs Tx Proofs (ICCHSM)        |
+| - DApp API Access & Submission    |          | - Multi-Signs Tx Proofs (ICCHSM)  |
 | - UI Layer Integration            |          | - Emits PQC Signatures to         |
 |                                   |          |   Event Logs                      |
 | - P2P Comm. (via OpenVPN)         |          | - P2P Comm. (via OpenVPN)         |
@@ -173,15 +173,15 @@ The architecture integrates Hyperledger Besu, ICC OpenSSL, ICCHSM, and OpenVPN t
          | - Authentication (ML-DSA)                    | - Authentication (ML-DSA)
          | - Encrypted Data (AES-256-GCM)               | - Encrypted Data (AES-256-GCM)
          +----------------------------------------------+
-                                 [Secure Internet]
-                                         |
-                                         v
+                    [Secure Internet]
+                           |
+                           v
 +-----------------------------------+
 | Miner Node (Site C)              |
 | Hyperledger Besu (EVM)           |
 | -------------------------------- |
 | - Commits Root Hashes            |
-| - Signs Root Hash (ICCHSM)       |
+| - Multi-Signs Root Hash (ICCHSM) |
 | - Emits Signature to Event Log   |
 | - Consensus (QBFT / IBFT 2.0)    |
 | - P2P Comm. (via OpenVPN)        |
@@ -200,14 +200,8 @@ The architecture integrates Hyperledger Besu, ICC OpenSSL, ICCHSM, and OpenVPN t
 ```
 
 This diagram shows Besu nodes communicating securely over OpenVPN tunnels, with PQC algorithms (e.g., ML-KEM and ML-DSA) ensuring quantum resistance. ICC OpenSSL is an OpenSSL extension supporting PQC internet workflow. ICCHSM provides PQC multi-signature capabilities for securing root hashes, transactions and smart contracts.
-
    
-### 3.2 PQC Blockchain Structure
-
-Here’s the updated and rewritten version of **Section 3.2 PQC Blockchain Structure** in **GitHub-flavored Markdown**, reflecting the architecture you defined (Application, Validator, and Miner nodes, event logs, and future roles like PQC-CA and QKD):
-
----
-
+   
 ### 3.2 PQC Blockchain Structure
 
 The PQC Blockchain is designed with quantum-safe mechanisms at both the **communication** and **operational** layers. The architecture has been evaluated and validated within the Sandbox environment “**PQC/2035**”. Each node type—Application, Validator, and Miner—has distinct roles in securing and maintaining the blockchain.
@@ -256,9 +250,9 @@ note
 |                               |
 | +---------------------------+ |
 | | Block Structure           | |
-| | - Root Hash (ML-DSA)      | |
+| | - Root Hash               | |
 | | - Transactions            | |
-| | - Event Log Signatures    | |
+| | - Event Log PQC Signatures | |
 | |   (Validator & Miner)     | |
 | +---------------------------+ |
 |                               |
@@ -280,8 +274,8 @@ note
 | | P2P Communication         | |
 | | - OpenVPN (PQC Tunnel)    | |
 | | - PQC-SSL (ICC OpenSSL)   | |
-| | - Key Exchange (ML-KEM)   | |
-| | - Auth (ML-DSA via ICC)   | |
+| | - Key Exchange (ML-KEM via ICCHSM)   | |
+| | - Auth (ML-DSA via ICCHSM)   | |
 | +---------------------------+ |
 |                               |
 | +---------------------------+ |
