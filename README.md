@@ -1,8 +1,8 @@
 <div align="center">
   <img src="PQC-2035_Figure_0.png" alt="PQC/2035">
   <h1><strong>PQC/2035 Sandbox Initiative</strong></h1>
-  <h2><strong>Quantum-Safe RWA Blockchain with ICC OpenSSL & ICCHSM</strong></h2>
-  <h2>White Paper</h2>
+  <h3><strong>Quantum-Safe RWA Blockchain with ICC OpenSSL & ICCHSM</strong></h3>
+  <h3>White Paper</h3>
 </div>
 <br>
 
