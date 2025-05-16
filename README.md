@@ -257,21 +257,21 @@ note
 | +---------------------------+ |
 |                               |
 | +---------------------------+ |
-| | Smart Contracts           | |
+| | PQC Smart Contracts       | |
 | | - PQC Multi-Sig (ICCHSM)  | |
 | | - Signed Interactions     | |
 | | - Event-based Proof Logs  | |
 | +---------------------------+ |
 |                               |
 | +---------------------------+ |
-| | Consensus (IBFT 2.0 /     | |
-| | QBFT with PQC Enhancements)| |
+| | PQC Enhanced Consensus    | |          
+| | (QBFT or IBFT 2.0)        | |
 | | - Miner Root Hash Voting  | |
 | | - Validator Tx Proofing   | |
 | +---------------------------+ |
 |                               |
 | +---------------------------+ |
-| | P2P Communication         | |
+| | PQC P2P Communication     | |
 | | - OpenVPN (PQC Tunnel)    | |
 | | - PQC-SSL (ICC OpenSSL)   | |
 | | - Key Exchange (ML-KEM via ICC)   | |
