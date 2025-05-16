@@ -11,11 +11,11 @@
 - [1. Introduction](#1-introduction)
   - [Sandbox Implementation](#sandbox-implementation)   
 - [2. Background](#2-background)    
-  - [2.1 Post-Quantum Cryptography (PQC)](#21-post-quantum-cryptography-pqc)   
-  - [2.2 ICC OpenSSL](#22-icc-openssl)   
-  - [2.3 OpenVPN](#23-openvpn)   
-  - [2.4 Hyperledger Besu](#24-hyperledger-besu)   
-  - [2.5 ICCHSM](#25-icchsm)  
+  - [2.1 Post-Quantum Cryptography (PQC)](#21-post-quantum-cryptography-pqc)
+  - [2.2 PQC Signatures and KEM for Ethereum Integration](#22-pqc-signatures-and-kem-for-ethereum-integration)
+  - [2.3 ICC OpenSSL and ICCHSM](#24-icc-openssl-and-icchsm)   
+  - [2.4 OpenVPN](#24-openvpn)   
+  - [2.5 Hyperledger Besu](#25-hyperledger-besu)   
 - [3. Architecture](#3-architecture)   
   - [3.1 High-Level Architecture Diagram](#31-high-level-architecture-diagram)   
   - [3.2 PQC Blockchain Structure](#32-pqc-blockchain-structure)   
@@ -90,7 +90,7 @@ SLH-DSA (Sphincs+): A stateless hash-based signature scheme.
 FALCON:             A lattice-based signature scheme using the hash-and-sign paradigm.
 ```
 
-#### NIST PQC Signature Schemes and KEM in the Ethereum Context
+### 2.2 PQC Signatures and KEM for Ethereum Integration
 
 | Scheme                 | Signature Method | KEM Method | Signature Length       | % of Max Log Entry Data (3.75 MB) | Estimated Gas Cost     | Notes                                                 |
 | ---------------------- | ---------------- | ---------- | ---------------------- | --------------------------------- | ---------------------- | ----------------------------------------------------- |
@@ -99,7 +99,7 @@ FALCON:             A lattice-based signature scheme using the hash-and-sign par
 | **FALCON**             | ✅ Yes            | ❌ N/A      | **666–1,280 bytes**    | **0.02%–0.03%**                   | **5,703–10,615 gas**   | Compact lattice-based signatures (FIPS 203)           |
 | **ML-KEM (Kyber)**     | ❌ N/A            | ✅ Yes      | *Not Applicable*       | *Not Applicable*                  | *Not Applicable*       | Kyber is a Key Encapsulation Mechanism (FIPS 203)     |
 
-##### Ethereum Block Size Context
+#### Ethereum Block Size Context
 
 * **Block Gas Limit:** \~30,000,000 gas
 * **Log Entry Cost:**
@@ -112,13 +112,13 @@ FALCON:             A lattice-based signature scheme using the hash-and-sign par
   \frac{30,000,000 - 375}{8} \approx \textbf{3,749,953 bytes} \ (\approx 3.75\text{ MB})
   $$
 
-##### Gas Cost Calculation Formula
+#### Gas Cost Calculation Formula
 
 $$
 \text{Gas Cost} = 375\ \text{(base)} + 8 \times \text{signature\_length}
 $$
 
-#### Practical Considerations
+### Practical Considerations
 
 * **Small PQC Signatures (e.g., FALCON, Dilithium):**
   Gas-efficient and feasible for on-chain logging or verification in smart contracts.
@@ -131,21 +131,19 @@ $$
 
 While all post-quantum signature schemes are technically viable within Ethereum's theoretical gas and size limits, **signature size directly impacts gas consumption**. For real-world use in smart contracts or log entries, **Falcon and Dilithium offer better trade-offs**, whereas **SPHINCS+** provides strong security but at a higher gas cost.
 
-### 2.2 ICC OpenSSL
+### 2.3 ICC OpenSSL and ICCHSM
 
 **ICC OpenSSL** extends the OpenSSL library by integrating <a href="https://www.ironcap.ca">IronCAP</a>'s PQC algorithms, enabling quantum-resistant key generation, encryption, and signing. It serves as the cryptographic backbone for OpenVPN and supports Besu’s transaction signing.
+   
+**ICCHSM** is a software implementation of the <a href="https://www.ironcap.ca">IronCAP</a>'s cryptographic Hardware Security Module (HSM) with a PKCS#11 interface, providing PQC encryption and signing capabilities. It supports single-purpose and dual-purpose keys for key encapsulation and digital signatures, including multi-signature operations for blockchain root hashes and smart contracts. ICCHSM enables Besu decentralized applications (DApps) to implement PQC multi-signatures, enhancing security for critical operations.
 
-### 2.3 OpenVPN
+### 2.4 OpenVPN
 
 **OpenVPN** is an open-source VPN solution that secures point-to-point and site-to-site connections. Configured with <a href="https://www.ironcap.ca">IronCAP</a>'s ICC OpenSSL, it uses PQC algorithms to establish quantum-safe tunnels, protecting Besu’s peer-to-peer (P2P) communication.
 
-### 2.4 Hyperledger Besu
+### 2.5 Hyperledger Besu
 
 **Hyperledger Besu**, an open-source Ethereum client under the Hyperledger project, supports permissioned networks tailored for enterprise needs. It handles transaction signing, consensus (e.g., QBFT or IBFT 2.0), and P2P communication, which we enhance with PQC via <a href="https://www.ironcap.ca">IronCAP</a>'s ICC OpenSSL and ICCHSM.
-
-### 2.5 ICCHSM
-
-**ICCHSM** is a software implementation of the <a href="https://www.ironcap.ca">IronCAP</a>'s cryptographic Hardware Security Module (HSM) with a PKCS#11 interface, providing PQC encryption and signing capabilities. It supports single-purpose and dual-purpose keys for key encapsulation and digital signatures, including multi-signature operations for blockchain root hashes and smart contracts. ICCHSM enables Besu decentralized applications (DApps) to implement PQC multi-signatures, enhancing security for critical operations.
 
 ---
 
