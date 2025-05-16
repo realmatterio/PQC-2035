@@ -89,9 +89,10 @@ SLH-DSA (Sphincs+): A stateless hash-based signature scheme.
 FALCON:             A lattice-based signature scheme using the hash-and-sign paradigm.
 ```
 
+   
 ### 2.2 PQC Signatures and KEM for Ethereum Integration
 
-| Scheme                 | Signature Method | KEM Method | Signature Length       | % of Max Log Entry Data (Ethereum Block Size of 3.75 MB) | Estimated Gas Cost     | Notes                                                 |
+| Scheme                 | Signature Method | KEM Method | Signature Length       | % of Max Log Entry Data (Ethereum Block Size of 3.75 MB) | Estimated Gas Cost     | Notes                                                             |
 | ---------------------- | ---------------- | ---------- | ---------------------- | ------------------------- | ---------------------- | ---------------------------------------------------------------- |
 | **ML-DSA (Dilithium)** | ✅ Yes            | ❌ N/A      | **2,420–4,627 bytes**  | **0.06%–0.12%**                   | **19,735–37,371 gas**  | Signature size depends on Dilithium levels (FIPS 204) |
 | **SLH-DSA (SPHINCS+)** | ✅ Yes            | ❌ N/A      | **7,856–49,856 bytes** | **0.21%–1.33%**                   | **62,233–399,223 gas** | Large stateless hash-based signatures (FIPS 205)      |
@@ -110,7 +111,7 @@ Max Log Entry Data Field Size:
    
 ```note Gas Cost Calculation Formula
 Gas Cost
-    = 375 + 8 × signature_length
+     = 375 + 8 × signature_length
 ```
 
 ### Practical Considerations
@@ -126,16 +127,19 @@ Gas Cost
 
 While all post-quantum signature schemes are technically viable within Ethereum's theoretical gas and size limits, **signature size directly impacts gas consumption**. For real-world use in smart contracts or log entries, **Falcon and Dilithium offer better trade-offs**, whereas **SPHINCS+** provides strong security but at a higher gas cost.
 
+    
 ### 2.3 ICC OpenSSL and ICCHSM
 
 **ICC OpenSSL** extends the OpenSSL library by integrating <a href="https://www.ironcap.ca">IronCAP</a>'s PQC algorithms, enabling quantum-resistant key generation, encryption, and signing. It serves as the cryptographic backbone for OpenVPN and supports Besu’s transaction signing.
    
 **ICCHSM** is a software implementation of the <a href="https://www.ironcap.ca">IronCAP</a>'s cryptographic Hardware Security Module (HSM) with a PKCS#11 interface, providing PQC encryption and signing capabilities. It supports single-purpose and dual-purpose keys for key encapsulation and digital signatures, including multi-signature operations for blockchain root hashes and smart contracts. ICCHSM enables Besu decentralized applications (DApps) to implement PQC multi-signatures, enhancing security for critical operations.
 
+      
 ### 2.4 OpenVPN
 
 **OpenVPN** is an open-source VPN solution that secures point-to-point and site-to-site connections. Configured with <a href="https://www.ironcap.ca">IronCAP</a>'s ICC OpenSSL, it uses PQC algorithms to establish quantum-safe tunnels, protecting Besu’s peer-to-peer (P2P) communication.
 
+   
 ### 2.5 Hyperledger Besu
 
 **Hyperledger Besu**, an open-source Ethereum client under the Hyperledger project, supports permissioned networks tailored for enterprise needs. It handles transaction signing, consensus (e.g., QBFT or IBFT 2.0), and P2P communication, which we enhance with PQC via <a href="https://www.ironcap.ca">IronCAP</a>'s ICC OpenSSL and ICCHSM.
@@ -146,6 +150,7 @@ While all post-quantum signature schemes are technically viable within Ethereum'
 
 The architecture integrates Hyperledger Besu, ICC OpenSSL, ICCHSM, and OpenVPN to create a PQC-enabled permissioned blockchain, tested within the Sandbox “PQC/2035”. Besu nodes handle blockchain operations, ICC OpenSSL and ICCHSM provide quantum-resistant cryptography, and OpenVPN ensures secure communication over PQC-protected tunnels.
 
+   
 ### 3.1 High-Level Architecture Diagram
 
 ```note
@@ -153,7 +158,7 @@ The architecture integrates Hyperledger Besu, ICC OpenSSL, ICCHSM, and OpenVPN t
 
 +-----------------------------------+          +-----------------------------------+
 | Application Node (Site A)         |          | Validator Node (Site B)           |
-| # Ethereum EVM Compatible         |          | # Ethereum EVM Compatible         |
+| # Hyperledger Besu (EVM)          |          | # Hyperledger Besu (EVM)          |
 | --------------------------------- |          | --------------------------------- |
 | - Smart Contract Interaction      |          | - Validates Transactions          |
 | - DApp API Access & Submission    |          | - Signs Tx Proofs (ICCHSM)        |
@@ -173,7 +178,7 @@ The architecture integrates Hyperledger Besu, ICC OpenSSL, ICCHSM, and OpenVPN t
                                          v
 +-----------------------------------+
 | Miner Node (Site C)              |
-| # Ethereum EVM Compatible        |
+| Hyperledger Besu (EVM)           |
 | -------------------------------- |
 | - Commits Root Hashes            |
 | - Signs Root Hash (ICCHSM)       |
@@ -193,75 +198,98 @@ The architecture integrates Hyperledger Besu, ICC OpenSSL, ICCHSM, and OpenVPN t
          +--------------------------------------------------------------+
 
 ```
-```mermaid
-flowchart TD
-
-%% Nodes
-A[Application Node Site A<br/># Ethereum EVM Compatible]
-B[Validator Node Site B<br/># Ethereum EVM Compatible]
-C[Miner Node Site C<br/># Ethereum EVM Compatible]
-FUTURE[Future Integration<br/><br/>- PQC Certificate Authority PQC-CA:<br/>Issue/manage quantum-safe certs<br/><br/>- QKD Layer 2 Credential Ledger:<br/>Distribute root secrets & session keys]
-
-%% Connections
-A -->|P2P Comm.<br/>OpenVPN PQC-Tunnel| B
-B -->|P2P Comm.<br/>OpenVPN PQC-Tunnel| C
-A -->|P2P Comm.<br/>OpenVPN PQC-Tunnel| C
-
-%% Internet
-subgraph SECURE INTERNET
-  VPN1[PQC-SSL<br/>- ML-KEM Key Exchange<br/>- ML-DSA Auth<br/>- AES-256-GCM Encryption]
-end
-
-A --> VPN1
-B --> VPN1
-C --> VPN1
-
-%% Roles
-A -.->|Smart Contract Interaction<br/>DApp / UI / API Access| A
-B -->|Signs Tx Proofs ML-DSA<br/>Logs PQC Signature in Events| SmartContract[Smart Contract<br/>Event Log]
-C -->|Signs Root Hash ML-DSA<br/>Logs PQC Signature in Events| SmartContract
-
-%% Future
-SmartContract --> FUTURE
-```
 
 This diagram shows Besu nodes communicating securely over OpenVPN tunnels, with PQC algorithms (e.g., ML-KEM and ML-DSA) ensuring quantum resistance. ICC OpenSSL is an OpenSSL extension supporting PQC internet workflow. ICCHSM provides PQC multi-signature capabilities for securing root hashes, transactions and smart contracts.
 
+   
 ### 3.2 PQC Blockchain Structure
 
-The blockchain structure leverages PQC for both communication and core operations, tested within the Sandbox “PQC/2035”. Besu uses **ICCHSM** for PQC multi-signature operations on root hashes and smart contracts, complementing the quantum-safe communication provided by OpenVPN.
+Here’s the updated and rewritten version of **Section 3.2 PQC Blockchain Structure** in **GitHub-flavored Markdown**, reflecting the architecture you defined (Application, Validator, and Miner nodes, event logs, and future roles like PQC-CA and QKD):
 
-- **PQC Multi-Signature for Root Hashes**: ICCHSM enables multiple parties to sign a block’s root hash using PQC algorithms (e.g., ML-DSA, SLH-DSA, or FALCON), ensuring quantum-resistant integrity and authenticity.
-- **PQC Smart Contract Signing**: Smart contracts are signed with PQC multi-signatures via ICCHSM, securing deployment and execution.
-- **PQC Communication**: OpenVPN tunnels, configured with ICC OpenSSL, protect Besu’s P2P traffic with ML-KEM key exchanges and ML-DSA authentication.
+---
+
+### 3.2 PQC Blockchain Structure
+
+The PQC Blockchain is designed with quantum-safe mechanisms at both the **communication** and **operational** layers. The architecture has been evaluated and validated within the Sandbox environment “**PQC/2035**”. Each node type—Application, Validator, and Miner—has distinct roles in securing and maintaining the blockchain.
+
+#### Core Components
+
+* **PQC Event Log Signatures**
+  Rather than storing post-quantum signatures directly in contract state (which is gas-expensive), validator and miner nodes emit PQC signatures to smart contract **event logs**:
+
+  * **Validators** emit signatures verifying transaction proofs.
+  * **Miners** emit signatures for root hash commitments.
+
+* **ICCHSM-Based Multi-Signatures**
+  ICCHSM enables hardware-accelerated quantum-safe signatures using PQC algorithms such as **ML-DSA**, **SLH-DSA**, or **FALCON**. These are used to:
+
+  * Sign root hashes before block finalization.
+  * Verify transaction batches by validators.
+  * Secure smart contract deployments when necessary.
+
+* **Quantum-Safe Smart Contract Interactions**
+  Smart contracts interact with DApps through PQC-authenticated interfaces and support **multi-signature verification** using event-based PQC logs for lightweight trust anchoring.
+
+* **PQC-Secured Communication Layer**
+  All inter-node communication runs over **OpenVPN tunnels**, protected with:
+
+  * **ICC OpenSSL** with integrated PQC support
+  * **ML-KEM** (key exchange)
+  * **ML-DSA** (node authentication)
+  * **AES-256-GCM** (for data confidentiality)
+
+#### Future Extensions
+
+* **PQC Certificate Authority (PQC-CA)**
+  A dedicated authority to issue and manage **quantum-safe digital certificates** for nodes (miners, validators, application interfaces) to ensure verified trust chains.
+
+* **QKD Layer 2 Credential Ledger**
+  Integration of **Quantum Key Distribution (QKD)** to deliver secure session keys and root secrets for Layer 2 identity and credential synchronization across blockchain and messaging layers.
 
 #### RWA Blockchain Framework Structure Diagram
 
 ```note
-+-----------------------------+
-| Hyperledger Besu Blockchain |
-|   (Permissioned Ethereum)   |
-|                             |
-| +-------------------------+ |
-| | Block Structure         | |
-| | - Root Hash (ML-DSA)    | |
-| | - Transactions (ML-DSA) | |
-| | - Smart Contracts       | |
-| |   (PQC Multi-Sig)       | |
-| +-------------------------+ |
-|                             |
-| +-------------------------+ |
-| | Consensus (IBFT 2.0)    | |
-| | - PQC Validation        | |
-| +-------------------------+ |
-|                             |
-| +-------------------------+ |
-| | P2P Communication       | |
-| | - OpenVPN (PQC Tunnel)  | |
-| | - PQC-SSL (ICC OpenSSL) | |
-| | - Key Exchange (ICCHSM) | |
-| +-------------------------+ |
-+-----------------------------+
+note
++-------------------------------+
+| Hyperledger Besu Blockchain   |
+|   (Permissioned Ethereum)     |
+|                               |
+| +---------------------------+ |
+| | Block Structure           | |
+| | - Root Hash (ML-DSA)      | |
+| | - Transactions            | |
+| | - Event Log Signatures    | |
+| |   (Validator & Miner)     | |
+| +---------------------------+ |
+|                               |
+| +---------------------------+ |
+| | Smart Contracts           | |
+| | - PQC Multi-Sig Ops       | |
+| | - Signed Interactions     | |
+| | - Event-based Proof Logs  | |
+| +---------------------------+ |
+|                               |
+| +---------------------------+ |
+| | Consensus (IBFT 2.0 /     | |
+| | QBFT with PQC Enhancements)| |
+| | - Miner Root Hash Voting  | |
+| | - Validator Tx Proofing   | |
+| +---------------------------+ |
+|                               |
+| +---------------------------+ |
+| | P2P Communication         | |
+| | - OpenVPN (PQC Tunnel)    | |
+| | - PQC-SSL (ICC OpenSSL)   | |
+| | - Key Exchange (ML-KEM)   | |
+| | - Auth (ML-DSA via ICC)   | |
+| +---------------------------+ |
+|                               |
+| +---------------------------+ |
+| | Future Extensions         | |
+| | - PQC Certificate Auth    | |
+| | - QKD Credential Ledger   | |
+| +---------------------------+ |
++-------------------------------+
 ```
 
 This diagram illustrates the RWA blockchain’s structure, highlighting PQC integration in block signing, smart contracts, consensus, and communication, all of which are tested in the Sandbox “PQC/2035”.
@@ -272,6 +300,7 @@ This diagram illustrates the RWA blockchain’s structure, highlighting PQC inte
 
 This section provides detailed procedures for implementing the PQC-enabled blockchain, enriched with reference steps and examples, designed to support the Sandbox “PQC/2035” testing environment.
 
+   
 ### 4.1 Installing ICC OpenSSL
 
 ICC OpenSSL provides the foundation for PQC cryptography.
