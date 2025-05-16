@@ -258,7 +258,7 @@ note
 |                               |
 | +---------------------------+ |
 | | Smart Contracts           | |
-| | - PQC Multi-Sig Ops       | |
+| | - PQC Multi-Sig (ICCHSM)  | |
 | | - Signed Interactions     | |
 | | - Event-based Proof Logs  | |
 | +---------------------------+ |
@@ -274,8 +274,8 @@ note
 | | P2P Communication         | |
 | | - OpenVPN (PQC Tunnel)    | |
 | | - PQC-SSL (ICC OpenSSL)   | |
-| | - Key Exchange (ML-KEM via ICCHSM)   | |
-| | - Auth (ML-DSA via ICCHSM)   | |
+| | - Key Exchange (ML-KEM via ICC)   | |
+| | - Auth (ML-DSA via ICC)   | |
 | +---------------------------+ |
 |                               |
 | +---------------------------+ |
