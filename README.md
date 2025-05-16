@@ -98,24 +98,20 @@ FALCON:             A lattice-based signature scheme using the hash-and-sign par
 | **FALCON**             | ✅ Yes            | ❌ N/A      | **666–1,280 bytes**    | **0.02%–0.03%**                   | **5,703–10,615 gas**   | Compact lattice-based signatures (FIPS 203)           |
 | **ML-KEM (Kyber)**     | ❌ N/A            | ✅ Yes      | *Not Applicable*       | *Not Applicable*                  | *Not Applicable*       | Kyber is a Key Encapsulation Mechanism (FIPS 203)     |
 
-#### Ethereum Block Size Context
-
-* **Block Gas Limit:** \~30,000,000 gas
-* **Log Entry Cost:**
-
-  * Fixed base cost: **375 gas**
-  * Per byte of `data` field: **8 gas/byte**
-* **Max Log Entry Data Field Size:**
-
-  $$
-  \frac{30,000,000 - 375}{8} \approx \textbf{3,749,953 bytes} \ (\approx 3.75\text{ MB})
-  $$
-
-#### Gas Cost Calculation Formula
-
-$$
-\text{Gas Cost} = 375\ \text{(base)} + 8 \times \text{signature\_length}
-$$
+```note Ethereum Block Size Context
+Block Gas Limit: ~30,000,000 gas
+Log Entry Cost:
+     Fixed base cost: 375 gas
+     Per byte of `data` field: 8 gas/byte
+Max Log Entry Data Field Size:
+     (30,000,000 - 375) / 8
+     ≈ 3,749,953 bytes (~3.75 MB)
+```
+   
+```note Gas Cost Calculation Formula
+Gas Cost
+    = 375 + 8 × signature_length
+```
 
 ### Practical Considerations
 
@@ -201,19 +197,19 @@ The architecture integrates Hyperledger Besu, ICC OpenSSL, ICCHSM, and OpenVPN t
 flowchart TD
 
 %% Nodes
-A[Application Node (Site A)<br/># Ethereum EVM Compatible]
-B[Validator Node (Site B)<br/># Ethereum EVM Compatible]
-C[Miner Node (Site C)<br/># Ethereum EVM Compatible]
-FUTURE[Future Integration<br/><br/>- PQC Certificate Authority (PQC-CA):<br/>Issue/manage quantum-safe certs<br/><br/>- QKD Layer 2 Credential Ledger:<br/>Distribute root secrets & session keys]
+A[Application Node Site A<br/># Ethereum EVM Compatible]
+B[Validator Node Site B<br/># Ethereum EVM Compatible]
+C[Miner Node Site C<br/># Ethereum EVM Compatible]
+FUTURE[Future Integration<br/><br/>- PQC Certificate Authority PQC-CA:<br/>Issue/manage quantum-safe certs<br/><br/>- QKD Layer 2 Credential Ledger:<br/>Distribute root secrets & session keys]
 
 %% Connections
-A -->|P2P Comm.<br/>(OpenVPN PQC-Tunnel)| B
-B -->|P2P Comm.<br/>(OpenVPN PQC-Tunnel)| C
-A -->|P2P Comm.<br/>(OpenVPN PQC-Tunnel)| C
+A -->|P2P Comm.<br/>OpenVPN PQC-Tunnel| B
+B -->|P2P Comm.<br/>OpenVPN PQC-Tunnel| C
+A -->|P2P Comm.<br/>OpenVPN PQC-Tunnel| C
 
 %% Internet
 subgraph SECURE INTERNET
-  VPN1[PQC-SSL<br/>- ML-KEM (Key Exchange)<br/>- ML-DSA (Auth)<br/>- AES-256-GCM (Encryption)]
+  VPN1[PQC-SSL<br/>- ML-KEM Key Exchange<br/>- ML-DSA Auth<br/>- AES-256-GCM Encryption]
 end
 
 A --> VPN1
@@ -222,8 +218,8 @@ C --> VPN1
 
 %% Roles
 A -.->|Smart Contract Interaction<br/>DApp / UI / API Access| A
-B -->|Signs Tx Proofs (ML-DSA)<br/>Logs PQC Signature in Events| SmartContract[Smart Contract<br/>(Event Log)]
-C -->|Signs Root Hash (ML-DSA)<br/>Logs PQC Signature in Events| SmartContract
+B -->|Signs Tx Proofs ML-DSA<br/>Logs PQC Signature in Events| SmartContract[Smart Contract<br/>Event Log]
+C -->|Signs Root Hash ML-DSA<br/>Logs PQC Signature in Events| SmartContract
 
 %% Future
 SmartContract --> FUTURE
