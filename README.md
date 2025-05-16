@@ -69,7 +69,7 @@ The Sandbox “PQC/2035” is a controlled testing environment designed to valid
 | **Security Risk Assessment** | Identify vulnerabilities in the PQC implementation, focusing on cryptographic strength, key management, and smart contract security. Conduct penetration testing to evaluate resistance to quantum and classical attacks. |
 | **Hacker Testing Platform** | Provide a secure environment for ethical hackers to stress-test the blockchain, simulating quantum-enabled attacks on PQC algorithms and VPN tunnels to validate robustness. |
 | **Token ICO Feasibility**  | Assess the viability of a primary market token Initial Coin Offering (ICO) connected via the blockchain bridge (Section 7.2). Test cross-chain token transfers, PQC multi-signature validation, and regulatory compliance to ensure a secure and scalable ICO process. |
-| **Future Plan**  | PQC Certificate Authority, QKD Layer 2 Credential Ledger |
+| **Future Plan**  | Implement a PQC-based Certificate Authority and establish a Layer 2 Credential Ledger integrated with Quantum Key Distribution (QKD) for secure identity and credential management. |
 
 The Sandbox leverages the demonstration programs (Section 7) to simulate real-world scenarios, providing data to refine the blockchain for enterprise deployment.
 
@@ -155,22 +155,77 @@ The architecture integrates Hyperledger Besu, ICC OpenSSL, ICCHSM, and OpenVPN t
                      [QUANTUM-SAFE RWA BLOCKCHAIN ARCHITECTURE]
 
 +-----------------------------------+          +-----------------------------------+
-| Hyperledger Besu Node (Site A)    |          | Hyperledger Besu Node (Site B)    |
+| Application Node (Site A)         |          | Validator Node (Site B)           |
 | # Ethereum EVM Compatible         |          | # Ethereum EVM Compatible         |
 | --------------------------------- |          | --------------------------------- |
-| - Root Hashes, Smart Contracts &  |          | - Root Hashes, Smart Contracts &  |
-|   Transaction MultiSig (ICCHSM)   |          |   Transaction MultiSig (ICCHSM)   |
-| - Consensus (QBFT/IBFT 2.0)       |          | - Consensus (QBFT/IBFT 2.0)       |
+| - Smart Contract Interaction      |          | - Validates Transactions          |
+| - DApp API Access & Submission    |          | - Signs Tx Proofs (ICCHSM)        |
+| - UI Layer Integration            |          | - Emits PQC Signatures to         |
+|                                   |          |   Event Logs                      |
 | - P2P Comm. (via OpenVPN)         |          | - P2P Comm. (via OpenVPN)         |
 +-----------------------------------+          +-----------------------------------+
          |                                              |
-         | [OpenVPN Tunnel (PQC)]                       | [OpenVPN Tunnel (PQC)]
+         | [OpenVPN Tunnel (PQC-Secured)]               | [OpenVPN Tunnel (PQC-Secured)]
          | - PQC-SSL (ICC OpenSSL)                      | - PQC-SSL (ICC OpenSSL)
          | - Key Exchange (ML-KEM)                      | - Key Exchange (ML-KEM)
          | - Authentication (ML-DSA)                    | - Authentication (ML-DSA)
          | - Encrypted Data (AES-256-GCM)               | - Encrypted Data (AES-256-GCM)
          +----------------------------------------------+
                                  [Secure Internet]
+                                         |
+                                         v
++-----------------------------------+
+| Miner Node (Site C)              |
+| # Ethereum EVM Compatible        |
+| -------------------------------- |
+| - Commits Root Hashes            |
+| - Signs Root Hash (ICCHSM)       |
+| - Emits Signature to Event Log   |
+| - Consensus (QBFT / IBFT 2.0)    |
+| - P2P Comm. (via OpenVPN)        |
++-----------------------------------+
+
+         +--------------------------------------------------------------+
+         |                        Future Integration                     |
+         | ------------------------------------------------------------ |
+         | - PQC Certificate Authority (PQC-CA):                         |
+         |   Issue and manage quantum-safe certificates for users.      |
+         | - QKD Layer 2 Credential Ledger:                             |
+         |   Distribute session keys using  Quantum Key Distribution,   |
+         |   enabling Layer 2 identity and credential synchronization.  |
+         +--------------------------------------------------------------+
+
+```
+```mermaid
+flowchart TD
+
+%% Nodes
+A[Application Node (Site A)<br/># Ethereum EVM Compatible]
+B[Validator Node (Site B)<br/># Ethereum EVM Compatible]
+C[Miner Node (Site C)<br/># Ethereum EVM Compatible]
+FUTURE[Future Integration<br/><br/>- PQC Certificate Authority (PQC-CA):<br/>Issue/manage quantum-safe certs<br/><br/>- QKD Layer 2 Credential Ledger:<br/>Distribute root secrets & session keys]
+
+%% Connections
+A -->|P2P Comm.<br/>(OpenVPN PQC-Tunnel)| B
+B -->|P2P Comm.<br/>(OpenVPN PQC-Tunnel)| C
+A -->|P2P Comm.<br/>(OpenVPN PQC-Tunnel)| C
+
+%% Internet
+subgraph SECURE INTERNET
+  VPN1[PQC-SSL<br/>- ML-KEM (Key Exchange)<br/>- ML-DSA (Auth)<br/>- AES-256-GCM (Encryption)]
+end
+
+A --> VPN1
+B --> VPN1
+C --> VPN1
+
+%% Roles
+A -.->|Smart Contract Interaction<br/>DApp / UI / API Access| A
+B -->|Signs Tx Proofs (ML-DSA)<br/>Logs PQC Signature in Events| SmartContract[Smart Contract<br/>(Event Log)]
+C -->|Signs Root Hash (ML-DSA)<br/>Logs PQC Signature in Events| SmartContract
+
+%% Future
+SmartContract --> FUTURE
 ```
 
 This diagram shows Besu nodes communicating securely over OpenVPN tunnels, with PQC algorithms (e.g., ML-KEM and ML-DSA) ensuring quantum resistance. ICC OpenSSL is an OpenSSL extension supporting PQC internet workflow. ICCHSM provides PQC multi-signature capabilities for securing root hashes, transactions and smart contracts.
