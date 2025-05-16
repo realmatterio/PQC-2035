@@ -20,7 +20,7 @@
 - [3. Architecture](#3-architecture)   
   - [3.1 High-Level Architecture Diagram](#31-high-level-architecture-diagram)   
   - [3.2 PQC Blockchain Structure](#32-pqc-blockchain-structure)   
-  - [RWA Blockchain Framework Structure Diagram](#rwa-blockchain-framework-structure-diagram)  
+    - [RWA Blockchain Framework Structure Diagram](#rwa-blockchain-framework-structure-diagram)  
 - [4. Implementation Details](#4-implementation-details)   
   - [4.1 Installing ICC OpenSSL](#41-installing-icc-openssl)   
   - [4.2 Installing and Configuring ICCHSM](#42-installing-and-configuring-icchsm)   
