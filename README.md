@@ -83,10 +83,53 @@ PQC encompasses cryptographic algorithms designed to withstand both classical an
 
 ```info
 ML-DSA (Dilithium): A lattice-based digital signature scheme for authentication and signing.
+                    The signature Length is approximately 2,701 to 4,595 bytes, depending on the security level (e.g., Dilithium2, Dilithium3, Dilithium5).
 ML-KEM (Kyber):     A lattice-based key encapsulation mechanism for secure key exchanges.
 SLH-DSA (Sphincs+): A stateless hash-based signature scheme.
+                    The sgnature Length is approximately 17,000 to 41,000 bytes, depending on the parameter set (e.g., SPHINCS+-128s, SPHINCS+-256f).
 FALCON:             A lattice-based signature scheme using the hash-and-sign paradigm.
 ```
+
+#### NIST PQC Signature Schemes and KEM in the Ethereum Context
+
+| Scheme                 | Signature Method | KEM Method | Signature Length       | % of Max Log Entry Data (3.75 MB) | Estimated Gas Cost     | Notes                                                 |
+| ---------------------- | ---------------- | ---------- | ---------------------- | --------------------------------- | ---------------------- | ----------------------------------------------------- |
+| **ML-DSA (Dilithium)** | ✅ Yes            | ❌ N/A      | **2,420–4,627 bytes**  | **0.06%–0.12%**                   | **19,735–37,371 gas**  | Signature size depends on Dilithium levels (FIPS 204) |
+| **SLH-DSA (SPHINCS+)** | ✅ Yes            | ❌ N/A      | **7,856–49,856 bytes** | **0.21%–1.33%**                   | **62,233–399,223 gas** | Large stateless hash-based signatures (FIPS 205)      |
+| **FALCON**             | ✅ Yes            | ❌ N/A      | **666–1,280 bytes**    | **0.02%–0.03%**                   | **5,703–10,615 gas**   | Compact lattice-based signatures (FIPS 203)           |
+| **ML-KEM (Kyber)**     | ❌ N/A            | ✅ Yes      | *Not Applicable*       | *Not Applicable*                  | *Not Applicable*       | Kyber is a Key Encapsulation Mechanism (FIPS 203)     |
+
+##### Ethereum Block Size Context
+
+* **Block Gas Limit:** \~30,000,000 gas
+* **Log Entry Cost:**
+
+  * Fixed base cost: **375 gas**
+  * Per byte of `data` field: **8 gas/byte**
+* **Max Log Entry Data Field Size:**
+
+  $$
+  \frac{30,000,000 - 375}{8} \approx \textbf{3,749,953 bytes} \ (\approx 3.75\text{ MB})
+  $$
+
+##### Gas Cost Calculation Formula
+
+$$
+\text{Gas Cost} = 375\ \text{(base)} + 8 \times \text{signature\_length}
+$$
+
+#### Practical Considerations
+
+* **Small PQC Signatures (e.g., FALCON, Dilithium):**
+  Gas-efficient and feasible for on-chain logging or verification in smart contracts.
+
+* **Large PQC Signatures (e.g., SPHINCS+):**
+  Can incur **over 300,000 gas**, which is significant for single transactions and may not be efficient for frequent or large-scale use in contracts.
+
+* **ML-KEM (Kyber):**
+  Being a KEM, Kyber does not produce signatures and is used for key encapsulation; unsuitable for digital signature needs in Ethereum logs.
+
+While all post-quantum signature schemes are technically viable within Ethereum's theoretical gas and size limits, **signature size directly impacts gas consumption**. For real-world use in smart contracts or log entries, **Falcon and Dilithium offer better trade-offs**, whereas **SPHINCS+** provides strong security but at a higher gas cost.
 
 ### 2.2 ICC OpenSSL
 
