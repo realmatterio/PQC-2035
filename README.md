@@ -19,7 +19,7 @@
 - [3. Architecture](#3-architecture)   
   - [3.1 High-Level Architecture Diagram](#31-high-level-architecture-diagram)   
   - [3.2 PQC Blockchain Structure](#32-pqc-blockchain-structure)   
-  - [Blockchain Framework Structure Diagram](#blockchain-framework-structure-diagram)  
+  - [RWA Blockchain Framework Structure Diagram](#rwa-blockchain-framework-structure-diagram)  
 - [4. Implementation Details](#4-implementation-details)   
   - [4.1 Installing ICC OpenSSL](#41-installing-icc-openssl)   
   - [4.2 Installing and Configuring ICCHSM](#42-installing-and-configuring-icchsm)   
@@ -83,10 +83,8 @@ PQC encompasses cryptographic algorithms designed to withstand both classical an
 
 ```info
 ML-DSA (Dilithium): A lattice-based digital signature scheme for authentication and signing.
-                    The signature Length is approximately 2,701 to 4,595 bytes, depending on the security level (e.g., Dilithium2, Dilithium3, Dilithium5).
 ML-KEM (Kyber):     A lattice-based key encapsulation mechanism for secure key exchanges.
 SLH-DSA (Sphincs+): A stateless hash-based signature scheme.
-                    The sgnature Length is approximately 17,000 to 41,000 bytes, depending on the parameter set (e.g., SPHINCS+-128s, SPHINCS+-256f).
 FALCON:             A lattice-based signature scheme using the hash-and-sign paradigm.
 ```
 
