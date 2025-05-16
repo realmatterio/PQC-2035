@@ -2,6 +2,7 @@
   <img src="PQC-2035_Figure_0.png" alt="PQC/2035">
   <h1><strong>PQC/2035 Sandbox Initiative</strong></h1>
   <h2><strong>Quantum-Safe RWA Blockchain with ICC OpenSSL & ICCHSM</strong></h2>
+  <h2>White Paper</h2>
 </div>
 <br>
 
@@ -91,7 +92,7 @@ FALCON:             A lattice-based signature scheme using the hash-and-sign par
 ### 2.2 PQC Signatures and KEM for Ethereum Integration
 
 | Scheme                 | Signature Method | KEM Method | Signature Length       | % of Max Log Entry Data (Ethereum Block Size of 3.75 MB) | Estimated Gas Cost     | Notes                                                 |
-| ---------------------- | ---------------- | ---------- | ---------------------- | ------------------------- | ---------------------- | ---------------------------------------------------------- |
+| ---------------------- | ---------------- | ---------- | ---------------------- | ------------------------- | ---------------------- | ---------------------------------------------------------------- |
 | **ML-DSA (Dilithium)** | ✅ Yes            | ❌ N/A      | **2,420–4,627 bytes**  | **0.06%–0.12%**                   | **19,735–37,371 gas**  | Signature size depends on Dilithium levels (FIPS 204) |
 | **SLH-DSA (SPHINCS+)** | ✅ Yes            | ❌ N/A      | **7,856–49,856 bytes** | **0.21%–1.33%**                   | **62,233–399,223 gas** | Large stateless hash-based signatures (FIPS 205)      |
 | **FALCON**             | ✅ Yes            | ❌ N/A      | **666–1,280 bytes**    | **0.02%–0.03%**                   | **5,703–10,615 gas**   | Compact lattice-based signatures (FIPS 203)           |
