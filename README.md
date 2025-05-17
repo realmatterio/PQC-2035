@@ -293,7 +293,7 @@ This diagram illustrates the RWA blockchain’s structure, highlighting PQC inte
 ## 4. Implementation Details
 
 This section provides detailed procedures for implementing the PQC-enabled blockchain, enriched with reference steps and examples, designed to support the Sandbox “PQC/2035” testing environment.
-
+ 
    
 ### 4.1 Installing ICC OpenSSL
 
@@ -318,6 +318,7 @@ ICC OpenSSL provides the foundation for PQC cryptography.
    export LD_LIBRARY_PATH=/path/to/icc-openssl/lib:$LD_LIBRARY_PATH
    ```
 
+   
 ### 4.2 Installing and Configuring ICCHSM
 
 ICCHSM provides PQC encryption and multi-signature capabilities.
@@ -340,41 +341,44 @@ ICCHSM provides PQC encryption and multi-signature capabilities.
    sudo softhsm2-util --module /usr/lib/softhsm/libsofthsm2.so --init-token --free --label "PQCToken" --pin 123456 --so-pin 123456
    ```
 
+   
 ### 4.3 Configuring OpenVPN with ICC OpenSSL
 
 OpenVPN secures Besu’s P2P communication using PQC-enabled tunnels, critical for Sandbox “PQC/2035” efficiency testing.
-
+   
 #### 4.3.1 Generate PQC Keys and Certificates
 ```bash
-# Generate CA key and certificate
+# CA key and certificate
+# (Kyber KEM + Dilithium2 Signing for CA authenticity)
 cd /path/to/icc-openssl/bin
 ./openssl genicc -bsl 128 -type shake256-kyber-li2 -out ca_key.pem
 ./openssl req -config openssl.cnf -keyform pem -key ca_key.pem -new -x509 -days 3650 -shake256 -extensions v3_ca -out ca_cert.pem
 
-# Generate server key and certificate
+# Server key and certificate
 ./openssl genicc -bsl 128 -type shake256-kyber-li2 -out server_key.pem
 ./openssl req -config openssl.cnf -new -shake256 -keyform pem -key server_key.pem -out server.csr
 ./openssl ca -config icc-ca-shake256-kyber-li2.cnf -keyform pem -days 365 -md shake256 -in server.csr -out server_cert.pem
 
-# Generate client key and certificate
+# Client key and certificate
 ./openssl genicc -bsl 128 -type shake256-kyber-li2 -out client_key.pem
 ./openssl req -config openssl.cnf -new -shake256 -keyform pem -key client_key.pem -out client.csr
 ./openssl ca -config icc-ca-shake256-kyber-li2.cnf -keyform pem -days 365 -md shake256 -in client.csr -out client_cert.pem
 ```
-
+   
 #### 4.3.2 OpenVPN Configuration
 - **Server (`server.ovpn`)**:
   ```plaintext
   port 1194
   proto udp
   dev tun
+  tls-version-min 1.3
+  dh none
   ca ca_cert.pem
   cert server_cert.pem
   key server_key.pem
-  dh none
   server 10.8.0.0 255.255.255.0
   cipher AES-256-GCM
-  tls-cipher TLS-ML-KEM-ML-DSA-WITH-AES-256-GCM-SHA384
+  tls-cipher TLS1.3-KYBER-DSA-AES256GCM-SHA384
   ```
 - **Client (`client.ovpn`)**:
   ```plaintext
@@ -382,128 +386,132 @@ cd /path/to/icc-openssl/bin
   remote <server-ip> 1194
   proto udp
   dev tun
+  tls-version-min 1.3
+  dh none
   ca ca_cert.pem
   cert client_cert.pem
   key client_key.pem
   cipher AES-256-GCM
-  tls-cipher TLS-ML-KEM-ML-DSA-WITH-AES-256-GCM-SHA384
+  tls-cipher TLS1.3-KYBER-DSA-AES256GCM-SHA384
   ```
-
+   
 #### 4.3.3 Framework Diagram 1: OpenVPN Initialization and TLS Handshake with Besu Context
 
 ```note
 Initialization Phase:
 [OpenVPN Server]                              [OpenVPN Client]
-  |                                              |
-  | Load CA, Server Cert/Key                     | Load CA, Client Cert/Key
-  | (ICC OpenSSL: PQC ML-DSA/Kyber)              | (ICC OpenSSL: PQC ML-DSA/Kyber)
-  | [Besu Node Prep: P2P Config]                 | [Besu Node Prep: P2P Config]
-  |                                              |
+  | Load CA, Server Cert/Key                   | Load CA, Client Cert/Key
+  | (ICC OpenSSL: PQC KEM + ML-DSA)            | (ICC OpenSSL: PQC KEM + ML-DSA)
+  | [Besu Node P2P Config]                     | [Besu Node P2P Config]
 
 TLS Handshake (Quantum-Safe):
 [OpenVPN Server]                               [OpenVPN Client]
-  |                                              |
-  | <--- ClientHello --------------------------> | Send PQC ciphersuites (ML-KEM/DSA)
-  | --- Send ServerHello, Cert ----------------> | Present server cert (ML-DSA)
-  |                                              | Verify cert (ML-DSA)
-  | <--- Client Cert, KeyEx -------------------> | Send client cert, KeyEx (ML-KEM)
-  | Verify client cert (ML-DSA)                  |
-  | --- Complete key exchange -----------------> | Derive session key (AES-256-GCM)
-  | [Besu P2P: Secure Tunnel Ready]              | [Besu P2P: Secure Tunnel Ready]
-  |                                              |
+  | <--- ClientHello ------------------------> | (includes Kyber+DSA)
+  | --- ServerHello, Cert -------------------> | Present server cert (ML-DSA)
+  | <--- Client Cert, KeyEx -----------------> | Send client cert & Kyber KeyEx
+  | Verify client cert (ML-DSA)                |
+  | --- Complete key exchange ---------------> | Derive AES-256-GCM session key
+  | [Besu P2P: Secure Tunnel Ready]            | [Besu P2P: Secure Tunnel Ready]
 ```
 
 This diagram integrates Besu by showing how the OpenVPN handshake prepares a secure tunnel for Besu’s P2P communication.
-
+   
 #### 4.3.4 Framework Diagram 2: OpenVPN Data Channel and ICC OpenSSL with Besu
 
 ```note
 [OpenVPN Server]                               [OpenVPN Client]
-+--------------------+                         +--------------------+
-| OpenVPN Server     |                         | OpenVPN Client     |
-| - Config (PQC Cert)| <--- TLS Handshake ---> | - Config (PQC Cert)|
-| - TLS (ML-KEM/DSA) |   (PQC: Kyber/DSA)      | - TLS (ML-KEM/DSA) |
-| - Data (AES-256)   | <--- Data Channel ----> | - Data (AES-256)   |
-| [Besu P2P Traffic] |   (AES-256-GCM)         | [Besu P2P Traffic] |
-+--------------------+                         +--------------------+
-| ICC OpenSSL        |                         | ICC OpenSSL        |
-| - genicc (PQC Keys)|                         | - genicc (PQC Keys)|
-| - iccutl (Enc/Dec) |                         | - iccutl (Enc/Dec) |
-| - Sign/Verify      |                         | - Sign/Verify      |
-+--------------------+                         +--------------------+
++---------------------+                         +---------------------+
+| - TLS (Kyber/DSA)   | <--- Data Channel --->  | - TLS (Kyber/DSA)   |
+| - Data (AES-256-GCM)|      (PQC Secured)      | - Data (AES-256-GCM) |
+| [Besu P2P Traffic]  |                         | [Besu P2P Traffic]  |
++---------------------+                         +---------------------+
+| ICC OpenSSL         |                         | ICC OpenSSL         |
+| - genicc (KEM keys) |                         | - genicc (KEM keys) |
+| - iccutl (encrypt)  |                         | - iccutl (decrypt)  |
+| - Sign/Verify       |                         | - Sign/Verify       |
++---------------------+                         +---------------------+
 ```
 
 This diagram emphasizes Besu’s P2P traffic flowing through the quantum-safe OpenVPN tunnel, supported by ICC OpenSSL’s PQC capabilities.
-
+   
 #### 4.3.5 Start OpenVPN
 ```bash
-openvpn --config server.ovpn  # Server
-openvpn --config client.ovpn  # Client
-```
+# On Server
+openvpn --config server.ovpn
 
+# On Client
+openvpn --config client.ovpn
+   
+```
+   
 ### 4.4 Configuring Hyperledger Besu with ICC OpenSSL and ICCHSM
 
 Besu is adapted to use ICC OpenSSL for transaction signing and ICCHSM for PQC multi-signature operations.
 
 #### 4.4.1 Install Besu
-1. **Download** from [GitHub](https://github.com/hyperledger/besu/releases):
-   ```bash
-   wget https://github.com/hyperledger/besu/releases/download/<version>/besu-<version>.tar.gz
-   tar -xzf besu-<version>.tar.gz
-   ```
-2. **Set PATH**:
-   ```bash
-   export PATH=$PATH:/path/to/besu-<version>/bin
-   ```
-3. **Verify**:
-   ```bash
-   besu --version
-   ```
+```bash
+wget https://github.com/hyperledger/besu/releases/download/<version>/besu-<version>.tar.gz
+tar -xzf besu-<version>.tar.gz
+export PATH=$PATH:/path/to/besu-<version>/bin
+besu --version
+```
+   
+#### 4.4.2 Validator Node: ICCHSM Multi-Signature for Transaction Proofs
 
-#### 4.4.2 Integrate ICC OpenSSL for Transaction Signing
-Besu’s Java-based architecture uses a JNI wrapper to call ICC OpenSSL’s PQC functions. Example:
-```java
-import icc.openssl.ICCOpenSSL;
+Validators use ICCHSM to co-sign transaction proofs before emitting them to smart-contract event logs. This ensures quantum-resistant verification of each transaction batch.
 
-public class BesuPQCrypto {
-    public static byte[] signTransaction(byte[] txData, String privateKey) {
-        return ICCOpenSSL.sign(privateKey, txData, "ML-DSA");
-    }
-    
-    public static boolean verifyTransaction(byte[] txData, byte[] signature, String publicKey) {
-        return ICCOpenSSL.verify(publicKey, txData, signature, "ML-DSA");
-    }
-}
+```bash
+# Generate a Dilithium2 key pair for validator multi-signature
+icc-tool \
+  --module /usr/lib/softhsm/libsofthsm2.so \
+  --slot <validator-slot> --login --pin <pin> \
+  --keypair --key-type shake256-dilithium2 \
+  --id 201 --label "ValidatorMultiSigKey"
+
+# Sign transaction proof data (tx_proof.bin)
+icc-tool \
+  --module /usr/lib/softhsm/libsofthsm2.so \
+  --slot <validator-slot> --login --pin <pin> \
+  --sign --mechanism CKM-ICC-DILITHIUM2 \
+  --id 201 -i tx_proof.bin -o tx_proof_sig.bin
 ```
 
-#### 4.4.3 Integrate ICCHSM for PQC Multi-Signature Operations
-Besu DApps leverage **ICCHSM** for PQC multi-signature operations on root hashes and smart contracts, ensuring quantum-resistant security.
+> The generated `tx_proof_sig.bin` is submitted by validators and emitted via an `event` in the smart contract for off-chain audit.
+   
+#### 4.4.3 Miner Node: ICCHSM Multi-Signature for Root Hashes
 
-- **Install ICCHSM**:
-  - **On Linux (Ubuntu/Debian)**:
-    ```bash
-    wget icchsm_6.0.y-z_amd64.deb
-    sudo dpkg -i icchsm_6.0.y-z_amd64.deb
-    export SOFTHSM2_CONF=/usr/local/etc/softhsm2.conf
-    ```
-- **Generate PQC Multi-Signature Key Pair**:
-  ```bash
-  icc-tool --module /usr/lib/softhsm/libsofthsm2.so --slot <slot-id> --login --pin 123456 -k --key-type icc-shake256-kyber-dilithium:128 --id 101 --label MultiSigKey
-  ```
-- **Sign Root Hash with Multi-Signatures**:
-  ```bash
-  icc-tool --module /usr/lib/softhsm/libsofthsm2.so --slot <slot-id> --login --pin 123456 -m CKM-ICC-SHAKE256-KYBER-DILITHIUM --sign --id 101 -i root_hash.bin -o multi_sig.bin
-  ```
-- **Smart Contract Multi-Signature**: DApps call ICCHSM via PKCS#11 to sign contract bytecode or execution parameters, logged as events on the blockchain.
+Miners co-sign the block root hash using ICCHSM before finalizing blocks. The signature is then emitted to the smart-contract event log for tamper-proof auditing.
 
+```bash
+# Generate a Dilithium2 key pair for miner multi-signature
+icc-tool \
+  --module /usr/lib/softhsm/libsofthsm2.so \
+  --slot <miner-slot> --login --pin <pin> \
+  --keypair --key-type shake256-dilithium2 \
+  --id 101 --label "MinerMultiSigKey"
+
+# Sign the block root hash (root_hash.bin)
+icc-tool \
+  --module /usr/lib/softhsm/libsofthsm2.so \
+  --slot <miner-slot> --login --pin <pin> \
+  --sign --mechanism CKM-ICC-DILITHIUM2 \
+  --id 101 -i root_hash.bin -o root_hash_sig.bin
+```
+
+> The `root_hash_sig.bin` is included in the block event log to provide a quantum-safe integrity proof of each block.
+   
 #### 4.4.4 Configure Besu P2P over OpenVPN
+
 In `besu-config.toml`:
+
 ```toml
 [p2p]
-host = "10.8.0.2"  # VPN-assigned IP
+host = "10.8.0.2"        # VPN-assigned IP
 port = 30303
 ```
+
 Start Besu:
+
 ```bash
 besu --config-file=besu-config.toml
 ```
