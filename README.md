@@ -30,10 +30,10 @@
     - [4.3.3 Framework Diagram 1: OpenVPN Initialization and TLS Handshake with Besu Context](#433-framework-diagram-1-openvpn-initialization-and-tls-handshake-with-besu-context)   
     - [4.3.4 Framework Diagram 2: OpenVPN Data Channel and ICC OpenSSL with Besu](#434-framework-diagram-2-openvpn-data-channel-and-icc-openssl-with-besu)   
     - [4.3.5 Start OpenVPN](#435-start-openvpn)   
-  - [4.4 Configuring Hyperledger Besu with ICC OpenSSL and ICCHSM](#44-configuring-hyperledger-besu-with-icc-openssl-and-icchsm)   
+  - [4.4 Configuring Hyperledger Besu with ICCHSM Multisig](#44-configuring-hyperledger-besu-with-icchsm-multisig)   
     - [4.4.1 Install Besu](#441-install-besu)   
-    - [4.4.2 Integrate ICC OpenSSL for Transaction Signing](#442-integrate-icc-openssl-for-transaction-signing)   
-    - [4.4.3 Integrate ICCHSM for PQC Multi-Signature Operations](#443-integrate-icchsm-for-pqc-multi-signature-operations)   
+    - [4.4.2 Validator Node: ICCHSM Multi-Signature for Transaction Proofs](#442-Validator-Node:-ICCHSM-Multi-Signature-for-Transaction-Proofs)   
+    - [4.4.3  Miner Node: ICCHSM Multi-Signature for Root Hashes](#443-Miner-Node:-ICCHSM-Multi-Signature-for-Root-Hashes)   
     - [4.4.4 Configure Besu P2P over OpenVPN](#444-configure-besu-p2p-over-openvpn)      
 - [5. ICCHSM PQC Methods](#5-icchsm-pqc-methods)   
 - [6. System Requirements](#6-system-requirements)   
@@ -444,7 +444,7 @@ openvpn --config client.ovpn
    
 ```
    
-### 4.4 Configuring Hyperledger Besu with ICC OpenSSL and ICCHSM
+### 4.4 Configuring Hyperledger Besu with ICCHSM Multisig
 
 Besu is adapted to use ICC OpenSSL for transaction signing and ICCHSM for PQC multi-signature operations.
 
