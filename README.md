@@ -208,7 +208,7 @@ The PQC Blockchain is designed with quantum-safe mechanisms at both the **commun
 
 #### Core Components
 
-* **PQC Event Log Signatures**
+* **PQC Event Log Multi-Signatures**
   Rather than storing post-quantum signatures directly in contract state (which is gas-expensive), validator and miner nodes emit PQC signatures to smart contract **event logs**:
 
   * **Validators** emit signatures verifying transaction proofs.
