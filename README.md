@@ -252,7 +252,7 @@ note
 | | Block Structure           | |
 | | - Root Hash               | |
 | | - Transactions            | |
-| | - Event Log PQC Signatures | |
+| | - Event Log PQC Multi-Signatures | |
 | |   (Validator & Miner)     | |
 | +---------------------------+ |
 |                               |
