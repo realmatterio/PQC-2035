@@ -188,9 +188,9 @@ The architecture integrates Hyperledger Besu, ICC OpenSSL, ICCHSM, and OpenVPN t
 +-----------------------------------+
 
          +--------------------------------------------------------------+
-         |                        Future Integration                     |
+         |                        Future Integration                    |
          | ------------------------------------------------------------ |
-         | - PQC Certificate Authority (PQC-CA):                         |
+         | - PQC Certificate Authority (PQC-CA):                        |
          |   Issue and manage quantum-safe certificates for users.      |
          | - QKD Layer 2 Credential Ledger:                             |
          |   Distribute session keys using  Quantum Key Distribution,   |
@@ -228,8 +228,8 @@ The PQC Blockchain is designed with quantum-safe mechanisms at both the **commun
   All inter-node communication runs over **OpenVPN tunnels**, protected with:
 
   * **ICC OpenSSL** with integrated PQC support
-  * **ML-KEM** (key exchange)
-  * **ML-DSA** (node authentication)
+  * **ML-KEM or other PQC KEM** (key exchange via ICC)
+  * **ML-DSA or other PQC Signatures** (node authentication via ICC)
   * **AES-256-GCM** (for data confidentiality)
 
 #### Future Extensions
