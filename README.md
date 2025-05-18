@@ -566,7 +566,7 @@ ICCHSM supports a variety of PQC mechanisms via its PKCS#11 interface, ensuring 
 
 ## 7. Demonstration Programs with Solidity Smart Contracts
 
-The PQC/2035 Sandbox features a suite of demonstration programs designed to validate our quantum-safe RWA blockchain’s performance, security, and suitability for a primary-market ICO bridged to a secondary DEX. These examples showcase a cross-chain token bridge between a Hyperledger Besu network (primary ICO market) and Ethereum (secondary DEX market), leveraging ICCHSM-generated PQC multi-signatures for all cross-chain proofs. The flowchart below illustrates the full process.:
+The PQC/2035 Sandbox features a suite of demonstration programs designed to validate our quantum-safe RWA blockchain’s performance, security, and suitability for a primary-market ICO bridged to a secondary DEX. These examples showcase a cross-chain token bridge between a Hyperledger Besu network (primary ICO market) and Ethereum (secondary DEX market), leveraging ICCHSM-generated PQC multi-signatures for all cross-chain proofs. The flowchart below illustrates the full process.
 
 ```note
 Hyperledger Besu                     Bridge                           Ethereum
@@ -905,8 +905,8 @@ contract MinerSignatureContract {
 
 * **Trust Minimization**:
 
-  * Validators co-sign cross-chain proof objects (e.g., `proofId`) during `mintTokens` or `releaseTokens` calls.
-  * Miners co-sign root hash commitments (e.g., `rootHash`) during `lockTokens` or `burnTokens` calls.
+  * Miners exclusively sign block root hashes via `MinerSignatureContract`.
+  * Validators exclusively sign cross-chain proofs (`proofId`) via `MintingContract`.
   * All signatures are verified off-chain via events (`PQCMultiSig`), removing trust assumptions from the on-chain bridge logic itself.
 
 * **Auditable `event` Emissions**:
