@@ -566,75 +566,112 @@ ICCHSM supports a variety of PQC mechanisms via its PKCS#11 interface, ensuring 
 
 ## 7. Demonstration Programs with Solidity Smart Contracts
 
-The PQC/2035 Sandbox features a suite of demonstration programs designed to validate our quantum-safe RWA blockchain’s performance, security, and suitability for a primary-market ICO bridged to a secondary DEX. These examples showcase a cross-chain token bridge between a Hyperledger Besu network (primary ICO market) and Ethereum (secondary DEX market), leveraging ICCHSM-generated PQC multi-signatures for all cross-chain proofs. The flowchart below illustrates the full process.
+The PQC/2035 Sandbox features a suite of demonstration programs designed to validate our quantum-safe RWA blockchain’s performance, security, and suitability for a primary-market ICO bridged to a secondary DEX. These examples showcase a cross-chain token bridge between a Hyperledger Besu network (primary ICO market) and Ethereum (secondary DEX market), leveraging ICCHSM-generated PQC multi-signatures for all cross-chain proofs. The flowchart below illustrates the full process: 
 
+   
+### Hyperledger Besu to Ethereum (Primary ICO to Secondary DEX)
 ```note
-Hyperledger Besu                     Bridge                           Ethereum
-(Primary ICO Market)            (Cross-Chain)                  (Secondary DEX Market)
+Hyperledger Besu             Cross Chain Bridge                 Ethereum
+(Primary ICO Market)         (Off-chain Relayer)                (Secondary DEX Market)
 +------------------+                                           +------------------+
 | User Wallet      |                                           | User Wallet      |
 | (MetaMask)       |                                           | (MetaMask)       |
 +--------+---------+                                           +--------+---------+
          | 1. Approve ICOToken                                          |
-         |    (ICOToken.approve)                                        |
+         |    ICOToken.approve()                                        |
          v                                                              |
 +------------------+                                           +------------------+
 | ICOToken         |                                           | WrappedICOToken  |
 | (ERC-20)         |                                           | (wICO, ERC-20)   |
 +------------------+                                           +------------------+
          | 2. Lock Tokens                                               |
-         |    (LockingContract.lockTokens)                              |
+         |    LockingContract.lockTokens(amount, multiSig, rootHash)    |
+         |    Emit TokensLocked(user, amount, multiSig, rootHash)       |
+         |    Emit PQCMultiSig(multiSig, user, rootHash)                |
          v                                                              |
 +------------------+          +-------------------+            +------------------+
 | LockingContract  |--------->| TokensLocked      |----------->| MintingContract  |
 |                  |          | Event             |            |                  |
 +------------------+          +-------------------+            +------------------+
-                                   |                                    |
-                                   | Validators generate PQC MultiSig   |
-                                   | proof via ICCHSM (ML-DSA)          |
-                                   | and emit VAA                         |
-                                   v                                    |
-                                 [Submit PQC-signed VAA to Ethereum]   |
-                                                                          | 3. Mint Wrapped Tokens
-                                                                          |    (MintingContract.mintTokens)
-                                                                          v
-                                                                         +------------------+
-                                                                         | WrappedICOToken  |
-                                                                         | Receives wICO    |
-                                                                         +------------------+
-
-Reverse Flow (Ethereum → Besu)
+         |                         |                                    |
+         | Miners sign block        | Validators generate ML-DSA     |
+         | rootHash via ICCHSM     | multi-signature via ICCHSM     |
+         | (MinerSignatureContract)| (proofId for cross-chain proof)|
+         | Emit RootHashSigned     | Emit VAA with proofId          |
+         v                         |                                    |
++------------------+               |                                    |
+| MinerSignature    |               v                                    |
+| Contract          |              [Submit ML-DSA-signed VAA to Ethereum] |
+| Emit RootHashSigned|                                                  |
+| (blockNumber,     |                                                  |
+|  rootHash, multiSig)|                                                 |
++------------------+                                                  |
+                                                                      | 3. Mint Wrapped Tokens
+                                                                      |    MintingContract.mintTokens(user, amount, multiSig, proofId)
+                                                                      |    Emit TokensMinted(user, amount, multiSig, proofId)
+                                                                      |    Emit PQCMultiSig(multiSig, validator, proofId)
+                                                                      v
+                                                                     +------------------+
+                                                                     | WrappedICOToken  |
+                                                                     | Receives wICO    |
+                                                                     +------------------+
+```
+   
+### Ethereum to Hyperledger Besu (Secondary DEX to Primary ICO)
+```note
+Ethereum                     Cross Chain Bridge                 Hyperledger Besu
+(Secondary DEX Market)       (Off-chain Relayer)                (Primary ICO Market)
 +------------------+                                           +------------------+
 | User Wallet      |                                           | User Wallet      |
 | (MetaMask)       |                                           | (MetaMask)       |
 +--------+---------+                                           +--------+---------+
          |                                                              |
-         |                                                  4. Approve Wrapped Token
-         |                                                     (WrappedICOToken.approve)
-         |                                                              |
+         | 4. Approve Wrapped Token                                     |
+         |    WrappedICOToken.approve()                                 |
          |                                                              v
 +------------------+          +-------------------+            +------------------+
-| LockingContract  |<---------| TokensBurned      |<-----------| MintingContract  |
+| MintingContract  |--------->| TokensBurned      |----------->| LockingContract  |
 |                  |          | Event             |            |                  |
 +------------------+          +-------------------+            +------------------+
-                                   |                                    |
-                                   | Validators generate PQC MultiSig   |
-                                   | proof via ICCHSM (ML-DSA)          |
-                                   | and emit VAA                         |
-                                   v                                    |
-                                [Submit PQC-signed VAA to Besu]        |
-         | 5. Unlock Tokens                                             |
-         |    (LockingContract.releaseTokens)                           |
-         v                                                              v
-+------------------+                                           +------------------+
-| ICOToken         |                                           | WrappedICOToken  |
-| Receives ICOToken|                                           | Burns wICO       |
-+------------------+                                           +------------------+
+         | 5. Burn Tokens                                               |
+         |    MintingContract.burnTokens(amount, multiSig, rootHash)    |
+         |    Emit TokensBurned(user, amount, multiSig, rootHash)       |
+         |    Emit PQCMultiSig(multiSig, user, rootHash)                |
+         |                                                              |
+         |                         |                                    |
+         |                         | Validators generate ML-DSA     |
+         |                         | multi-signature via ICCHSM     |
+         |                         | (proofId for cross-chain proof)|
+         |                         | Emit VAA with proofId          |
+         v                         v                                    |
++------------------+              [Submit ML-DSA-signed VAA to Besu]  |
+| MinerSignature    |                                                 |
+| Contract          |                                                 |
+| Emit RootHashSigned|                                                |
+| (blockNumber,     |                                                |
+|  rootHash, multiSig)|                                               |
++------------------+                                                 |
+                                                                     | 6. Unlock Tokens
+                                                                     |    LockingContract.releaseTokens(user, amount, multiSig, proofId)
+                                                                     |    Emit TokensUnlocked(user, amount, multiSig, proofId)
+                                                                     |    Emit PQCMultiSig(multiSig, validator, proofId)
+                                                                     v
+                                                                    +------------------+
+                                                                    | ICOToken         |
+                                                                    | Receives ICOToken|
+                                                                    +------------------+
 
 ```
 
-Below are the demonstration programs implementing this flowchart.
-
+Notes
+- Muilti-Signatures: All signatures are generated using ICCHSM, ensuring quantum-safe cross-chain proofs and block root signatures.
+- Miner vs. Validator Roles:
+  - Miners sign block root hashes (rootHash) via MinerSignatureContract, emitting RootHashSigned(blockNumber, rootHash, multiSig).
+  - Validators sign cross-chain proofs (proofId) for operations like lockTokens, mintTokens, burnTokens, and releaseTokens, emitting PQCMultiSig(multiSig, signer, proofId/rootHash).
+- Off-Chain Verification: PQC signatures are emitted as events (PQCMultiSig, RootHashSigned) for off-chain verification by light clients or auditors, reducing on-chain gas costs.
+- Replay Prevention: Unique proofId or rootHash identifiers, tracked via processedProofs mapping, prevent replay or double-spend attacks.
+- ICCHSM: All signatures are generated by a hardened post-quantum PKCS#11 HSM module (ICCHSM), ensuring secure key management.
+   
    
 ### 7.1 ICOToken and LockingContract on Hyperledger Besu
 
@@ -806,9 +843,9 @@ contract MintingContract {
 ```
    
    
-### 7.3 Cross-Chain Bridge DApp (JavaScript)
+### 7.3 Cross-Chain Bridge (Off-Chain Relay)
 
-**Description**: A Node.js DApp using Web3.js and PKCS#11 via ICCHSM to produce ML-DSA signatures for cross-chain operations between Besu and Ethereum. These operations include locking, minting, burning, and releasing tokens, with all cryptographic proofs emitted as PQC events.
+**Description**: A Node.js Off-Chain Relay using Web3.js and PKCS#11 via ICCHSM to produce ML-DSA signatures for cross-chain operations between Besu and Ethereum. These operations include locking, minting, burning, and releasing tokens, with all cryptographic proofs emitted as PQC events.
 
 ```javascript
 const Web3 = require('web3');
