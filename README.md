@@ -155,51 +155,7 @@ The architecture integrates Hyperledger Besu, ICC OpenSSL, ICCHSM, and OpenVPN t
    
 ### 3.1 High-Level Architecture Diagram
 
-```note
-                     [QUANTUM-SAFE RWA BLOCKCHAIN ARCHITECTURE]
-
-+-----------------------------------+          +-----------------------------------+
-| Application Node (Site A)         |          | Validator Node (Site B)           |
-| # Hyperledger Besu (EVM)          |          | # Hyperledger Besu (EVM)          |
-| --------------------------------- |          | --------------------------------- |
-| - Smart Contract Interaction      |          | - Validates Transactions          |
-| - DApp API Access & Submission    |          | - Multi-Signs Tx Proofs (ICCHSM)  |
-| - UI Layer Integration            |          | - Emits PQC Signatures to         |
-|                                   |          |   Event Logs                      |
-| - P2P Comm. (via OpenVPN)         |          | - P2P Comm. (via OpenVPN)         |
-+-----------------------------------+          +-----------------------------------+
-         |                                              |
-         | [OpenVPN Tunnel (PQC-Secured)]               | [OpenVPN Tunnel (PQC-Secured)]
-         | - PQC-SSL (ICC OpenSSL)                      | - PQC-SSL (ICC OpenSSL)
-         | - Key Exchange (ML-KEM)                      | - Key Exchange (ML-KEM)
-         | - Authentication (ML-DSA)                    | - Authentication (ML-DSA)
-         | - Encrypted Data (AES-256-GCM)               | - Encrypted Data (AES-256-GCM)
-         +----------------------------------------------+
-                    [Secure Internet]
-                           |
-                           v
-+-----------------------------------+
-| Miner Node (Site C)              |
-| Hyperledger Besu (EVM)           |
-| -------------------------------- |
-| - Commits Root Hashes            |
-| - Multi-Signs Root Hash (ICCHSM) |
-| - Emits Signature to Event Log   |
-| - Consensus (QBFT / IBFT 2.0)    |
-| - P2P Comm. (via OpenVPN)        |
-+-----------------------------------+
-
-         +--------------------------------------------------------------+
-         |                        Future Integration                    |
-         | ------------------------------------------------------------ |
-         | - PQC Certificate Authority (PQC-CA):                        |
-         |   Issue and manage quantum-safe certificates for users.      |
-         | - QKD Layer 2 Credential Ledger:                             |
-         |   Distribute session keys using  Quantum Key Distribution,   |
-         |   enabling Layer 2 identity and credential synchronization.  |
-         +--------------------------------------------------------------+
-
-```
+<img src="PQC-2035_Figure_1.png" alt="Architecture">
 
 This diagram shows Besu nodes communicating securely over OpenVPN tunnels, with PQC algorithms (e.g., ML-KEM and ML-DSA) ensuring quantum resistance. ICC OpenSSL is an OpenSSL extension supporting PQC internet workflow. ICCHSM provides PQC multi-signature capabilities for securing root hashes, transactions and smart contracts.
    
