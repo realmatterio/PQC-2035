@@ -199,9 +199,9 @@ The PQC Blockchain is designed with quantum-safe mechanisms at both the **commun
   Integration of **Quantum Key Distribution (QKD)** to deliver secure session keys and root secrets for Layer 2 identity and credential synchronization across blockchain and messaging layers.
 
 #### RWA Blockchain Framework Structure Diagram
-
+   
 <img src="PQC-2035_Figure_2.png" alt="Block">
-
+   
 This diagram illustrates the RWA blockchain’s structure, highlighting PQC integration in block signing, smart contracts, consensus, and communication, all of which are tested in the Sandbox “PQC/2035”.
 
 ---
