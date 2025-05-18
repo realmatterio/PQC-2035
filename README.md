@@ -8,44 +8,48 @@
 
 ## Table of Contents
 
-- [Abstract](#abstract)   
+# Table of Contents
+
+- [Abstract](#abstract)
 - [1. Introduction](#1-introduction)
-  - [Sandbox Implementation](#sandbox-implementation)   
-- [2. Background](#2-background)    
+  - [Sandbox Implementation](#sandbox-implementation)
+- [2. Background](#2-background)
   - [2.1 Post-Quantum Cryptography (PQC)](#21-post-quantum-cryptography-pqc)
   - [2.2 PQC Signatures and KEM for Ethereum Integration](#22-pqc-signatures-and-kem-for-ethereum-integration)
-  - [2.3 ICC OpenSSL and ICCHSM](#24-icc-openssl-and-icchsm)   
-  - [2.4 OpenVPN](#24-openvpn)   
-  - [2.5 Hyperledger Besu](#25-hyperledger-besu)   
-- [3. Architecture](#3-architecture)   
-  - [3.1 High-Level Architecture Diagram](#31-high-level-architecture-diagram)   
-  - [3.2 PQC Blockchain Structure](#32-pqc-blockchain-structure)   
-    - [RWA Blockchain Framework Structure Diagram](#rwa-blockchain-framework-structure-diagram)  
-- [4. Implementation Details](#4-implementation-details)   
-  - [4.1 Installing ICC OpenSSL](#41-installing-icc-openssl)   
-  - [4.2 Installing and Configuring ICCHSM](#42-installing-and-configuring-icchsm)   
-  - [4.3 Configuring OpenVPN with ICC OpenSSL](#43-configuring-openvpn-with-icc-openssl)   
-    - [4.3.1 Generate PQC Keys and Certificates](#431-generate-pqc-keys-and-certificates)   
-    - [4.3.2 OpenVPN Configuration](#432-openvpn-configuration)   
-    - [4.3.3 Framework Diagram 1: OpenVPN Initialization and TLS Handshake with Besu Context](#433-framework-diagram-1-openvpn-initialization-and-tls-handshake-with-besu-context)   
-    - [4.3.4 Framework Diagram 2: OpenVPN Data Channel and ICC OpenSSL with Besu](#434-framework-diagram-2-openvpn-data-channel-and-icc-openssl-with-besu)   
-    - [4.3.5 Start OpenVPN](#435-start-openvpn)   
-  - [4.4 Configuring Hyperledger Besu with ICCHSM Multisig](#44-configuring-hyperledger-besu-with-icchsm-multisig)   
-    - [4.4.1 Install Besu](#441-install-besu)   
-    - [4.4.2 Validator Node: ICCHSM Multi-Signature for Transaction Proofs](#442-Validator-Node:-ICCHSM-Multi-Signature-for-Transaction-Proofs)   
-    - [4.4.3  Miner Node: ICCHSM Multi-Signature for Root Hashes](#443-Miner-Node:-ICCHSM-Multi-Signature-for-Root-Hashes)   
-    - [4.4.4 Configure Besu P2P over OpenVPN](#444-configure-besu-p2p-over-openvpn)      
-- [5. ICCHSM PQC Methods](#5-icchsm-pqc-methods)   
-- [6. System Requirements](#6-system-requirements)   
-- [7. Demonstration Programs with Solidity Smart Contracts](#7-demonstration-programs-with-solidity-smart-contracts)   
-  - [7.1 ICOToken and LockingContract on Hyperledger Besu](#71-icotoken-and-lockingcontract-on-hyperledger-besu)   
-  - [7.2 WrappedICOToken and MintingContract on Ethereum](#72-wrappedicotoken-and-mintingcontract-on-ethereum)   
-  - [7.3 Cross-Chain Bridge DApp with PQC Multi-Signature](#73-cross-chain-bridge-dapp-with-pqc-multi-signature)  
-- [8. Security Analysis](#8-security-analysis)   
-- [9. Performance Considerations](#9-performance-considerations)   
-- [Conclusion](#conclusion)   
-- [Technology Partners](#technology-partners)   
-
+  - [2.3 ICC OpenSSL and ICCHSM](#23-icc-openssl-and-icchsm)
+  - [2.4 OpenVPN](#24-openvpn)
+  - [2.5 Hyperledger Besu](#25-hyperledger-besu)
+- [3. Architecture](#3-architecture)
+  - [3.1 High-Level Architecture Diagram](#31-high-level-architecture-diagram)
+  - [3.2 PQC Blockchain Structure](#32-pqc-blockchain-structure)
+    - [RWA Blockchain Framework Structure Diagram](#rwa-blockchain-framework-structure-diagram)
+- [4. Implementation Details](#4-implementation-details)
+  - [4.1 Installing ICC OpenSSL](#41-installing-icc-openssl)
+  - [4.2 Installing and Configuring ICCHSM](#42-installing-and-configuring-icchsm)
+  - [4.3 Configuring OpenVPN with ICC OpenSSL](#43-configuring-openvpn-with-icc-openssl)
+    - [4.3.1 Generate PQC Keys and Certificates](#431-generate-pqc-keys-and-certificates)
+    - [4.3.2 OpenVPN Configuration](#432-openvpn-configuration)
+    - [4.3.3 Framework Diagram 1: OpenVPN Initialization and TLS Handshake with Besu Context](#433-framework-diagram-1-openvpn-initialization-and-tls-handshake-with-besu-context)
+    - [4.3.4 Framework Diagram 2: OpenVPN Data Channel and ICC OpenSSL with Besu](#434-framework-diagram-2-openvpn-data-channel-and-icc-openssl-with-besu)
+    - [4.3.5 Start OpenVPN](#435-start-openvpn)
+  - [4.4 Configuring Hyperledger Besu with ICCHSM Multisig](#44-configuring-hyperledger-besu-with-icchsm-multisig)
+    - [4.4.1 Install Besu](#441-install-besu)
+    - [4.4.2 Validator Node: ICCHSM Multi-Signature for Transaction Proofs](#442-validator-node-icchsm-multi-signature-for-transaction-proofs)
+    - [4.4.3 Miner Node: ICCHSM Multi-Signature for Root Hashes](#443-miner-node-icchsm-multi-signature-for-root-hashes)
+    - [4.4.4 Configure Besu P2P over OpenVPN](#444-configure-besu-p2p-over-openvpn)
+- [5. ICCHSM PQC Methods](#5-icchsm-pqc-methods)
+- [6. System Requirements](#6-system-requirements)
+- [7. Demonstration Programs with Solidity Smart Contracts](#7-demonstration-programs-with-solidity-smart-contracts)
+  - [7.1 ICOToken and LockingContract on Hyperledger Besu](#71-icotoken-and-lockingcontract-on-hyperledger-besu)
+  - [7.2 WrappedICOToken and MintingContract on Ethereum](#72-wrappedicotoken-and-mintingcontract-on-ethereum)
+  - [7.3 Cross-Chain Bridge with PQC Multi-Signature](#73-cross-chain-bridge-with-pqc-multi-signature)
+  - [7.4 Miner-Signature-Contract (Block Root Signing)](#74-miner-signature-contract-block-root-signing)
+  - [7.5 Quantum-Safe Multi-Signatures and Trust-Minimized Cross-Chain Security](#75-quantum-safe-multi-signatures-and-trust-minimized-cross-chain-security)
+- [8. Security Analysis](#8-security-analysis)
+- [9. Performance Considerations](#9-performance-considerations)
+- [Conclusion](#conclusion)
+- [Technology Partners](#technology-partners)
+    
 ---
 
 ## Abstract
@@ -843,7 +847,7 @@ contract MintingContract {
 ```
    
    
-### 7.3 Cross-Chain Bridge (Off-Chain Relay)
+### 7.3 Cross-Chain Bridge with PQC Multi-Signature
 
 **Description**: A Node.js Off-Chain Relay using Web3.js and PKCS#11 via ICCHSM to produce ML-DSA signatures for cross-chain operations between Besu and Ethereum. These operations include locking, minting, burning, and releasing tokens, with all cryptographic proofs emitted as PQC events.
 
@@ -896,7 +900,7 @@ async function bridgeEthToBesu(account, amount) {
 * This architecture supports hybrid post-quantum blockchain bridging using HSM modules such as ICCHSM, compliant with PQC-CA and QKD readiness.
    
    
-### 7.4 MinerSignatureContract (Block Root Signing)
+### 7.4 Miner Signature Contract (Block Root Signing)
 
 **Description**: Dedicated contract for miners to co-sign each newly mined block’s root hash using PQC multi-signatures via ICCHSM. Emitted events allow off-chain auditors to verify quantum-safe block integrity.
 
