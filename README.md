@@ -8,8 +8,6 @@
 
 ## Table of Contents
 
-# Table of Contents
-
 - [Abstract](#abstract)
 - [1. Introduction](#1-introduction)
   - [Sandbox Implementation](#sandbox-implementation)
