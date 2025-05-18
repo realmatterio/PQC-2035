@@ -960,42 +960,44 @@ contract MinerSignatureContract {
 
 ## 8. Security Analysis
 
-- **Transaction Security**: ML-DSA and ICCHSM’s multi-signature capabilities ensure quantum-resistant transaction signing and root hash validation.
-- **Communication Security**: OpenVPN’s ML-KEM and ML-DSA secure P2P traffic against quantum eavesdropping.
-- **Smart Contract Security**: PQC multi-signatures protect smart contract deployment and execution.
-- **Hashing**: SHA-3 provides quantum-resistant hashing for blockchain operations.
+- **Transaction Security**: ML-DSA multi-signatures, generated via ICCHSM, ensure quantum-resistant signing for transactions and block root hashes. Miners sign block root hashes (`rootHash`) via `MinerSignatureContract`, emitting `RootHashSigned` events, while validators sign cross-chain proofs (`proofId`) for operations like `lockTokens`, `mintTokens`, `burnTokens`, and `releaseTokens`, emitting `PQCMultiSig` events.
+- **Communication Security**: OpenVPN leverages ML-KEM for key encapsulation and ML-DSA for authentication, securing P2P traffic against quantum eavesdropping.
+- **Smart Contract Security**: PQC multi-signatures protect smart contract deployment and execution, with `PQCMultiSig` events enabling off-chain verification to reduce on-chain gas costs.
+- **Hashing**: SHA-3 provides quantum-resistant hashing for blockchain operations, ensuring integrity of `rootHash` and `proofId`.
+- **Replay and Double-Spend Prevention**: Unique `proofId` or `rootHash` identifiers, tracked via `processedProofs` mappings in `LockingContract` and `MintingContract`, prevent replay and double-spend attacks.
 
-This multi-layered approach ensures comprehensive post-quantum security, rigorously tested in the Sandbox “PQC/2035”.
+This multi-layered approach, rigorously tested in the Sandbox “PQC/2035”, ensures comprehensive post-quantum security with auditable, tamper-evident event emissions.
 
 ---
 
 ## 9. Performance Considerations
 
-PQC algorithms (e.g., ML-DSA, ML-KEM) introduce higher computational overhead and larger key sizes compared to ECC. In permissioned networks, these impacts are manageable due to fewer nodes. Optimizations include:
+PQC algorithms (e.g., ML-DSA, ML-KEM) introduce higher computational overhead and larger signature sizes (e.g., ML-DSA: 2,701–4,595 bytes) compared to ECC, impacting gas costs in Ethereum-based operations. In permissioned networks like Hyperledger Besu, these impacts are manageable due to fewer nodes. Optimizations include:
 
-- **Hardware Acceleration**: Leverage AVX2-enabled CPUs for faster PQC computations.
-- **Parameter Tuning**: Use 128-bit security for balanced performance and protection.
-- **Caching**: Store frequently used PQC keys in ICCHSM for efficient access.
+- **Hardware Acceleration**: Leverage AVX2-enabled CPUs and ICCHSM for faster ML-DSA signature generation, critical for cross-chain operations like `lockTokens` and `mintTokens`.
+- **Parameter Tuning**: Use 128-bit security parameters for ML-DSA to balance performance and protection, suitable for Sandbox “PQC/2035” testing.
+- **Caching**: Store frequently used PQC keys in ICCHSM for efficient access during repeated cross-chain signing.
+- **Off-Chain Verification**: Emit ML-DSA signatures via `PQCMultiSig` and `RootHashSigned` events for off-chain verification, significantly reducing on-chain gas costs (e.g., 36,760–328,375 gas for ML-DSA signatures).
 
-These optimizations are evaluated for efficiency within the Sandbox “PQC/2035”.
+These optimizations are evaluated for efficiency and scalability within the Sandbox “PQC/2035”, ensuring practical deployment of quantum-safe cross-chain bridges.
 
 ---
 
 ## Conclusion
 
-This whitepaper presents a comprehensive framework for a PQC-enabled permissioned blockchain, validated through the Sandbox “PQC/2035”. Key features include:
+This whitepaper presents a comprehensive framework for a quantum-resistant permissioned blockchain, validated through the Sandbox “PQC/2035”. Key features include:
 
-- **Project Goal**: Completion of Sandbox “PQC/2035” to test PQC VPN blockchain efficiency, security, and ICO feasibility.
-- **Quantum-Resistant Cryptography**: ICC OpenSSL and ICCHSM provide PQC algorithms (ML-KEM, ML-DSA, etc.) for secure operations.
-- **Secure Communication**: OpenVPN with PQC tunnels protects node-to-node communication.
-- **Multi-Signature Support**: ICCHSM enables PQC multi-signatures for root hashes and smart contracts.
-- **PQC Blockchain Structure**: Besu integrates PQC for signing, consensus, and communication, as shown in the blockchain framework diagram.
-- **DApp Integration**: Besu DApps use ICCHSM for PQC multi-signatures in token generation, bridging, and wrapping.
-- **System Compatibility**: Meets requirements for running OpenVPN, ICC OpenSSL, and ICCHSM.
-- **Demonstration Programs**: Solidity contracts and JavaScript DApps for ERC20 token generation, blockchain bridging, and token wrapping showcase PQC integration.
-- **Sandbox Testing**: Validates efficiency, security, and ICO feasibility in a controlled environment.
+- **Project Goal**: Completion of Sandbox “PQC/2035” to test PQC-enabled blockchain efficiency, security, and ICO feasibility across Hyperledger Besu and Ethereum.
+- **Quantum-Resistant Cryptography**: ICC OpenSSL and ICCHSM provide ML-DSA for multi-signatures and ML-KEM for key encapsulation, ensuring quantum-safe operations.
+- **Secure Communication**: OpenVPN with PQC tunnels (ML-KEM, ML-DSA) protects node-to-node communication.
+- **Multi-Signature Support**: ICCHSM enables ML-DSA multi-signatures, with miners signing block root hashes (`rootHash`) via `MinerSignatureContract` and validators signing cross-chain proofs (`proofId`) for operations like `lockTokens`, `mintTokens`, `burnTokens`, and `releaseTokens`.
+- **PQC Blockchain Structure**: Hyperledger Besu integrates ML-DSA for signing, consensus, and cross-chain bridging, as demonstrated in the updated flow diagram.
+- **DApp Integration**: Besu and Ethereum DApps use ICCHSM for ML-DSA multi-signatures in ERC-20 token generation, cross-chain bridging, and token wrapping.
+- **System Compatibility**: Supports OpenVPN, ICC OpenSSL, and ICCHSM for seamless PQC integration.
+- **Demonstration Programs**: Solidity contracts (`ICOToken`, `LockingContract`, `WrappedICOToken`, `MintingContract`, `MinerSignatureContract`) and JavaScript off-chain relays showcase PQC integration, with `PQCMultiSig` and `RootHashSigned` events enabling off-chain verification.
+- **Sandbox Testing**: Validates efficiency, security, and ICO feasibility, with `processedProofs` mappings ensuring replay and double-spend prevention.
 
-This framework enables enterprises to deploy secure, quantum-resistant blockchain systems, ensuring long-term trust and resilience.
+This framework enables enterprises to deploy secure, quantum-resistant blockchain systems with trust-minimized cross-chain bridges, ensuring long-term resilience against quantum threats.
 
 ---
 
