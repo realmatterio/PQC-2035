@@ -542,24 +542,25 @@ ICCHSM supports a variety of PQC mechanisms via its PKCS#11 interface, ensuring 
 
 ## 6. System Requirements
 
-To deploy this PQC-enabled blockchain within the Sandbox “PQC/2035”, the following minimum system requirements ensure compatibility with OpenVPN, ICC OpenSSL, ICCHSM, and Besu:
+**To deploy the PQC-enabled blockchain in the “PQC/2035” sandbox, ensure at least:**
 
-- **Operating System**: Ubuntu 20.04+ (Linux) or Windows Server 2019+.
-- **Processor**: Quad-core CPU (e.g., Intel Core i7 or AMD Ryzen 5) with AVX2 support for optimized PQC performance.
-- **Memory**: 16 GB RAM to handle blockchain and cryptographic workloads.
-- **Storage**: 100 GB SSD for blockchain data, software, and logs.
-- **Network**: 100 Mbps internet connection for VPN and blockchain synchronization.
-- **Software Dependencies**:
-  ```info
-  ICC OpenSSL (v6.0+)
-  ICCHSM (v6.0+)
-  OpenVPN (v2.5+)
-  Hyperledger Besu (v24.1+)
-  Java 17+ for Besu
-  PKCS#11 libraries for ICCHSM integration
-  ```
+| Component            | Minimum Specification                                             | Notes / Recommendations                                            |
+| -------------------- | ----------------------------------------------------------------- | ------------------------------------------------------------------ |
+| **Operating System** | Ubuntu 20.04 LTS (or later) **or** Windows Server 2019 (or later) | Ubuntu 22.04 LTS is recommended for longer support.                |
+| **Processor**        | Quad-core CPU with AVX2 (e.g. Intel Core i7, AMD Ryzen 5)         | AVX2 accelerates many PQC primitives—AVX-512 would be even better. |
+| **Memory**           | 16 GB RAM                                                         | If running multiple Besu peers or heavy testing, consider 32 GB.   |
+| **Storage**          | 100 GB SSD                                                        | Use NVMe SSD for best I/O; allow headroom for chain growth.        |
+| **Network**          | ≥100 Mbps bandwidth                                               | Low latency (≤10 ms) between nodes improves consensus.             |
 
-These requirements ensure efficient execution of the blockchain infrastructure.
+   
+### Software Dependencies
+
+* **ICC OpenSSL:** v6.0 or later
+* **ICCHSM:** v6.0 or later (plus compatible PKCS#11 library)
+* **OpenVPN:** v2.5 or later (TLS 1.3 support required)
+* **Hyperledger Besu:** v24.1 or later
+* **Java:** OpenJDK 17 or later (LTS)
+* **PKCS#11 provider:** For ICCHSM integration (e.g., `softhsm2` or vendor library)
 
 ---
 
