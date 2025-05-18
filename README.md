@@ -200,49 +200,7 @@ The PQC Blockchain is designed with quantum-safe mechanisms at both the **commun
 
 #### RWA Blockchain Framework Structure Diagram
 
-```note
-note
-+-------------------------------+
-| Hyperledger Besu Blockchain   |
-|   (Permissioned Ethereum)     |
-|                               |
-| +---------------------------+ |
-| | Block Structure           | |
-| | - Root Hash               | |
-| | - Transactions            | |
-| | - Event Log PQC Multi-Signatures | |
-| |   (Validator & Miner)     | |
-| +---------------------------+ |
-|                               |
-| +---------------------------+ |
-| | PQC Smart Contracts       | |
-| | - PQC Multi-Sig (ICCHSM)  | |
-| | - Signed Interactions     | |
-| | - Event-based Proof Logs  | |
-| +---------------------------+ |
-|                               |
-| +---------------------------+ |
-| | PQC Enhanced Consensus    | |          
-| | (QBFT or IBFT 2.0)        | |
-| | - Miner Root Hash Voting  | |
-| | - Validator Tx Proofing   | |
-| +---------------------------+ |
-|                               |
-| +---------------------------+ |
-| | PQC P2P Communication     | |
-| | - OpenVPN (PQC Tunnel)    | |
-| | - PQC-SSL (ICC OpenSSL)   | |
-| | - Key Exchange (ML-KEM via ICC)   | |
-| | - Auth (ML-DSA via ICC)   | |
-| +---------------------------+ |
-|                               |
-| +---------------------------+ |
-| | Future Extensions         | |
-| | - PQC Certificate Auth    | |
-| | - QKD Credential Ledger   | |
-| +---------------------------+ |
-+-------------------------------+
-```
+<img src="PQC-2035_Figure_2.png" alt="Block">
 
 This diagram illustrates the RWA blockchain’s structure, highlighting PQC integration in block signing, smart contracts, consensus, and communication, all of which are tested in the Sandbox “PQC/2035”.
 
