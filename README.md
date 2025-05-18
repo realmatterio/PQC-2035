@@ -313,7 +313,7 @@ cd /path/to/icc-openssl/bin
    
 #### 4.3.3 Framework Diagram 1: OpenVPN Initialization and TLS Handshake with Besu Context
 
-```note
+```info
 Initialization Phase:
 [OpenVPN Server]                              [OpenVPN Client]
   | Load CA, Server Cert/Key                   | Load CA, Client Cert/Key
@@ -334,7 +334,7 @@ This diagram integrates Besu by showing how the OpenVPN handshake prepares a sec
    
 #### 4.3.4 Framework Diagram 2: OpenVPN Data Channel and ICC OpenSSL with Besu
 
-```note
+```info
 [OpenVPN Server]                               [OpenVPN Client]
 +---------------------+                         +---------------------+
 | - TLS (Kyber/DSA)   | <--- Data Channel --->  | - TLS (Kyber/DSA)   |
