@@ -144,7 +144,7 @@ While all post-quantum signature schemes are technically viable within Ethereum'
 
 **ICC OpenSSL** extends the OpenSSL library by integrating <a href="https://www.ironcap.ca">IronCAP</a>'s PQC algorithms, enabling quantum-resistant key generation, encryption, and signing. It serves as the cryptographic backbone for OpenVPN and supports Besu’s transaction signing.
    
-**ICCHSM** is a software implementation of the <a href="https://www.ironcap.ca">IronCAP</a>'s cryptographic Hardware Security Module (HSM) with a PKCS#11 interface, providing PQC encryption and signing capabilities. It supports single-purpose and dual-purpose keys for key encapsulation and digital signatures, including multi-signature operations for blockchain root hashes and smart contracts. ICCHSM enables Besu decentralized applications (DApps) to implement PQC multi-signatures, enhancing security for critical operations.
+**ICCHSM** is a software implementation of the <a href="https://www.ironcap.ca">IronCAP</a>'s cryptographic Hardware Security Module (HSM) with a PKCS#11 interface, providing PQC encryption and signing capabilities. It supports single-purpose and dual-purpose keys for key encapsulation and digital signatures, including multi-signature operations for blockchain root hashes and smart contracts. ICCHSM enables Besu decentralized applications (DApps) and the cross-chain bridge to implement PQC multi-signatures, enhancing security for critical operations.
 
       
 ### 2.4 OpenVPN
