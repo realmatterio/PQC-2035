@@ -1,50 +1,63 @@
 <div align="center">
-  <img src="PQCyear2035_505x449.png" alt="Logo" width="25%">
-  <h1><strong>PQC/2035::Sandbox</strong></h1>
-  <h2><strong>Initiating a Post-Quantum Secure Permissioned Blockchain with ICC OpenSSL & ICCHSM</strong></h2>
+  <img src="PQC-2035_Figure_0.png" alt="PQC/2035">
+  <h1><strong>PQC/2035 Sandbox Initiative</strong></h1>
+  <h3><strong>Quantum-Safe RWA Blockchain with ICC OpenSSL & ICCHSM</strong></h3>
+  <h3>White Paper</h3>
 </div>
 <br>
 
 ## Table of Contents
 
-- [Abstract](#abstract)   
+- [Abstract](#abstract)
+  
 - [1. Introduction](#1-introduction)
-  - [Sandbox Implementation](#sandbox-implementation)   
-- [2. Background](#2-background)    
-  - [2.1 Post-Quantum Cryptography (PQC)](#21-post-quantum-cryptography-pqc)   
-  - [2.2 ICC OpenSSL](#22-icc-openssl)   
-  - [2.3 OpenVPN](#23-openvpn)   
-  - [2.4 Hyperledger Besu](#24-hyperledger-besu)   
-  - [2.5 ICCHSM](#25-icchsm)  
-- [3. Architecture](#3-architecture)   
-  - [3.1 High-Level Architecture Diagram](#31-high-level-architecture-diagram)   
-  - [3.2 PQC Blockchain Structure](#32-pqc-blockchain-structure)   
-  - [Blockchain Framework Structure Diagram](#blockchain-framework-structure-diagram)  
-- [4. Implementation Details](#4-implementation-details)   
-  - [4.1 Installing ICC OpenSSL](#41-installing-icc-openssl)   
-  - [4.2 Installing and Configuring ICCHSM](#42-installing-and-configuring-icchsm)   
-  - [4.3 Configuring OpenVPN with ICC OpenSSL](#43-configuring-openvpn-with-icc-openssl)   
-    - [4.3.1 Generate PQC Keys and Certificates](#431-generate-pqc-keys-and-certificates)   
-    - [4.3.2 OpenVPN Configuration](#432-openvpn-configuration)   
-    - [4.3.3 Framework Diagram 1: OpenVPN Initialization and TLS Handshake with Besu Context](#433-framework-diagram-1-openvpn-initialization-and-tls-handshake-with-besu-context)   
-    - [4.3.4 Framework Diagram 2: OpenVPN Data Channel and ICC OpenSSL with Besu](#434-framework-diagram-2-openvpn-data-channel-and-icc-openssl-with-besu)   
-    - [4.3.5 Start OpenVPN](#435-start-openvpn)   
-  - [4.4 Configuring Hyperledger Besu with ICC OpenSSL and ICCHSM](#44-configuring-hyperledger-besu-with-icc-openssl-and-icchsm)   
-    - [4.4.1 Install Besu](#441-install-besu)   
-    - [4.4.2 Integrate ICC OpenSSL for Transaction Signing](#442-integrate-icc-openssl-for-transaction-signing)   
-    - [4.4.3 Integrate ICCHSM for PQC Multi-Signature Operations](#443-integrate-icchsm-for-pqc-multi-signature-operations)   
-    - [4.4.4 Configure Besu P2P over OpenVPN](#444-configure-besu-p2p-over-openvpn)      
-- [5. ICCHSM PQC Methods](#5-icchsm-pqc-methods)   
-- [6. System Requirements](#6-system-requirements)   
-- [7. Demonstration Programs with Solidity Smart Contracts](#7-demonstration-programs-with-solidity-smart-contracts)   
-  - [7.1 ICOToken and LockingContract on Hyperledger Besu](#71-icotoken-and-lockingcontract-on-hyperledger-besu)   
-  - [7.2 WrappedICOToken and MintingContract on Ethereum](#72-wrappedicotoken-and-mintingcontract-on-ethereum)   
-  - [7.3 Cross-Chain Bridge DApp with PQC Multi-Signature](#73-cross-chain-bridge-dapp-with-pqc-multi-signature)  
-- [8. Security Analysis](#8-security-analysis)   
-- [9. Performance Considerations](#9-performance-considerations)   
-- [Conclusion](#conclusion)   
-- [Technology Partners](#technology-partners)   
-
+  - [Sandbox Implementation](#sandbox-implementation)
+    
+- [2. Background](#2-background)
+  - [2.1 Post-Quantum Cryptography (PQC)](#21-post-quantum-cryptography-pqc)
+  - [2.2 PQC Signatures and KEM for Ethereum Integration](#22-pqc-signatures-and-kem-for-ethereum-integration)
+  - [2.3 ICC OpenSSL and ICCHSM](#23-icc-openssl-and-icchsm)
+  - [2.4 OpenVPN](#24-openvpn)
+  - [2.5 Hyperledger Besu](#25-hyperledger-besu)
+    
+- [3. Architecture](#3-architecture)
+  - [3.1 High-Level Architecture Diagram](#31-high-level-architecture-diagram)
+  - [3.2 PQC Blockchain Structure](#32-pqc-blockchain-structure)
+    - [RWA Blockchain Framework Structure Diagram](#rwa-blockchain-framework-structure-diagram)
+      
+- [4. Implementation Details](#4-implementation-details)
+  - [4.1 Installing ICC OpenSSL](#41-installing-icc-openssl)
+  - [4.2 Installing and Configuring ICCHSM](#42-installing-and-configuring-icchsm)
+  - [4.3 Configuring OpenVPN with ICC OpenSSL](#43-configuring-openvpn-with-icc-openssl)
+    - [4.3.1 Generate PQC Keys and Certificates](#431-generate-pqc-keys-and-certificates)
+    - [4.3.2 OpenVPN Configuration](#432-openvpn-configuration)
+    - [4.3.3 Framework Diagram 1: OpenVPN Initialization and TLS Handshake with Besu Context](#433-framework-diagram-1-openvpn-initialization-and-tls-handshake-with-besu-context)
+    - [4.3.4 Framework Diagram 2: OpenVPN Data Channel and ICC OpenSSL with Besu](#434-framework-diagram-2-openvpn-data-channel-and-icc-openssl-with-besu)
+    - [4.3.5 Start OpenVPN](#435-start-openvpn)
+  - [4.4 Configuring Hyperledger Besu with ICCHSM Multisig](#44-configuring-hyperledger-besu-with-icchsm-multisig)
+    - [4.4.1 Install Besu](#441-install-besu)
+    - [4.4.2 Validator Node: ICCHSM Multi-Signature for Transaction Proofs](#442-validator-node-icchsm-multi-signature-for-transaction-proofs)
+    - [4.4.3 Miner Node: ICCHSM Multi-Signature for Root Hashes](#443-miner-node-icchsm-multi-signature-for-root-hashes)
+    - [4.4.4 Configure Besu P2P over OpenVPN](#444-configure-besu-p2p-over-openvpn)
+      
+- [5. ICCHSM PQC Methods](#5-icchsm-pqc-methods)
+  
+- [6. System Requirements](#6-system-requirements)
+  
+- [7. Demonstration Programs with Solidity Smart Contracts](#7-demonstration-programs-with-solidity-smart-contracts)
+  - [7.1 ICOToken and LockingContract on Hyperledger Besu](#71-icotoken-and-lockingcontract-on-hyperledger-besu)
+  - [7.2 WrappedICOToken and MintingContract on Ethereum](#72-wrappedicotoken-and-mintingcontract-on-ethereum)
+  - [7.3 Cross-Chain Bridge with PQC Multi-Signature](#73-cross-chain-bridge-with-pqc-multi-signature)
+  - [7.4 Miner-Signature-Contract (Block Root Signing)](#74-miner-signature-contract-block-root-signing)
+  - [7.5 Quantum-Safe Multi-Signatures and Trust-Minimized Cross-Chain Security](#75-quantum-safe-multi-signatures-and-trust-minimized-cross-chain-security)
+    
+- [8. Security Analysis](#8-security-analysis)
+  
+- [9. Performance Considerations](#9-performance-considerations)
+  
+- [Conclusion](#conclusion)
+- [Technology Partners](#technology-partners)
+    
 ---
 
 ## Abstract
@@ -61,7 +74,7 @@ Post-Quantum Cryptography (PQC) offers algorithms resistant to quantum attacks, 
 
 ### Sandbox Implementation
 
-The Sandbox “PQC/2035” is a controlled testing environment designed to validate the PQC-enabled blockchain framework. Its objectives are:
+The Sandbox “PQC/2035” is a controlled testing environment designed to validate the quantum-safe RWA blockchain framework. Its objectives are:
 
 | Task                       | Description                                                                                                                    |
 |----------------------------|-------------------------------------------------------------------------------------------------------------------------------|
@@ -69,6 +82,7 @@ The Sandbox “PQC/2035” is a controlled testing environment designed to valid
 | **Security Risk Assessment** | Identify vulnerabilities in the PQC implementation, focusing on cryptographic strength, key management, and smart contract security. Conduct penetration testing to evaluate resistance to quantum and classical attacks. |
 | **Hacker Testing Platform** | Provide a secure environment for ethical hackers to stress-test the blockchain, simulating quantum-enabled attacks on PQC algorithms and VPN tunnels to validate robustness. |
 | **Token ICO Feasibility**  | Assess the viability of a primary market token Initial Coin Offering (ICO) connected via the blockchain bridge (Section 7.2). Test cross-chain token transfers, PQC multi-signature validation, and regulatory compliance to ensure a secure and scalable ICO process. |
+| **Future Plan**  | Implement a PQC-based Certificate Authority and establish a Layer 2 Credential Ledger integrated with Quantum Key Distribution (QKD) for secure identity and credential management. |
 
 The Sandbox leverages the demonstration programs (Section 7) to simulate real-world scenarios, providing data to refine the blockchain for enterprise deployment.
 
@@ -87,21 +101,60 @@ SLH-DSA (Sphincs+): A stateless hash-based signature scheme.
 FALCON:             A lattice-based signature scheme using the hash-and-sign paradigm.
 ```
 
-### 2.2 ICC OpenSSL
+   
+### 2.2 PQC Signatures and KEM for Ethereum Integration
+
+| Scheme                 | Signature Method | KEM Method | Signature Length       | % of Max Log Entry Data (Ethereum Block Size of 3.75 MB) | Estimated Gas Cost     | Notes                                                             |
+| ---------------------- | ---------------- | ---------- | ---------------------- | ------------------------- | ---------------------- | ---------------------------------------------------------------- |
+| **ML-DSA (Dilithium)** | ✅ Yes            | ❌ N/A      | **2,420–4,627 bytes**  | **0.06%–0.12%**                   | **19,735–37,371 gas**  | Signature size depends on Dilithium levels (FIPS 204) |
+| **SLH-DSA (SPHINCS+)** | ✅ Yes            | ❌ N/A      | **7,856–49,856 bytes** | **0.21%–1.33%**                   | **62,233–399,223 gas** | Large stateless hash-based signatures (FIPS 205)      |
+| **FALCON**             | ✅ Yes            | ❌ N/A      | **666–1,280 bytes**    | **0.02%–0.03%**                   | **5,703–10,615 gas**   | Compact lattice-based signatures (FIPS 203)           |
+| **ML-KEM (Kyber)**     | ❌ N/A            | ✅ Yes      | *Not Applicable*       | *Not Applicable*                  | *Not Applicable*       | Kyber is a Key Encapsulation Mechanism (FIPS 203)     |
+
+```note Ethereum Block Size Context
+Block Gas Limit: ~30,000,000 gas
+Log Entry Cost:
+     Fixed base cost: 375 gas
+     Per byte of `data` field: 8 gas/byte
+Max Log Entry Data Field Size:
+     (30,000,000 - 375) / 8
+     ≈ 3,749,953 bytes (~3.75 MB)
+```
+   
+```note Gas Cost Calculation Formula
+Gas Cost
+     = 375 + 8 × signature_length
+```
+
+### Practical Considerations
+
+* **Small PQC Signatures (e.g., FALCON, Dilithium):**
+  Gas-efficient and feasible for on-chain logging or verification in smart contracts.
+
+* **Large PQC Signatures (e.g., SPHINCS+):**
+  Can incur **over 300,000 gas**, which is significant for single transactions and may not be efficient for frequent or large-scale use in contracts.
+
+* **ML-KEM (Kyber):**
+  Being a KEM, Kyber does not produce signatures and is used for key encapsulation; unsuitable for digital signature needs in Ethereum logs.
+
+While all post-quantum signature schemes are technically viable within Ethereum's theoretical gas and size limits, **signature size directly impacts gas consumption**. For real-world use in smart contracts or log entries, **Falcon and Dilithium offer better trade-offs**, whereas **SPHINCS+** provides strong security but at a higher gas cost.
+
+    
+### 2.3 ICC OpenSSL and ICCHSM
 
 **ICC OpenSSL** extends the OpenSSL library by integrating <a href="https://www.ironcap.ca">IronCAP</a>'s PQC algorithms, enabling quantum-resistant key generation, encryption, and signing. It serves as the cryptographic backbone for OpenVPN and supports Besu’s transaction signing.
+   
+**ICCHSM** is a software implementation of the <a href="https://www.ironcap.ca">IronCAP</a>'s cryptographic Hardware Security Module (HSM) with a PKCS#11 interface, providing PQC encryption and signing capabilities. It supports single-purpose and dual-purpose keys for key encapsulation and digital signatures, including multi-signature operations for blockchain root hashes and smart contracts. ICCHSM enables Besu decentralized applications (DApps) to implement PQC multi-signatures, enhancing security for critical operations.
 
-### 2.3 OpenVPN
+      
+### 2.4 OpenVPN
 
 **OpenVPN** is an open-source VPN solution that secures point-to-point and site-to-site connections. Configured with <a href="https://www.ironcap.ca">IronCAP</a>'s ICC OpenSSL, it uses PQC algorithms to establish quantum-safe tunnels, protecting Besu’s peer-to-peer (P2P) communication.
 
-### 2.4 Hyperledger Besu
+   
+### 2.5 Hyperledger Besu
 
-**Hyperledger Besu**, an open-source Ethereum client under the Hyperledger project, supports permissioned networks tailored for enterprise needs. It handles transaction signing, consensus (e.g., IBFT 2.0), and P2P communication, which we enhance with PQC via <a href="https://www.ironcap.ca">IronCAP</a>'s ICC OpenSSL and ICCHSM.
-
-### 2.5 ICCHSM
-
-**ICCHSM** is a software implementation of the <a href="https://www.ironcap.ca">IronCAP</a>'s cryptographic Hardware Security Module (HSM) with a PKCS#11 interface, providing PQC encryption and signing capabilities. It supports single-purpose and dual-purpose keys for key encapsulation and digital signatures, including multi-signature operations for blockchain root hashes and smart contracts. ICCHSM enables Besu decentralized applications (DApps) to implement PQC multi-signatures, enhancing security for critical operations.
+**Hyperledger Besu**, an open-source Ethereum client under the Hyperledger project, supports permissioned networks tailored for enterprise needs. It handles transaction signing, consensus (e.g., QBFT or IBFT 2.0), and P2P communication, which we enhance with PQC via <a href="https://www.ironcap.ca">IronCAP</a>'s ICC OpenSSL and ICCHSM.
 
 ---
 
@@ -109,77 +162,65 @@ FALCON:             A lattice-based signature scheme using the hash-and-sign par
 
 The architecture integrates Hyperledger Besu, ICC OpenSSL, ICCHSM, and OpenVPN to create a PQC-enabled permissioned blockchain, tested within the Sandbox “PQC/2035”. Besu nodes handle blockchain operations, ICC OpenSSL and ICCHSM provide quantum-resistant cryptography, and OpenVPN ensures secure communication over PQC-protected tunnels.
 
+   
 ### 3.1 High-Level Architecture Diagram
 
-```note
-                     PERMISSIONED BLOCKCHAIN NETWORK (ETHEREUM)
+<img src="PQC-2035_Figure_1.png" alt="Architecture">
 
-+-----------------------------------+          +-----------------------------------+
-| Hyperledger Besu Node (Site A)    |          | Hyperledger Besu Node (Site B)    |
-| --------------------------------- |          | --------------------------------- |
-| - Transaction Signing (ML-DSA)    |          | - Transaction Signing (ML-DSA)    |
-| - Consensus (e.g., IBFT 2.0)      |          | - Consensus (e.g., IBFT 2.0)      |
-| - P2P Comm. (via OpenVPN)         |          | - P2P Comm. (via OpenVPN)         |
-| - ICCHSM (PQC Multi-Sig)          |          | - ICCHSM (PQC Multi-Sig)          |
-+-----------------------------------+          +-----------------------------------+
-         |                                              |
-         | [OpenVPN Tunnel (PQC)]                       | [OpenVPN Tunnel (PQC)]
-         | - PQC-SSL (ICC OpenSSL)                      | - PQC-SSL (ICC OpenSSL)
-         | - Key Exchange (ML-KEM)                      | - Key Exchange (ML-KEM)
-         | - Authentication (ML-DSA)                    | - Authentication (ML-DSA)
-         | - Encrypted Data (AES-256-GCM)               | - Encrypted Data (AES-256-GCM)
-         +----------------------------------------------+
-                                 [Secure Internet]
-```
-
-This diagram shows Besu nodes communicating securely over OpenVPN tunnels, with PQC algorithms (ML-KEM and ML-DSA) ensuring quantum resistance. ICC OpenSSL is an OpenSSL extension 
-supporting PQC internet workflow. ICCHSM provides PQC multi-signature capabilities for securing root hashes and smart contracts.
-
+This diagram shows Besu nodes communicating securely over OpenVPN tunnels, with PQC algorithms (e.g., ML-KEM and ML-DSA) ensuring quantum resistance. ICC OpenSSL is an OpenSSL extension supporting PQC internet workflow. ICCHSM provides PQC multi-signature capabilities for securing root hashes, transactions and smart contracts.
+   
+   
 ### 3.2 PQC Blockchain Structure
 
-The blockchain structure leverages PQC for both communication and core operations, tested within the Sandbox “PQC/2035”. Besu uses **ICCHSM** for PQC multi-signature operations on root hashes and smart contracts, complementing the quantum-safe communication provided by OpenVPN.
+The PQC Blockchain is designed with quantum-safe mechanisms at both the **communication** and **operational** layers. The architecture has been evaluated and validated within the Sandbox environment “**PQC/2035**”. Each node type—Application, Validator, and Miner—has distinct roles in securing and maintaining the blockchain.
 
-- **PQC Multi-Signature for Root Hashes**: ICCHSM enables multiple parties to sign a block’s root hash using PQC algorithms (e.g., ML-DSA, SLH-DSA, or FALCON), ensuring quantum-resistant integrity and authenticity.
-- **PQC Smart Contract Signing**: Smart contracts are signed with PQC multi-signatures via ICCHSM, securing deployment and execution.
-- **PQC Communication**: OpenVPN tunnels, configured with ICC OpenSSL, protect Besu’s P2P traffic with ML-KEM key exchanges and ML-DSA authentication.
+#### Core Components
 
-#### Blockchain Framework Structure Diagram
+* **PQC Event Log Multi-Signatures**
+  Rather than storing post-quantum signatures directly in contract state (which is gas-expensive), validator and miner nodes emit PQC signatures to smart contract **event logs**:
 
-```note
-+-----------------------------+
-| Hyperledger Besu Blockchain |
-|   (Permissioned Ethereum)   |
-|                             |
-| +-------------------------+ |
-| | Block Structure         | |
-| | - Root Hash (ML-DSA)    | |
-| | - Transactions (ML-DSA) | |
-| | - Smart Contracts       | |
-| |   (PQC Multi-Sig)       | |
-| +-------------------------+ |
-|                             |
-| +-------------------------+ |
-| | Consensus (IBFT 2.0)    | |
-| | - PQC Validation        | |
-| +-------------------------+ |
-|                             |
-| +-------------------------+ |
-| | P2P Communication       | |
-| | - OpenVPN (PQC Tunnel)  | |
-| | - PQC-SSL (ICC OpenSSL) | |
-| | - Key Exchange (ICCHSM) | |
-| +-------------------------+ |
-+-----------------------------+
-```
+  * **Validators** emit signatures verifying transaction proofs.
+  * **Miners** emit signatures for root hash commitments.
 
-This diagram illustrates the blockchain’s structure, highlighting PQC integration in block signing, smart contracts, consensus, and communication, all of which are tested in the Sandbox “PQC/2035”.
+* **ICCHSM-Based Multi-Signatures**
+  ICCHSM enables hardware-accelerated quantum-safe signatures using PQC algorithms such as **ML-DSA**, **SLH-DSA**, or **FALCON**. These are used to:
+
+  * Sign root hashes before block finalization.
+  * Verify transaction batches by validators.
+  * Secure smart contract deployments when necessary.
+
+* **Quantum-Safe Smart Contract Interactions**
+  Smart contracts interact with DApps through PQC-authenticated interfaces and support **multi-signature verification** using event-based PQC logs for lightweight trust anchoring.
+
+* **PQC-Secured Communication Layer**
+  All inter-node communication runs over **OpenVPN tunnels**, protected with:
+
+  * **ICC OpenSSL** with integrated PQC support
+  * **ML-KEM or other PQC KEM** (key exchange via ICC)
+  * **ML-DSA or other PQC Signatures** (node authentication via ICC)
+  * **AES-256-GCM** (for data confidentiality)
+
+#### Future Extensions
+
+* **PQC Certificate Authority (PQC-CA)**
+  A dedicated authority to issue and manage **quantum-safe digital certificates** for nodes (miners, validators, application interfaces) to ensure verified trust chains.
+
+* **QKD Layer 2 Credential Ledger**
+  Integration of **Quantum Key Distribution (QKD)** to deliver secure session keys and root secrets for Layer 2 identity and credential synchronization across blockchain and messaging layers.
+
+#### RWA Blockchain Framework Structure Diagram
+   
+<img src="PQC-2035_Figure_2.png" alt="Block">
+   
+This diagram illustrates the RWA blockchain’s structure, highlighting PQC integration in block signing, smart contracts, consensus, and communication, all of which are tested in the Sandbox “PQC/2035”.
 
 ---
 
 ## 4. Implementation Details
 
 This section provides detailed procedures for implementing the PQC-enabled blockchain, enriched with reference steps and examples, designed to support the Sandbox “PQC/2035” testing environment.
-
+ 
+   
 ### 4.1 Installing ICC OpenSSL
 
 ICC OpenSSL provides the foundation for PQC cryptography.
@@ -203,6 +244,7 @@ ICC OpenSSL provides the foundation for PQC cryptography.
    export LD_LIBRARY_PATH=/path/to/icc-openssl/lib:$LD_LIBRARY_PATH
    ```
 
+   
 ### 4.2 Installing and Configuring ICCHSM
 
 ICCHSM provides PQC encryption and multi-signature capabilities.
@@ -225,41 +267,44 @@ ICCHSM provides PQC encryption and multi-signature capabilities.
    sudo softhsm2-util --module /usr/lib/softhsm/libsofthsm2.so --init-token --free --label "PQCToken" --pin 123456 --so-pin 123456
    ```
 
+   
 ### 4.3 Configuring OpenVPN with ICC OpenSSL
 
 OpenVPN secures Besu’s P2P communication using PQC-enabled tunnels, critical for Sandbox “PQC/2035” efficiency testing.
-
+   
 #### 4.3.1 Generate PQC Keys and Certificates
 ```bash
-# Generate CA key and certificate
+# CA key and certificate
+# (Kyber KEM + Dilithium2 Signing for CA authenticity)
 cd /path/to/icc-openssl/bin
 ./openssl genicc -bsl 128 -type shake256-kyber-li2 -out ca_key.pem
 ./openssl req -config openssl.cnf -keyform pem -key ca_key.pem -new -x509 -days 3650 -shake256 -extensions v3_ca -out ca_cert.pem
 
-# Generate server key and certificate
+# Server key and certificate
 ./openssl genicc -bsl 128 -type shake256-kyber-li2 -out server_key.pem
 ./openssl req -config openssl.cnf -new -shake256 -keyform pem -key server_key.pem -out server.csr
 ./openssl ca -config icc-ca-shake256-kyber-li2.cnf -keyform pem -days 365 -md shake256 -in server.csr -out server_cert.pem
 
-# Generate client key and certificate
+# Client key and certificate
 ./openssl genicc -bsl 128 -type shake256-kyber-li2 -out client_key.pem
 ./openssl req -config openssl.cnf -new -shake256 -keyform pem -key client_key.pem -out client.csr
 ./openssl ca -config icc-ca-shake256-kyber-li2.cnf -keyform pem -days 365 -md shake256 -in client.csr -out client_cert.pem
 ```
-
+   
 #### 4.3.2 OpenVPN Configuration
 - **Server (`server.ovpn`)**:
   ```plaintext
   port 1194
   proto udp
   dev tun
+  tls-version-min 1.3
+  dh none
   ca ca_cert.pem
   cert server_cert.pem
   key server_key.pem
-  dh none
   server 10.8.0.0 255.255.255.0
   cipher AES-256-GCM
-  tls-cipher TLS-ML-KEM-ML-DSA-WITH-AES-256-GCM-SHA384
+  tls-cipher TLS1.3-KYBER-DSA-AES256GCM-SHA384
   ```
 - **Client (`client.ovpn`)**:
   ```plaintext
@@ -267,128 +312,132 @@ cd /path/to/icc-openssl/bin
   remote <server-ip> 1194
   proto udp
   dev tun
+  tls-version-min 1.3
+  dh none
   ca ca_cert.pem
   cert client_cert.pem
   key client_key.pem
   cipher AES-256-GCM
-  tls-cipher TLS-ML-KEM-ML-DSA-WITH-AES-256-GCM-SHA384
+  tls-cipher TLS1.3-KYBER-DSA-AES256GCM-SHA384
   ```
-
+   
 #### 4.3.3 Framework Diagram 1: OpenVPN Initialization and TLS Handshake with Besu Context
 
-```note
+```info
 Initialization Phase:
 [OpenVPN Server]                              [OpenVPN Client]
-  |                                              |
-  | Load CA, Server Cert/Key                     | Load CA, Client Cert/Key
-  | (ICC OpenSSL: PQC ML-DSA/Kyber)              | (ICC OpenSSL: PQC ML-DSA/Kyber)
-  | [Besu Node Prep: P2P Config]                 | [Besu Node Prep: P2P Config]
-  |                                              |
+  | Load CA, Server Cert/Key                   | Load CA, Client Cert/Key
+  | (ICC OpenSSL: PQC KEM + ML-DSA)            | (ICC OpenSSL: PQC KEM + ML-DSA)
+  | [Besu Node P2P Config]                     | [Besu Node P2P Config]
 
 TLS Handshake (Quantum-Safe):
 [OpenVPN Server]                               [OpenVPN Client]
-  |                                              |
-  | <--- ClientHello --------------------------> | Send PQC ciphersuites (ML-KEM/DSA)
-  | --- Send ServerHello, Cert ----------------> | Present server cert (ML-DSA)
-  |                                              | Verify cert (ML-DSA)
-  | <--- Client Cert, KeyEx -------------------> | Send client cert, KeyEx (ML-KEM)
-  | Verify client cert (ML-DSA)                  |
-  | --- Complete key exchange -----------------> | Derive session key (AES-256-GCM)
-  | [Besu P2P: Secure Tunnel Ready]              | [Besu P2P: Secure Tunnel Ready]
-  |                                              |
+  | <--- ClientHello ------------------------> | (includes Kyber+DSA)
+  | --- ServerHello, Cert -------------------> | Present server cert (ML-DSA)
+  | <--- Client Cert, KeyEx -----------------> | Send client cert & Kyber KeyEx
+  | Verify client cert (ML-DSA)                |
+  | --- Complete key exchange ---------------> | Derive AES-256-GCM session key
+  | [Besu P2P: Secure Tunnel Ready]            | [Besu P2P: Secure Tunnel Ready]
 ```
 
 This diagram integrates Besu by showing how the OpenVPN handshake prepares a secure tunnel for Besu’s P2P communication.
-
+   
 #### 4.3.4 Framework Diagram 2: OpenVPN Data Channel and ICC OpenSSL with Besu
 
-```note
+```info
 [OpenVPN Server]                               [OpenVPN Client]
-+--------------------+                         +--------------------+
-| OpenVPN Server     |                         | OpenVPN Client     |
-| - Config (PQC Cert)| <--- TLS Handshake ---> | - Config (PQC Cert)|
-| - TLS (ML-KEM/DSA) |   (PQC: Kyber/DSA)      | - TLS (ML-KEM/DSA) |
-| - Data (AES-256)   | <--- Data Channel ----> | - Data (AES-256)   |
-| [Besu P2P Traffic] |   (AES-256-GCM)         | [Besu P2P Traffic] |
-+--------------------+                         +--------------------+
-| ICC OpenSSL        |                         | ICC OpenSSL        |
-| - genicc (PQC Keys)|                         | - genicc (PQC Keys)|
-| - iccutl (Enc/Dec) |                         | - iccutl (Enc/Dec) |
-| - Sign/Verify      |                         | - Sign/Verify      |
-+--------------------+                         +--------------------+
++---------------------+                         +---------------------+
+| - TLS (Kyber/DSA)   | <--- Data Channel --->  | - TLS (Kyber/DSA)   |
+| - Data (AES-256-GCM)|      (PQC Secured)      | - Data (AES-256-GCM) |
+| [Besu P2P Traffic]  |                         | [Besu P2P Traffic]  |
++---------------------+                         +---------------------+
+| ICC OpenSSL         |                         | ICC OpenSSL         |
+| - genicc (KEM keys) |                         | - genicc (KEM keys) |
+| - iccutl (encrypt)  |                         | - iccutl (decrypt)  |
+| - Sign/Verify       |                         | - Sign/Verify       |
++---------------------+                         +---------------------+
 ```
 
 This diagram emphasizes Besu’s P2P traffic flowing through the quantum-safe OpenVPN tunnel, supported by ICC OpenSSL’s PQC capabilities.
-
+   
 #### 4.3.5 Start OpenVPN
 ```bash
-openvpn --config server.ovpn  # Server
-openvpn --config client.ovpn  # Client
-```
+# On Server
+openvpn --config server.ovpn
 
-### 4.4 Configuring Hyperledger Besu with ICC OpenSSL and ICCHSM
+# On Client
+openvpn --config client.ovpn
+   
+```
+   
+### 4.4 Configuring Hyperledger Besu with ICCHSM Multisig
 
 Besu is adapted to use ICC OpenSSL for transaction signing and ICCHSM for PQC multi-signature operations.
 
 #### 4.4.1 Install Besu
-1. **Download** from [GitHub](https://github.com/hyperledger/besu/releases):
-   ```bash
-   wget https://github.com/hyperledger/besu/releases/download/<version>/besu-<version>.tar.gz
-   tar -xzf besu-<version>.tar.gz
-   ```
-2. **Set PATH**:
-   ```bash
-   export PATH=$PATH:/path/to/besu-<version>/bin
-   ```
-3. **Verify**:
-   ```bash
-   besu --version
-   ```
+```bash
+wget https://github.com/hyperledger/besu/releases/download/<version>/besu-<version>.tar.gz
+tar -xzf besu-<version>.tar.gz
+export PATH=$PATH:/path/to/besu-<version>/bin
+besu --version
+```
+   
+#### 4.4.2 Validator Node: ICCHSM Multi-Signature for Transaction Proofs
 
-#### 4.4.2 Integrate ICC OpenSSL for Transaction Signing
-Besu’s Java-based architecture uses a JNI wrapper to call ICC OpenSSL’s PQC functions. Example:
-```java
-import icc.openssl.ICCOpenSSL;
+Validators use ICCHSM to co-sign transaction proofs before emitting them to smart-contract event logs. This ensures quantum-resistant verification of each transaction batch.
 
-public class BesuPQCrypto {
-    public static byte[] signTransaction(byte[] txData, String privateKey) {
-        return ICCOpenSSL.sign(privateKey, txData, "ML-DSA");
-    }
-    
-    public static boolean verifyTransaction(byte[] txData, byte[] signature, String publicKey) {
-        return ICCOpenSSL.verify(publicKey, txData, signature, "ML-DSA");
-    }
-}
+```bash
+# Generate a Dilithium2 key pair for validator multi-signature
+icc-tool \
+  --module /usr/lib/softhsm/libsofthsm2.so \
+  --slot <validator-slot> --login --pin <pin> \
+  --keypair --key-type shake256-dilithium2 \
+  --id 201 --label "ValidatorMultiSigKey"
+
+# Sign transaction proof data (tx_proof.bin)
+icc-tool \
+  --module /usr/lib/softhsm/libsofthsm2.so \
+  --slot <validator-slot> --login --pin <pin> \
+  --sign --mechanism CKM-ICC-DILITHIUM2 \
+  --id 201 -i tx_proof.bin -o tx_proof_sig.bin
 ```
 
-#### 4.4.3 Integrate ICCHSM for PQC Multi-Signature Operations
-Besu DApps leverage **ICCHSM** for PQC multi-signature operations on root hashes and smart contracts, ensuring quantum-resistant security.
+> The generated `tx_proof_sig.bin` is submitted by validators and emitted via an `event` in the smart contract for off-chain audit.
+   
+#### 4.4.3 Miner Node: ICCHSM Multi-Signature for Root Hashes
 
-- **Install ICCHSM**:
-  - **On Linux (Ubuntu/Debian)**:
-    ```bash
-    wget icchsm_6.0.y-z_amd64.deb
-    sudo dpkg -i icchsm_6.0.y-z_amd64.deb
-    export SOFTHSM2_CONF=/usr/local/etc/softhsm2.conf
-    ```
-- **Generate PQC Multi-Signature Key Pair**:
-  ```bash
-  icc-tool --module /usr/lib/softhsm/libsofthsm2.so --slot <slot-id> --login --pin 123456 -k --key-type icc-shake256-kyber-dilithium:128 --id 101 --label MultiSigKey
-  ```
-- **Sign Root Hash with Multi-Signatures**:
-  ```bash
-  icc-tool --module /usr/lib/softhsm/libsofthsm2.so --slot <slot-id> --login --pin 123456 -m CKM-ICC-SHAKE256-KYBER-DILITHIUM --sign --id 101 -i root_hash.bin -o multi_sig.bin
-  ```
-- **Smart Contract Multi-Signature**: DApps call ICCHSM via PKCS#11 to sign contract bytecode or execution parameters, logged as events on the blockchain.
+Miners co-sign the block root hash using ICCHSM before finalizing blocks. The signature is then emitted to the smart-contract event log for tamper-proof auditing.
 
+```bash
+# Generate a Dilithium2 key pair for miner multi-signature
+icc-tool \
+  --module /usr/lib/softhsm/libsofthsm2.so \
+  --slot <miner-slot> --login --pin <pin> \
+  --keypair --key-type shake256-dilithium2 \
+  --id 101 --label "MinerMultiSigKey"
+
+# Sign the block root hash (root_hash.bin)
+icc-tool \
+  --module /usr/lib/softhsm/libsofthsm2.so \
+  --slot <miner-slot> --login --pin <pin> \
+  --sign --mechanism CKM-ICC-DILITHIUM2 \
+  --id 101 -i root_hash.bin -o root_hash_sig.bin
+```
+
+> The `root_hash_sig.bin` is included in the block event log to provide a quantum-safe integrity proof of each block.
+   
 #### 4.4.4 Configure Besu P2P over OpenVPN
+
 In `besu-config.toml`:
+
 ```toml
 [p2p]
-host = "10.8.0.2"  # VPN-assigned IP
+host = "10.8.0.2"        # VPN-assigned IP
 port = 30303
 ```
+
 Start Besu:
+
 ```bash
 besu --config-file=besu-config.toml
 ```
@@ -419,559 +468,376 @@ ICCHSM supports a variety of PQC mechanisms via its PKCS#11 interface, ensuring 
 
 ## 6. System Requirements
 
-To deploy this PQC-enabled blockchain within the Sandbox “PQC/2035”, the following minimum system requirements ensure compatibility with OpenVPN, ICC OpenSSL, ICCHSM, and Besu:
+**To deploy the PQC-enabled blockchain in the “PQC/2035” sandbox, ensure at least:**
 
-- **Operating System**: Ubuntu 20.04+ (Linux) or Windows Server 2019+.
-- **Processor**: Quad-core CPU (e.g., Intel Core i7 or AMD Ryzen 5) with AVX2 support for optimized PQC performance.
-- **Memory**: 16 GB RAM to handle blockchain and cryptographic workloads.
-- **Storage**: 100 GB SSD for blockchain data, software, and logs.
-- **Network**: 100 Mbps internet connection for VPN and blockchain synchronization.
-- **Software Dependencies**:
-  ```info
-  ICC OpenSSL (v6.0+)
-  ICCHSM (v6.0+)
-  OpenVPN (v2.5+)
-  Hyperledger Besu (v24.1+)
-  Java 17+ for Besu
-  PKCS#11 libraries for ICCHSM integration
-  ```
+| Component            | Minimum Specification                                             | Notes / Recommendations                                            |
+| -------------------- | ----------------------------------------------------------------- | ------------------------------------------------------------------ |
+| **Operating System** | Ubuntu 20.04 LTS (or later) **or** Windows Server 2019 (or later) | Ubuntu 22.04 LTS is recommended for longer support.                |
+| **Processor**        | Quad-core CPU with AVX2 (e.g. Intel Core i7, AMD Ryzen 5)         | AVX2 accelerates many PQC primitives—AVX-512 would be even better. |
+| **Memory**           | 16 GB RAM                                                         | If running multiple Besu peers or heavy testing, consider 32 GB.   |
+| **Storage**          | 100 GB SSD                                                        | Use NVMe SSD for best I/O; allow headroom for chain growth.        |
+| **Network**          | ≥100 Mbps bandwidth                                               | Low latency (≤10 ms) between nodes improves consensus.             |
 
-These requirements ensure efficient execution of the blockchain infrastructure.
+   
+### Software Dependencies
+
+* **ICC OpenSSL:** v6.0 or later
+* **ICCHSM:** v6.0 or later (plus compatible PKCS#11 library)
+* **OpenVPN:** v2.5 or later (TLS 1.3 support required)
+* **Hyperledger Besu:** v24.1 or later
+* **Java:** OpenJDK 17 or later (LTS)
+* **PKCS#11 provider:** For ICCHSM integration (e.g., `softhsm2` or vendor library)
 
 ---
 
 ## 7. Demonstration Programs with Solidity Smart Contracts
 
-The Sandbox “PQC/2035” includes demonstration programs to validate the PQC-enabled blockchain’s efficiency, security, and feasibility for a primary market token Initial Coin Offering (ICO) connected via a blockchain bridge. The following programs implement a cross-chain token bridge between Hyperledger Besu (primary ICO market) and Ethereum (secondary DEX market), using PQC multi-signatures generated by ICCHSM for enhanced security. The flowchart below outlines the process:
+The PQC/2035 Sandbox features a suite of demonstration programs designed to validate our quantum-safe RWA blockchain’s performance, security, and suitability for a primary-market ICO bridged to a secondary DEX. These examples showcase a cross-chain token bridge between a Hyperledger Besu network (primary ICO market) and Ethereum (secondary DEX market), leveraging ICCHSM-generated PQC multi-signatures for all cross-chain proofs. The flowchart below illustrates the full process: 
 
-```note
-Hyperledger Besu                     Bridge                        Ethereum
-(Primary ICO Market)              (Cross-Chain)                (Secondary DEX Market)
-+------------------+                                           +------------------+
-| User Wallet      |                                           | User Wallet      |
-| (MetaMask)       |                                           | (MetaMask)       |
-+--------+---------+                                           +--------+---------+
-         | 1. Approve ICOToken                                          |
-         |    (ICOToken.approve)                                        |
-         v                                                              |
-+------------------+                                           +------------------+
-| ICOToken         |                                           | WrappedICOToken  |
-| (ERC-20)         |                                           | (wICO, ERC-20)   |
-+------------------+                                           +------------------+
-         | 2. Lock Tokens                                               |
-         |    (LockingContract.lockTokens)                              |
-         v                                                              |
-+------------------+          +-------------------+            +------------------+
-| LockingContract  |--------->| TokensLocked Event|----------->| MintingContract  |
-|                  |          |                   |            |                  |
-+------------------+          +-------------------+            +------------------+
-         |                       | Validators/Relayers                  |
-         |                       | Generate Proof (e.g., VAA)           |
-         |                       | Submit to Ethereum                   |
-         |                       +->                                    |
-         |                                                  3. Mint Wrapped Tokens
-         |                                                     (MintingContract.mintTokens)
-         |                                                              |
-         |                                                              v
-         |                                                     +------------------+
-         |                                                     | WrappedICOToken  |
-         |                                                     | Receives wICO    |
-         |                                                     +------------------+
-         |
-         | Reverse Flow (Ethereum to Besu)
-         |
-         v
-+------------------+                                           +------------------+
-| User Wallet      |                                           | User Wallet      |
-| (MetaMask)       |                                           | (MetaMask)       |
-+--------+---------+                                           +--------+---------+
-         |                                                              |
-         |                                                  4. Approve Wrapped Token
-         |                                                     (WrappedICOToken.approve)
-         |                                                              |
-         |                                                              v
-+------------------+          +-------------------+            +------------------+
-| LockingContract  |<---------| TokensBurned Event|<-----------| MintingContract  |
-|                  |          |                   |            |                  |
-+------------------+          +-------------------+            +------------------+
-         |                       | Validators/Relayers                  |
-         |                       | Generate Proof (e.g., VAA)           |
-         |                       | Submit to Besu                       | 
-         |                     <-+                                      |
-         | 5. Unlock Tokens                                             |
-         |    (LockingContract.releaseTokens)                           |
-         v                                                              v
-+------------------+                                           +------------------+
-| ICOToken         |                                           | WrappedICOToken  |
-| Receives ICOToken|                                           | Burns wICO       |
-+------------------+                                           +------------------+
-```
-
-Below are the demonstration programs implementing this flowchart.
-
+   
+### Hyperledger Besu to Ethereum (Primary ICO to Secondary DEX)
+   
+<img src="PQC-2035_Figure_5.png" alt="ICO to DEX">
+   
+### Ethereum to Hyperledger Besu (Secondary DEX to Primary ICO)
+   
+<img src="PQC-2035_Figure_6.png" alt="DEX to ICO">
+   
+Notes
+- Muilti-Signatures: All signatures are generated using ICCHSM, ensuring quantum-safe cross-chain proofs and block root signatures.
+- Miner vs. Validator Roles:
+  - Miners sign block root hashes (rootHash) via MinerSignatureContract, emitting RootHashSigned(blockNumber, rootHash, multiSig).
+  - Validators sign cross-chain proofs (proofId) for operations like lockTokens, mintTokens, burnTokens, and releaseTokens, emitting PQCMultiSig(multiSig, signer, proofId/rootHash).
+- Off-Chain Verification: PQC signatures are emitted as events (PQCMultiSig, RootHashSigned) for off-chain verification by light clients or auditors, reducing on-chain gas costs.
+- Replay Prevention: Unique proofId or rootHash identifiers, tracked via processedProofs mapping, prevent replay or double-spend attacks.
+- ICCHSM: All signatures are generated by a hardened post-quantum PKCS#11 HSM module (ICCHSM), ensuring secure key management.
+   
+   
 ### 7.1 ICOToken and LockingContract on Hyperledger Besu
 
-- **Description**: This program deploys an ERC20 token (`ICOToken`) and a locking contract (`LockingContract`) on Besu, enabling users to approve and lock tokens for cross-chain transfer to Ethereum. PQC multi-signatures generated by ICCHSM secure the locking process, logged as events for traceability.
+**Description**: Deploys an ERC-20 token (`ICOToken`) and a locking contract (`LockingContract`) on Hyperledger Besu. Validators co-sign cross-chain transaction proofs using ICCHSM (e.g., ML-DSA). All PQC signatures are logged via `PQCMultiSig` events for off-chain verification.
 
-- **Solidity Smart Contracts**:
-  ```solidity
-  // SPDX-License-Identifier: MIT
-  pragma solidity ^0.8.0;
+```solidity
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.20;
 
-  // ICOToken: ERC20 token for the primary ICO market
-  contract ICOToken {
-      string public name = "ICO Token";
-      string public symbol = "ICOT";
-      uint8 public decimals = 18;
-      uint256 public totalSupply;
-      mapping(address => uint256) public balanceOf;
-      mapping(address => mapping(address => uint256)) public allowance;
+interface IERC20 {
+    function totalSupply() external view returns (uint256);
+    function balanceOf(address account) external view returns (uint256);
+    function transfer(address to, uint256 amount) external returns (bool);
+    function approve(address spender, uint256 amount) external returns (bool);
+    function transferFrom(address from, address to, uint256 amount) external returns (bool);
+    event Transfer(address indexed from, address indexed to, uint256 value);
+    event Approval(address indexed owner, address indexed spender, uint256 value);
+}
 
-      event Transfer(address indexed from, address indexed to, uint256 value);
-      event Approval(address indexed owner, address indexed spender, uint256 value);
+contract ICOToken is IERC20 {
+    string public constant name = "ICO Token";
+    string public constant symbol = "ICOT";
+    uint8 public constant decimals = 18;
+    uint256 public override totalSupply;
+    mapping(address => uint256) public override balanceOf;
+    mapping(address => mapping(address => uint256)) public override allowance;
 
-      constructor(uint256 initialSupply) {
-          totalSupply = initialSupply * 10 ** uint256(decimals);
-          balanceOf[msg.sender] = totalSupply;
-      }
+    constructor(uint256 initialSupply) {
+        totalSupply = initialSupply * 10 ** decimals;
+        balanceOf[msg.sender] = totalSupply;
+        emit Transfer(address(0), msg.sender, totalSupply);
+    }
 
-      function transfer(address to, uint256 value) public returns (bool) {
-          require(balanceOf[msg.sender] >= value, "Insufficient balance");
-          balanceOf[msg.sender] -= value;
-          balanceOf[to] += value;
-          emit Transfer(msg.sender, to, value);
-          return true;
-      }
+    function transfer(address to, uint256 amount) public override returns (bool) {
+        require(balanceOf[msg.sender] >= amount, "Insufficient balance");
+        balanceOf[msg.sender] -= amount;
+        balanceOf[to] += amount;
+        emit Transfer(msg.sender, to, amount);
+        return true;
+    }
 
-      function approve(address spender, uint256 value) public returns (bool) {
-          allowance[msg.sender][spender] = value;
-          emit Approval(msg.sender, spender, value);
-          return true;
-      }
+    function approve(address spender, uint256 amount) public override returns (bool) {
+        allowance[msg.sender][spender] = amount;
+        emit Approval(msg.sender, spender, amount);
+        return true;
+    }
 
-      function transferFrom(address from, address to, uint256 value) public returns (bool) {
-          require(balanceOf[from] >= value, "Insufficient balance");
-          require(allowance[from][msg.sender] >= value, "Insufficient allowance");
-          balanceOf[from] -= value;
-          balanceOf[to] += value;
-          allowance[from][msg.sender] -= value;
-          emit Transfer(from, to, value);
-          return true;
-      }
-  }
+    function transferFrom(address from, address to, uint256 amount) public override returns (bool) {
+        require(balanceOf[from] >= amount, "Insufficient balance");
+        require(allowance[from][msg.sender] >= amount, "Insufficient allowance");
+        balanceOf[from] -= amount;
+        balanceOf[to] += amount;
+        allowance[from][msg.sender] -= amount;
+        emit Transfer(from, to, amount);
+        return true;
+    }
+}
 
-  // LockingContract: Locks ICOToken for cross-chain transfer
-  contract LockingContract {
-      ICOToken public token;
-      address public bridgeValidator;
-      mapping(bytes32 => bool) public processedProofs;
+contract LockingContract {
+    ICOToken public immutable token;
+    address public immutable bridgeValidator;
+    mapping(bytes32 => bool) public processedProofs;
 
-      event TokensLocked(address indexed user, uint256 amount, bytes multiSig, bytes32 indexed rootHash);
-      event TokensUnlocked(address indexed user, uint256 amount, bytes multiSig, bytes32 indexed proofId);
-      event PQCMultiSig(bytes multiSig, address indexed signer, bytes32 indexed rootHash);
+    event TokensLocked(address indexed user, uint256 amount, bytes multiSig, bytes32 indexed rootHash);
+    event TokensUnlocked(address indexed user, uint256 amount, bytes multiSig, bytes32 indexed proofId);
+    event PQCMultiSig(bytes multiSig, address indexed signer, bytes32 indexed refId);
 
-      constructor(address _token, address _bridgeValidator) {
-          token = ICOToken(_token);
-          bridgeValidator = _bridgeValidator;
-      }
+    constructor(address _token, address _bridgeValidator) {
+        token = ICOToken(_token);
+        bridgeValidator = _bridgeValidator;
+    }
 
-      function lockTokens(uint256 amount, bytes memory multiSig, bytes32 rootHash) public {
-          require(amount > 0, "Invalid amount");
-          require(token.transferFrom(msg.sender, address(this), amount), "Transfer failed");
-          emit TokensLocked(msg.sender, amount, multiSig, rootHash);
-          emit PQCMultiSig(multiSig, msg.sender, rootHash);
-      }
+    function lockTokens(uint256 amount, bytes calldata multiSig, bytes32 rootHash) external {
+        require(amount > 0, "Invalid amount");
+        token.transferFrom(msg.sender, address(this), amount);
+        emit TokensLocked(msg.sender, amount, multiSig, rootHash);
+        emit PQCMultiSig(multiSig, msg.sender, rootHash);
+    }
 
-      function releaseTokens(address user, uint256 amount, bytes memory multiSig, bytes32 proofId) public {
-          require(msg.sender == bridgeValidator, "Only validator");
-          require(!processedProofs[proofId], "Proof already processed");
-          processedProofs[proofId] = true;
-          require(token.transfer(user, amount), "Transfer failed");
-          emit TokensUnlocked(user, amount, multiSig, proofId);
-          emit PQCMultiSig(multiSig, msg.sender, proofId);
-      }
-  }
-  ```
-
-- **Integration**: The `LockingContract` uses ICCHSM to generate PQC multi-signatures (e.g., ML-DSA) for token locking and unlocking, logged as `PQCMultiSig` events. Validators detect `TokensLocked` events, generate cross-chain proofs (e.g., VAA), and submit them to Ethereum.
-
-- **Procedure**:
-  1. Deploy `ICOToken` with an initial supply (e.g., 1,000,000 tokens) and `LockingContract` on Besu, specifying the token address and validator address.
-  2. Approve tokens:
-     ```bash
-     # User approves LockingContract to spend tokens (via DApp or Remix)
-     ```
-  3. Lock tokens with a PQC multi-signature:
-     ```bash
-     sudo icc-tool --module /usr/lib/softhsm/libsofthsm2.so --slot <slot-id> --login --pin 123456 -m CKM-ICC-SHAKE256-DILITHIUM --sign --id 101 -i lock_data.bin -o multi_sig.bin
-     ```
-  4. Call `lockTokens` via a DApp, passing the multi-signature and root hash.
-  5. Validators monitor `TokensLocked` events and generate proofs for Ethereum.
-
+    function releaseTokens(address user, uint256 amount, bytes calldata multiSig, bytes32 proofId) external {
+        require(msg.sender == bridgeValidator, "Only validator");
+        require(!processedProofs[proofId], "Proof processed");
+        processedProofs[proofId] = true;
+        token.transfer(user, amount);
+        emit TokensUnlocked(user, amount, multiSig, proofId);
+        emit PQCMultiSig(multiSig, msg.sender, proofId);
+    }
+}
+```
+   
+   
 ### 7.2 WrappedICOToken and MintingContract on Ethereum
 
-- **Description**: This program deploys a wrapped token (`WrappedICOToken`) and a minting contract (`MintingContract`) on Ethereum, enabling the minting of wrapped tokens (wICO) for DEX trading after tokens are locked on Besu. PQC multi-signatures secure the minting and burning processes.
+**Description**: On Ethereum, `WrappedICOToken` (wICO) and `MintingContract` enable validators to mint and burn wICO based on cross-chain proofs verified with ICCHSM multi-signatures. All PQC events are emitted via `PQCMultiSig`.
 
-- **Solidity Smart Contracts**:
-  ```solidity
-  // SPDX-License-Identifier: MIT
-  pragma solidity ^0.8.0;
+```solidity
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.20;
 
-  // WrappedICOToken: ERC20 token for the secondary DEX market
-  contract WrappedICOToken {
-      string public name = "Wrapped ICO Token";
-      string public symbol = "wICO";
-      uint8 public decimals = 18;
-      uint256 public totalSupply;
-      mapping(address => uint256) public balanceOf;
-      mapping(address => mapping(address => uint256)) public allowance;
+interface IERC20 {
+    function balanceOf(address) external view returns (uint256);
+    function transfer(address to, uint256 amount) external returns (bool);
+    function transferFrom(address from, address to, uint256 amount) external returns (bool);
+    event Transfer(address indexed from, address indexed to, uint256 value);
+    event Approval(address indexed owner, address indexed spender, uint256 value);
+}
 
-      event Transfer(address indexed from, address indexed to, uint256 value);
-      event Approval(address indexed owner, address indexed spender, uint256 value);
+contract WrappedICOToken is IERC20 {
+    string public constant name = "Wrapped ICO Token";
+    string public constant symbol = "wICO";
+    uint8 public constant decimals = 18;
+    uint256 public override balanceOf;
+    mapping(address => uint256) public override allowance;
+    uint256 public totalSupply;
 
-      function transfer(address to, uint256 value) public returns (bool) {
-          require(balanceOf[msg.sender] >= value, "Insufficient balance");
-          balanceOf[msg.sender] -= value;
-          balanceOf[to] += value;
-          emit Transfer(msg.sender, to, value);
-          return true;
-      }
+    function transfer(address to, uint256 amount) external override returns (bool) {
+        require(balanceOf[msg.sender] >= amount, "Insufficient");
+        balanceOf[msg.sender] -= amount;
+        balanceOf[to] += amount;
+        emit Transfer(msg.sender, to, amount);
+        return true;
+    }
 
-      function approve(address spender, uint256 value) public returns (bool) {
-          allowance[msg.sender][spender] = value;
-          emit Approval(msg.sender, spender, value);
-          return true;
-      }
+    function mint(address to, uint256 amount) external {
+        totalSupply += amount;
+        balanceOf += amount;
+        emit Transfer(address(0), to, amount);
+    }
 
-      function transferFrom(address from, address to, uint256 value) public returns (bool) {
-          require(balanceOf[from] >= value, "Insufficient balance");
-          require(allowance[from][msg.sender] >= value, "Insufficient allowance");
-          balanceOf[from] -= value;
-          balanceOf[to] += value;
-          allowance[from][msg.sender] -= value;
-          emit Transfer(from, to, value);
-          return true;
-      }
+    function burn(address from, uint256 amount) external {
+        require(balanceOf[from] >= amount, "Insufficient");
+        balanceOf[from] -= amount;
+        totalSupply -= amount;
+        emit Transfer(from, address(0), amount);
+    }
+}
 
-      function mint(address to, uint256 amount) external {
-          // Only MintingContract can mint
-          totalSupply += amount;
-          balanceOf[to] += amount;
-          emit Transfer(address(0), to, amount);
-      }
+contract MintingContract {
+    WrappedICOToken public immutable token;
+    address public immutable bridgeValidator;
+    mapping(bytes32 => bool) public processedProofs;
 
-      function burn(address from, uint256 amount) external {
-          // Only MintingContract can burn
-          require(balanceOf[from] >= amount, "Insufficient balance");
-          balanceOf[from] -= amount;
-          totalSupply -= amount;
-          emit Transfer(from, address(0), amount);
-      }
-  }
+    event TokensMinted(address indexed user, uint256 amount, bytes multiSig, bytes32 indexed proofId);
+    event TokensBurned(address indexed user, uint256 amount, bytes multiSig, bytes32 indexed rootHash);
+    event PQCMultiSig(bytes multiSig, address indexed signer, bytes32 indexed refId);
 
-  // MintingContract: Mints and burns wICO on Ethereum
-  contract MintingContract {
-      WrappedICOToken public token;
-      address public bridgeValidator;
-      mapping(bytes32 => bool) public processedProofs;
+    constructor(address _token, address _bridgeValidator) {
+        token = WrappedICOToken(_token);
+        bridgeValidator = _bridgeValidator;
+    }
 
-      event TokensMinted(address indexed user, uint256 amount, bytes multiSig, bytes32 indexed proofId);
-      event TokensBurned(address indexed user, uint256 amount, bytes multiSig, bytes32 indexed rootHash);
-      event PQCMultiSig(bytes multiSig, address indexed signer, bytes32 indexed rootHash);
+    function mintTokens(address user, uint256 amount, bytes calldata multiSig, bytes32 proofId) external {
+        require(msg.sender == bridgeValidator, "Only validator");
+        require(!processedProofs[proofId], "Proof processed");
+        processedProofs[proofId] = true;
+        token.mint(user, amount);
+        emit TokensMinted(user, amount, multiSig, proofId);
+        emit PQCMultiSig(multiSig, msg.sender, proofId);
+    }
 
-      constructor(address _token, address _bridgeValidator) {
-          token = WrappedICOToken(_token);
-          bridgeValidator = _bridgeValidator;
-      }
+    function burnTokens(uint256 amount, bytes calldata multiSig, bytes32 rootHash) external {
+        require(amount > 0, "Invalid amount");
+        token.transferFrom(msg.sender, address(this), amount);
+        token.burn(address(this), amount);
+        emit TokensBurned(msg.sender, amount, multiSig, rootHash);
+        emit PQCMultiSig(multiSig, msg.sender, rootHash);
+    }
+}
+```
+   
+   
+### 7.3 Cross-Chain Bridge with PQC Multi-Signature
 
-      function mintTokens(address user, uint256 amount, bytes memory multiSig, bytes32 proofId) public {
-          require(msg.sender == bridgeValidator, "Only validator");
-          require(!processedProofs[proofId], "Proof already processed");
-          processedProofs[proofId] = true;
-          token.mint(user, amount);
-          emit TokensMinted(user, amount, multiSig, proofId);
-          emit PQCMultiSig(multiSig, msg.sender, proofId);
-      }
+**Description**: A Node.js Off-Chain Relay using Web3.js and PKCS#11 via ICCHSM to produce ML-DSA signatures for cross-chain operations between Besu and Ethereum. These operations include locking, minting, burning, and releasing tokens, with all cryptographic proofs emitted as PQC events.
 
-      function burnTokens(uint256 amount, bytes memory multiSig, bytes32 rootHash) public {
-          require(amount > 0, "Invalid amount");
-          require(token.transferFrom(msg.sender, address(this), amount), "Transfer failed");
-          token.burn(msg.sender, amount);
-          emit TokensBurned(msg.sender, amount, multiSig, rootHash);
-          emit PQCMultiSig(multiSig, msg.sender, rootHash);
-      }
-  }
-  ```
+```javascript
+const Web3 = require('web3');
+const PKCS11 = require('pkcs11js');
 
-- **Integration**: The `MintingContract` uses ICCHSM to generate PQC multi-signatures for minting and burning wICO, logged as `PQCMultiSig` events. Validators detect `TokensBurned` events, generate proofs, and submit them to Besu for unlocking.
+const besu = new Web3('http://localhost:8545');
+const eth = new Web3('https://mainnet.infura.io/v3/YOUR_ID');
 
-- **Procedure**:
-  1. Deploy `WrappedICOToken` and `MintingContract` on Ethereum, specifying the token address and validator address.
-  2. Validators submit proofs from Besu’s `TokensLocked` events to call `mintTokens` with a PQC multi-signature:
-     ```bash
-     icc-tool --module /usr/lib/softhsm/libsofthsm2.so --slot <slot-id> --login --pin 123456 -m CKM-ICC-SHAKE256-DILITHIUM --sign --id 102 -i mint_data.bin -o multi_sig.bin
-     ```
-  3. Users approve and burn wICO:
-     ```bash
-     # User approves MintingContract to burn wICO (via DApp or Remix)
-     icc-tool --module /usr/lib/softhsm/libsofthsm2.so --slot <slot-id> --login --pin 123456 -m CKM-ICC-SHAKE256-DILITHIUM --sign --id 103 -i burn_data.bin -o multi_sig.bin
-     ```
-  4. Call `burnTokens` via a DApp, passing the multi-signature and root hash.
-  5. Validators monitor `TokensBurned` events and submit proofs to Besu.
+// Contract addresses, ABIs, and signer config would be loaded here
+const library = '/usr/lib/softhsm/libsofthsm2.so';
 
-### 7.3 Cross-Chain Bridge DApp with PQC Multi-Signature
+async function signWithICCHSM(data, keyId) {
+  const pkcs11 = new PKCS11();
+  pkcs11.load(library);
+  pkcs11.C_Initialize();
+  const slots = pkcs11.C_GetSlotList(true);
+  const session = pkcs11.C_OpenSession(slots[0], PKCS11.CKF_RW_SESSION);
+  pkcs11.C_Login(session, PKCS11.CKU_USER, '123456');
+  pkcs11.C_SignInit(session, { mechanism: PKCS11.CKM_ICC_SHAKE256_DILITHIUM }, /* get key handle */);
+  const sig = pkcs11.C_Sign(session, Buffer.from(data));
+  pkcs11.C_Finalize();
+  return '0x' + sig.toString('hex');
+}
 
-- **Description**: A JavaScript DApp that interacts with `LockingContract` on Besu and `MintingContract` on Ethereum, facilitating cross-chain token transfers. The DApp uses Web3.js and ICCHSM to generate PQC multi-signatures for locking, minting, burning, and unlocking tokens, tested in the Sandbox “PQC/2035” for ICO feasibility.
+async function bridgeBesuToEth(account, amount) {
+  // Step 1: User approves and locks ICOTokens
+  // Step 2: Miner signs rootHash and emits PQCMultiSig
+  // Step 3: Validator reads event, signs proof, mints wICO
+}
 
-- **JavaScript DApp**:
-  ```javascript
-  const Web3 = require('web3');
-  const pkcs11js = require('pkcs11js');
+async function bridgeEthToBesu(account, amount) {
+  // Step 1: User approves and burns wICO
+  // Step 2: Validator signs rootHash and emits PQCMultiSig
+  // Step 3: Miner validates event, signs proof, releases ICOToken
+}
 
-  // Besu and Ethereum connections
-  const besuWeb3 = new Web3('http://localhost:8545'); // Besu RPC endpoint
-  const ethWeb3 = new Web3('https://mainnet.infura.io/v3/YOUR_PROJECT_ID'); // Ethereum RPC endpoint
+(async () => {
+  const accounts = await besu.eth.getAccounts();
+  await bridgeBesuToEth(accounts[0], 100);
+  await bridgeEthToBesu(accounts[0], 100);
+})();
+```
 
-  // Contract ABIs and addresses
-  const icotokenABI = [
-      // ABI for ICOToken (approve, transferFrom)
-      {
-          "inputs": [
-              {"name": "spender", "type": "address"},
-              {"name": "value", "type": "uint256"}
-          ],
-          "name": "approve",
-          "outputs": [{"name": "", "type": "bool"}],
-          "stateMutability": "nonpayable",
-          "type": "function"
-      }
-  ];
-  const lockingContractABI = [
-      // ABI for LockingContract (lockTokens, releaseTokens)
-      {
-          "inputs": [
-              {"name": "amount", "type": "uint256"},
-              {"name": "multiSig", "type": "bytes"},
-              {"name": "rootHash", "type": "bytes32"}
-          ],
-          "name": "lockTokens",
-          "outputs": [],
-          "stateMutability": "nonpayable",
-          "type": "function"
-      },
-      {
-          "anonymous": false,
-          "inputs": [
-              {"indexed": true, "name": "user", "type": "address"},
-              {"indexed": false, "name": "amount", "type": "uint256"},
-              {"indexed": false, "name": "multiSig", "type": "bytes"},
-              {"indexed": true, "name": "rootHash", "type": "bytes32"}
-          ],
-          "name": "TokensLocked",
-          "type": "event"
-      }
-  ];
-  const wrappedICOTokenABI = [
-      // ABI for WrappedICOToken (approve)
-      {
-          "inputs": [
-              {"name": "spender", "type": "address"},
-              {"name": "value", "type": "uint256"}
-          ],
-          "name": "approve",
-          "outputs": [{"name": "", "type": "bool"}],
-          "stateMutability": "nonpayable",
-          "type": "function"
-      }
-  ];
-  const mintingContractABI = [
-      // ABI for MintingContract (burnTokens)
-      {
-          "inputs": [
-              {"name": "amount", "type": "uint256"},
-              {"name": "multiSig", "type": "bytes"},
-              {"name": "rootHash", "type": "bytes32"}
-          ],
-          "name": "burnTokens",
-          "outputs": [],
-          "stateMutability": "nonpayable",
-          "type": "function"
-      },
-      {
-          "anonymous": false,
-          "inputs": [
-              {"indexed": true, "name": "user", "type": "address"},
-              {"indexed": false, "name": "amount", "type": "uint256"},
-              {"indexed": false, "name": "multiSig", "type": "bytes"},
-              {"indexed": true, "name": "rootHash", "type": "bytes32"}
-          ],
-          "name": "TokensBurned",
-          "type": "event"
-      }
-  ];
+**Notes:**
 
-  const icotokenAddress = '0xBesuICOTokenAddress'; // Replace with deployed address
-  const lockingContractAddress = '0xBesuLockingContractAddress'; // Replace with deployed address
-  const wrappedICOTokenAddress = '0xEthWrappedICOTokenAddress'; // Replace with deployed address
-  const mintingContractAddress = '0xEthMintingContractAddress'; // Replace with deployed address
+* PQC signatures (ML-DSA) from both miners and validators are required for secure token operations.
+* Events `PQCMultiSig` log each operation for off-chain verification.
+* This architecture supports hybrid post-quantum blockchain bridging using HSM modules such as ICCHSM, compliant with PQC-CA and QKD readiness.
+   
+   
+### 7.4 Miner Signature Contract (Block Root Signing)
 
-  const icotoken = new besuWeb3.eth.Contract(icotokenABI, icotokenAddress);
-  const lockingContract = new besuWeb3.eth.Contract(lockingContractABI, lockingContractAddress);
-  const wrappedICOToken = new ethWeb3.eth.Contract(wrappedICOTokenABI, wrappedICOTokenAddress);
-  const mintingContract = new ethWeb3.eth.Contract(mintingContractABI, mintingContractAddress);
+**Description**: Dedicated contract for miners to co-sign each newly mined block’s root hash using PQC multi-signatures via ICCHSM. Emitted events allow off-chain auditors to verify quantum-safe block integrity.
 
-  // ICCHSM configuration
-  const pkcs11 = new pkcs11js.PKCS11();
-  pkcs11.load('/usr/lib/softhsm/libsofthsm2.so'); // Path to ICCHSM library
-  const slotId = '1603015102'; // Replace with your slot ID
-  const pin = '123456';
+```solidity
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.20;
 
-  // Initialize ICCHSM session
-  async function initICCHSM() {
-      pkcs11.C_Initialize();
-      const slots = pkcs11.C_GetSlotList(true);
-      const slot = slots.find(s => s.toString() === slotId);
-      const session = pkcs11.C_OpenSession(slot, pkcs11js.CKF_RW_SESSION | pkcs11js.CKF_SERIAL_SESSION);
-      pkcs11.C_Login(session, pkcs11js.CKU_USER, pin);
-      return session;
-  }
+contract MinerSignatureContract {
+    address public immutable hsmSigner;
+    mapping(uint256 => bool) public signedBlocks;
 
-  // Generate PQC multi-signature
-  async function generatePQCMultiSig(data, keyId) {
-      const session = await initICCHSM();
-      const mechanism = { mechanism: pkcs11js.CKM_ICC_SHAKE256_DILITHIUM };
-      const privateKey = pkcs11.C_FindObjectsInit(session, [{ type: pkcs11js.CKA_ID, value: Buffer.from(keyId) }]);
-      pkcs11.C_SignInit(session, mechanism, privateKey);
-      const signature = pkcs11.C_Sign(session, Buffer.from(data), Buffer.alloc(4096));
-      pkcs11.C_Finalize();
-      return signature.toString('hex');
-  }
+    event RootHashSigned(
+        uint256 indexed blockNumber,
+        bytes32 indexed rootHash,
+        bytes multiSig
+    );
 
-  // Besu: Approve and lock tokens
-  async function lockTokensOnBesu(account, amount, rootHash) {
-      // Step 1: Approve ICOToken
-      const approveTx = await icotoken.methods.approve(lockingContractAddress, besuWeb3.utils.toWei(amount.toString(), 'ether'))
-          .send({ from: account, gas: 100000 });
-      console.log('Approve transaction:', approveTx.transactionHash);
+    constructor(address _hsmSigner) {
+        hsmSigner = _hsmSigner;
+    }
 
-      // Step 2: Lock tokens
-      const dataToSign = besuWeb3.utils.soliditySha3(account, amount, rootHash);
-      const multiSig = await generatePQCMultiSig(dataToSign, '101');
-      const lockTx = await lockingContract.methods.lockTokens(
-          besuWeb3.utils.toWei(amount.toString(), 'ether'),
-          '0x' + multiSig,
-          rootHash
-      ).send({ from: account, gas: 200000 });
-      console.log('Lock transaction:', lockTx.transactionHash);
-  }
+    /// Miner (HSM) submits PQC signature for block root
+    function signRootHash(bytes32 rootHash, bytes calldata multiSig) external {
+        require(msg.sender == hsmSigner, "Only authorized miner");
+        uint256 bn = block.number;
+        require(!signedBlocks[bn], "Already signed");
+        signedBlocks[bn] = true;
+        emit RootHashSigned(bn, rootHash, multiSig);
+    }
+}
+```
+      
+   
+### 7.5 Quantum-Safe Multi-Signatures and Trust-Minimized Cross-Chain Security
 
-  // Ethereum: Approve and burn tokens
-  async function burnTokensOnEthereum(account, amount, rootHash) {
-      // Step 4: Approve WrappedICOToken
-      const approveTx = await wrappedICOToken.methods.approve(mintingContractAddress, ethWeb3.utils.toWei(amount.toString(), 'ether'))
-          .send({ from: account, gas: 100000 });
-      console.log('Approve transaction:', approveTx.transactionHash);
+**Description**: This bridge architecture utilizes quantum-safe multi-signatures based on ML-DSA, secured by ICCHSM hardware, to enable post-quantum verification of cross-chain proofs and state transitions.
 
-      // Step 5: Burn tokens
-      const dataToSign = ethWeb3.utils.soliditySha3(account, amount, rootHash);
-      const multiSig = await generatePQCMultiSig(dataToSign, '102');
-      const burnTx = await mintingContract.methods.burnTokens(
-          ethWeb3.utils.toWei(amount.toString(), 'ether'),
-          '0x' + multiSig,
-          rootHash
-      ).send({ from: account, gas: 200000 });
-      console.log('Burn transaction:', burnTx.transactionHash);
-  }
+#### Key Features:
 
-  // Example usage
-  async function main() {
-      const besuAccounts = await besuWeb3.eth.getAccounts();
-      const ethAccounts = await ethWeb3.eth.getAccounts();
-      const besuAccount = besuAccounts[0];
-      const ethAccount = ethAccounts[0];
-      const amount = 100; // 100 tokens
-      const rootHash = besuWeb3.utils.randomHex(32);
+* **ICCHSM-Powered Signatures**: All cross-chain interactions—such as `lockTokens`, `releaseTokens`, `mintTokens`, and `burnTokens`—include PQC multi-signatures generated by validators or miners using ICCHSM, a hardened post-quantum PKCS#11 HSM module.
 
-      // Besu to Ethereum flow
-      await lockTokensOnBesu(besuAccount, amount, rootHash);
+* **ML-DSA Signature Scheme**: Signatures are generated using a hybrid PQC scheme such as ML-DSA, offering high integrity and resistance to both classical and quantum attacks.
 
-      // Ethereum to Besu flow
-      await burnTokensOnEthereum(ethAccount, amount, rootHash);
-  }
+* **Trust Minimization**:
 
-  main().catch(console.error);
-  ```
+  * Miners exclusively sign block root hashes via `MinerSignatureContract`.
+  * Validators exclusively sign cross-chain proofs (`proofId`) via `MintingContract`.
+  * All signatures are verified off-chain via events (`PQCMultiSig`), removing trust assumptions from the on-chain bridge logic itself.
 
-- **Integration**:
-  - The DApp connects to Besu and Ethereum nodes via Web3.js, interacting with `ICOToken`, `LockingContract`, `WrappedICOToken`, and `MintingContract`.
-  - ICCHSM generates PQC multi-signatures (e.g., ML-DSA) for locking and burning transactions, logged as `PQCMultiSig` events.
-  - Validators/relayers (not implemented in the DApp) monitor `TokensLocked` and `TokensBurned` events, generating proofs (e.g., VAA) for cross-chain operations.
+* **Auditable `event` Emissions**:
 
-- **Procedure**:
-  1. **Deploy Contracts**:
-     - Deploy `ICOToken` and `LockingContract` on Besu, and `WrappedICOToken` and `MintingContract` on Ethereum using Remix or Truffle.
-     - Note contract addresses and ABIs.
-  2. **Set Up ICCHSM**:
-     ```bash
-     sudo softhsm2-util --module /usr/lib/softhsm/libsofthsm2.so --init-token --free --label "PQCToken" --pin 123456 --so-pin 123456
-     sudo icc-tool --module /usr/lib/softhsm/libsofthsm2.so --slot <slot-id> --login --pin 123456 -k --key-type icc-shake256-dilithium:128 --id 101 --label MultiSigKeyBesu
-     sudo icc-tool --module /usr/lib/softhsm/libsofthsm2.so --slot <slot-id> --login --pin 123456 -k --key-type icc-shake256-dilithium:128 --id 102 --label MultiSigKeyEth
-     ```
-  3. **Run the DApp**:
-     - Install dependencies:
-       ```bash
-       npm install web3 pkcs11js
-       ```
-     - Save the JavaScript code as `pqc_bridge_dapp.js` and run:
-       ```bash
-       node pqc_bridge_dapp.js
-       ```
-  4. **Validator Operations**:
-     - Monitor `TokensLocked` events on Besu, generate proofs, and call `mintTokens` on Ethereum.
-     - Monitor `TokensBurned` events on Ethereum, generate proofs, and call `releaseTokens` on Besu.
-  5. **Verify Events**:
-     - Check Besu and Ethereum logs for `TokensLocked`, `TokensMinted`, `TokensBurned`, `TokensUnlocked`, and `PQCMultiSig` events.
+  * Every PQC signature is emitted as a `PQCMultiSig` event alongside the signer address and context (`proofId` or `rootHash`), creating a verifiable and tamper-evident audit trail.
+
+#### Security Model:
+
+* **Post-Quantum Assurance**: The use of PQC algorithms ensures resilience against future quantum adversaries, unlike traditional ECDSA-based bridges which are quantum-vulnerable.
+* **Off-Chain Verification**: Since on-chain verification of PQC signatures is gas-expensive, all multi-signatures are emitted as events for light clients or auditors to verify off-chain using the public keys managed by the ICCHSM root-of-trust.
+* **Replay and Double-Spend Prevention**: Each cross-chain operation is uniquely identified by a `proofId` or `rootHash`, which is recorded and marked as processed in the contract's state (`processedProofs`), ensuring single-use and integrity.
 
 ---
 
 ## 8. Security Analysis
 
-- **Transaction Security**: ML-DSA and ICCHSM’s multi-signature capabilities ensure quantum-resistant transaction signing and root hash validation.
-- **Communication Security**: OpenVPN’s ML-KEM and ML-DSA secure P2P traffic against quantum eavesdropping.
-- **Smart Contract Security**: PQC multi-signatures protect smart contract deployment and execution.
-- **Hashing**: SHA-3 provides quantum-resistant hashing for blockchain operations.
+- **Transaction Security**: ML-DSA multi-signatures, generated via ICCHSM, ensure quantum-resistant signing for transactions and block root hashes. Miners sign block root hashes (`rootHash`) via `MinerSignatureContract`, emitting `RootHashSigned` events, while validators sign cross-chain proofs (`proofId`) for operations like `lockTokens`, `mintTokens`, `burnTokens`, and `releaseTokens`, emitting `PQCMultiSig` events.
+- **Communication Security**: OpenVPN leverages ML-KEM for key encapsulation and ML-DSA for authentication, securing P2P traffic against quantum eavesdropping.
+- **Smart Contract Security**: PQC multi-signatures protect smart contract deployment and execution, with `PQCMultiSig` events enabling off-chain verification to reduce on-chain gas costs.
+- **Hashing**: SHA-3 provides quantum-resistant hashing for blockchain operations, ensuring integrity of `rootHash` and `proofId`.
+- **Replay and Double-Spend Prevention**: Unique `proofId` or `rootHash` identifiers, tracked via `processedProofs` mappings in `LockingContract` and `MintingContract`, prevent replay and double-spend attacks.
 
-This multi-layered approach ensures comprehensive post-quantum security, rigorously tested in the Sandbox “PQC/2035”.
+This multi-layered approach, rigorously tested in the Sandbox “PQC/2035”, ensures comprehensive post-quantum security with auditable, tamper-evident event emissions.
 
 ---
 
 ## 9. Performance Considerations
 
-PQC algorithms (e.g., ML-DSA, ML-KEM) introduce higher computational overhead and larger key sizes compared to ECC. In permissioned networks, these impacts are manageable due to fewer nodes. Optimizations include:
+PQC algorithms (e.g., ML-DSA, ML-KEM) introduce higher computational overhead and larger signature sizes (e.g., ML-DSA: 2,701–4,595 bytes) compared to ECC, impacting gas costs in Ethereum-based operations. In permissioned networks like Hyperledger Besu, these impacts are manageable due to fewer nodes. Optimizations include:
 
-- **Hardware Acceleration**: Leverage AVX2-enabled CPUs for faster PQC computations.
-- **Parameter Tuning**: Use 128-bit security for balanced performance and protection.
-- **Caching**: Store frequently used PQC keys in ICCHSM for efficient access.
+- **Hardware Acceleration**: Leverage AVX2-enabled CPUs and ICCHSM for faster ML-DSA signature generation, critical for cross-chain operations like `lockTokens` and `mintTokens`.
+- **Parameter Tuning**: Use 128-bit security parameters for ML-DSA to balance performance and protection, suitable for Sandbox “PQC/2035” testing.
+- **Caching**: Store frequently used PQC keys in ICCHSM for efficient access during repeated cross-chain signing.
+- **Off-Chain Verification**: Emit ML-DSA signatures via `PQCMultiSig` and `RootHashSigned` events for off-chain verification, significantly reducing on-chain gas costs (e.g., 36,760–328,375 gas for ML-DSA signatures).
 
-These optimizations are evaluated for efficiency within the Sandbox “PQC/2035”.
+These optimizations are evaluated for efficiency and scalability within the Sandbox “PQC/2035”, ensuring practical deployment of quantum-safe cross-chain bridges.
 
 ---
 
 ## Conclusion
 
-This whitepaper presents a comprehensive framework for a PQC-enabled permissioned blockchain, validated through the Sandbox “PQC/2035”. Key features include:
+This whitepaper presents a comprehensive framework for a quantum-resistant permissioned blockchain, validated through the Sandbox “PQC/2035”. Key features include:
 
-- **Project Goal**: Completion of Sandbox “PQC/2035” to test PQC VPN blockchain efficiency, security, and ICO feasibility.
-- **Quantum-Resistant Cryptography**: ICC OpenSSL and ICCHSM provide PQC algorithms (ML-KEM, ML-DSA, etc.) for secure operations.
-- **Secure Communication**: OpenVPN with PQC tunnels protects node-to-node communication.
-- **Multi-Signature Support**: ICCHSM enables PQC multi-signatures for root hashes and smart contracts.
-- **PQC Blockchain Structure**: Besu integrates PQC for signing, consensus, and communication, as shown in the blockchain framework diagram.
-- **DApp Integration**: Besu DApps use ICCHSM for PQC multi-signatures in token generation, bridging, and wrapping.
-- **System Compatibility**: Meets requirements for running OpenVPN, ICC OpenSSL, and ICCHSM.
-- **Demonstration Programs**: Solidity contracts and JavaScript DApps for ERC20 token generation, blockchain bridging, and token wrapping showcase PQC integration.
-- **Sandbox Testing**: Validates efficiency, security, and ICO feasibility in a controlled environment.
+- **Project Goal**: Completion of Sandbox “PQC/2035” to test PQC-enabled blockchain efficiency, security, and ICO feasibility across Hyperledger Besu and Ethereum.
+- **Quantum-Resistant Cryptography**: ICC OpenSSL and ICCHSM provide ML-DSA for multi-signatures and ML-KEM for key encapsulation, ensuring quantum-safe operations.
+- **Secure Communication**: OpenVPN with PQC tunnels (ML-KEM, ML-DSA) protects node-to-node communication.
+- **Multi-Signature Support**: ICCHSM enables ML-DSA multi-signatures, with miners signing block root hashes (`rootHash`) via `MinerSignatureContract` and validators signing cross-chain proofs (`proofId`) for operations like `lockTokens`, `mintTokens`, `burnTokens`, and `releaseTokens`.
+- **PQC Blockchain Structure**: Hyperledger Besu integrates ML-DSA for signing, consensus, and cross-chain bridging, as demonstrated in the updated flow diagram.
+- **DApp Integration**: Besu and Ethereum DApps use ICCHSM for ML-DSA multi-signatures in ERC-20 token generation, cross-chain bridging, and token wrapping.
+- **System Compatibility**: Supports OpenVPN, ICC OpenSSL, and ICCHSM for seamless PQC integration.
+- **Demonstration Programs**: Solidity contracts (`ICOToken`, `LockingContract`, `WrappedICOToken`, `MintingContract`, `MinerSignatureContract`) and JavaScript off-chain relays showcase PQC integration, with `PQCMultiSig` and `RootHashSigned` events enabling off-chain verification.
+- **Sandbox Testing**: Validates efficiency, security, and ICO feasibility, with `processedProofs` mappings ensuring replay and double-spend prevention.
 
-This framework enables enterprises to deploy secure, quantum-resistant blockchain systems, ensuring long-term trust and resilience.
+This framework enables enterprises to deploy secure, quantum-resistant blockchain systems with trust-minimized cross-chain bridges, ensuring long-term resilience against quantum threats.
 
 ---
 
@@ -986,5 +852,15 @@ For more information, visit:
 - [Real Matter Technology](https://www.realmatter.io)
 - [Quantumatter Blockchain](https://quantumatter-blockchain.web.app)
 
-> Seamless Integration of Quantum-Safe HSM Module & Lattice-Based Chip Entropy for PQC Next-Gen Security
+---
+   
+> *Seamless Integration of Quantum-Safe HSM Module & Lattice-Based Chip Entropy for PQC Next-Gen Security*
+   
+---
+
+### Disclaimer   
+
+> This white paper is for educational purposes only. It is not intended to provide financial, legal, or investment advice, nor does it constitute an offer to sell or a solicitation to buy any securities or tokens. The concepts, mechanisms, and smart contracts described are hypothetical and intended for illustrative purposes. Readers should conduct their own research and consult with qualified professionals before making any financial decisions.
+<br>
+© 2024~2025 Real Matter Technology Limited
 
