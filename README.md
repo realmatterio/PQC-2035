@@ -930,7 +930,7 @@ For more information, visit:
 
 ---
    
-> Seamless Integration of Quantum-Safe HSM Module & Lattice-Based Chip Entropy for PQC Next-Gen Security
+> *Seamless Integration of Quantum-Safe HSM Module & Lattice-Based Chip Entropy for PQC Next-Gen Security*
    
 ---
 
