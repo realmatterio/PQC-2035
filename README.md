@@ -325,19 +325,20 @@ cd /path/to/icc-openssl/bin
 
 ```info
 Initialization Phase:
-[OpenVPN Server]                              [OpenVPN Client]
+ [OpenVPN Server]                             [OpenVPN Client]
   | Load CA, Server Cert/Key                   | Load CA, Client Cert/Key
   | (ICC OpenSSL: PQC KEM + ML-DSA)            | (ICC OpenSSL: PQC KEM + ML-DSA)
   | [Besu Node P2P Config]                     | [Besu Node P2P Config]
 
 TLS Handshake (Quantum-Safe):
-[OpenVPN Server]                               [OpenVPN Client]
+ [OpenVPN Server]                             [OpenVPN Client]
   | <--- ClientHello ------------------------> | (includes Kyber+DSA)
   | --- ServerHello, Cert -------------------> | Present server cert (ML-DSA)
   | <--- Client Cert, KeyEx -----------------> | Send client cert & Kyber KeyEx
   | Verify client cert (ML-DSA)                |
   | --- Complete key exchange ---------------> | Derive AES-256-GCM session key
   | [Besu P2P: Secure Tunnel Ready]            | [Besu P2P: Secure Tunnel Ready]
+
 ```
 
 This diagram integrates Besu by showing how the OpenVPN handshake prepares a secure tunnel for Besu’s P2P communication.
@@ -345,17 +346,17 @@ This diagram integrates Besu by showing how the OpenVPN handshake prepares a sec
 #### 4.3.4 Framework Diagram 2: OpenVPN Data Channel and ICC OpenSSL with Besu
 
 ```info
-[OpenVPN Server]                               [OpenVPN Client]
-+---------------------+                         +---------------------+
-| - TLS (Kyber/DSA)   | <--- Data Channel --->  | - TLS (Kyber/DSA)   |
-| - Data (AES-256-GCM)|      (PQC Secured)      | - Data (AES-256-GCM) |
-| [Besu P2P Traffic]  |                         | [Besu P2P Traffic]  |
-+---------------------+                         +---------------------+
-| ICC OpenSSL         |                         | ICC OpenSSL         |
-| - genicc (KEM keys) |                         | - genicc (KEM keys) |
-| - iccutl (encrypt)  |                         | - iccutl (decrypt)  |
-| - Sign/Verify       |                         | - Sign/Verify       |
-+---------------------+                         +---------------------+
+[OpenVPN Server]                                [OpenVPN Client]
++----------------------+                        +----------------------+
+| - TLS (Kyber/DSA)    | <--- Data Channel ---> | - TLS (Kyber/DSA)    |
+| - Data (AES-256-GCM) |      (PQC Secured)     | - Data (AES-256-GCM) |
+| [Besu P2P Traffic]   |                        | [Besu P2P Traffic]   |
++----------------------+                        +----------------------+
+| ICC OpenSSL          |                        | ICC OpenSSL          |
+| - genicc (KEM keys)  |                        | - genicc (KEM keys)  |
+| - iccutl (encrypt)   |                        | - iccutl (decrypt)   |
+| - Sign/Verify        |                        | - Sign/Verify        |
++----------------------+                        +----------------------+
 ```
 
 This diagram emphasizes Besu’s P2P traffic flowing through the quantum-safe OpenVPN tunnel, supported by ICC OpenSSL’s PQC capabilities.
