@@ -94,9 +94,6 @@ Client Request --> Nginx --> Dynamic PQC-SSL Cert Loading --> ICCHSMatter Server
 ### **Implementation Steps**
 1. **Generate PQC-SSL Certificates**:
    - Use OpenSSL with PQC algorithms (e.g., Kyber, Dilithium) to generate certificates for each client.
-   ```bash
-   openssl req -x509 -newkey rsa:2048 -keyout client-key.pem -out client-cert.pem -days 365
-   ```
 
 2. **Configure Nginx for Dynamic SSL Loading**:
    - Use the `ssl_certificate_by_lua` module to dynamically load certificates based on the client's domain.
