@@ -26,7 +26,7 @@ Below is the sequential diagram emphasizing the secure communication between the
         |                                                   |
         | 4. Encrypt PIN Using Session Key                  |
         |-------------------------------------------------->|
-        |    ENCRYPTION > PIN > DECRYTIION                  |        
+        |    ENCRYPTION > PIN > DECRYTION                   |        
         |-------------------------------------------------->|
         |                                                   |
         | 5. Validate PIN                                   |
