@@ -3,9 +3,9 @@
 ICCHSMatter is a **Post-Quantum Cryptography (PQC)**-secured Hardware Security Module (HSM) server designed to provide secure wallet API functions for key access and transaction signing. This article outlines the security architecture of ICCHSMatter, focusing on four key aspects: **dynamic SSL certificate loading**, **session-based PIN encryption**, **login and authentication**, and **additional essential security measures**. The implementation leverages PQC OpenSSL certificates and PQC KEM keys to ensure robust protection against quantum threats.
 
 
-## **Communication Diagram: ICCHSMatter Server and PQC Wallet**
+## **Sequential Diagram: ICCHSMatter Server and PQC Wallet**
 
-Below is the modified flow diagram emphasizing the secure communication between the **ICCHSMatter Server** and the **PQC Wallet**. The diagram highlights the security measures implemented during the interaction.
+Below is the sequential diagram emphasizing the secure communication between the **ICCHSMatter Server** and the **PQC Wallet**. The diagram highlights the security measures implemented during the interaction.
 
 ```plaintext
 +-----------------------+                           +-----------------------+
@@ -20,11 +20,11 @@ Below is the modified flow diagram emphasizing the secure communication between 
         |<--------------------------------------------------|
         |                                                   |
         |                                                   |
-        | 3. Establish Session Key (PQC KEM)               |
+        | 3. Establish Session Key (PQC KEM)                |
         |-------------------------------------------------->|
         |                                                   |
         |                                                   |
-        | 4. Encrypt PIN Using Session Key                 |
+        | 4. Encrypt PIN Using Session Key                  |
         |-------------------------------------------------->|
         |                                                   |
         |                                                   |
@@ -32,16 +32,16 @@ Below is the modified flow diagram emphasizing the secure communication between 
         |<--------------------------------------------------|
         |                                                   |
         |                                                   |
-        | 6. Perform Wallet Operation                      |
+        | 6. Perform Wallet Operation                       |
         |   (Address Loading or Transaction Signing)        |
         |-------------------------------------------------->|
         |                                                   |
         |                                                   |
-        | 7. HSM Executes Key Access or Signing            |
+        | 7. HSM Executes Key Access or Signing             |
         |<--------------------------------------------------|
         |                                                   |
         |                                                   |
-        | 8. Return Response to Wallet                     |
+        | 8. Return Response to Wallet                      |
         |-------------------------------------------------->|
         |                                                   |
 +-----------------------+                           +-----------------------+
