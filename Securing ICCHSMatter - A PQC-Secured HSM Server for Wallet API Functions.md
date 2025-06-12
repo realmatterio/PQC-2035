@@ -97,25 +97,6 @@ Client Request --> Nginx --> Dynamic PQC-SSL Cert Loading --> ICCHSMatter Server
 
 2. **Configure Nginx for Dynamic SSL Loading**:
    - Use the `ssl_certificate_by_lua` module to dynamically load certificates based on the client's domain.
-   ```nginx
-   server {
-       listen 443 ssl;
-       server_name _;
-
-       ssl_certificate_by_lua_block {
-           local domain = ngx.var.host
-           local cert_path = "/certs/" .. domain .. ".pem"
-           local key_path = "/certs/" .. domain .. ".key"
-
-           ngx.ssl.set_der_cert(io.open(cert_path, "rb"):read("*a"))
-           ngx.ssl.set_der_priv_key(io.open(key_path, "rb"):read("*a"))
-       }
-
-       location / {
-           proxy_pass http://127.0.0.1:5000;
-       }
-   }
-   ```
 
 3. **Benefits**:
    - Ensures secure communication using PQC algorithms.
@@ -136,41 +117,12 @@ Client Passkey (PIN) --> PQC-Session Key Exchange --> Encrypted PIN --> ICCHSMat
 ### **Implementation Steps**
 1. **Session Key Exchange**:
    - Use PQC KEM (e.g., Kyber) for secure key exchange.
-   ```python
-   from pqcrypto.kem.kyber import generate_keypair, encapsulate, decapsulate
-
-   # Server generates keypair
-   public_key, private_key = generate_keypair()
-
-   # Client encapsulates session key
-   session_key, ciphertext = encapsulate(public_key)
-
-   # Server decapsulates session key
-   session_key = decapsulate(private_key, ciphertext)
-   ```
 
 2. **Encrypt PIN**:
    - Use AES encryption with the session key to encrypt the PIN.
-   ```python
-   from cryptography.hazmat.primitives.ciphers import Cipher, algorithms, modes
-
-   def encrypt_pin(pin, session_key):
-       iv = os.urandom(16)
-       cipher = Cipher(algorithms.AES(session_key), modes.CFB(iv))
-       encryptor = cipher.encryptor()
-       encrypted_pin = encryptor.update(pin.encode()) + encryptor.finalize()
-       return iv, encrypted_pin
-   ```
 
 3. **Decrypt PIN**:
    - The server decrypts the PIN using the session key.
-   ```python
-   def decrypt_pin(encrypted_pin, iv, session_key):
-       cipher = Cipher(algorithms.AES(session_key), modes.CFB(iv))
-       decryptor = cipher.decryptor()
-       decrypted_pin = decryptor.update(encrypted_pin) + decryptor.finalize()
-       return decrypted_pin.decode()
-   ```
 
 4. **Benefits**:
    - Prevents PIN exposure during transmission.
@@ -194,21 +146,9 @@ Client Login --> Nginx SSL Validation --> PIN Validation --> ICCHSMatter Server 
 
 2. **PIN Validation**:
    - The server decrypts and validates the PIN against the stored value.
-   ```python
-   def validate_request(data, required_fields):
-       if str(data.get('pin')) != WALLET_VALID_PIN:
-           return False, "Invalid PIN"
-       return True, "Valid"
-   ```
 
 3. **Session Management**:
    - Use Flask's session management to track authenticated sessions.
-   ```python
-   from flask import session
-
-   session['authenticated'] = True
-   session['expiry'] = time.time() + 3600  # Session expires in 1 hour
-   ```
 
 4. **Benefits**:
    - Ensures only authenticated clients can access the server.
@@ -233,25 +173,9 @@ Secure Communication --> Rate Limiting --> Logging --> Intrusion Detection
 
 2. **Rate Limiting**:
    - Limit the number of API requests per client to prevent brute-force attacks.
-   ```nginx
-   limit_req_zone $binary_remote_addr zone=api_limit:10m rate=10r/s;
-
-   server {
-       location /wallet_sign_transaction {
-           limit_req zone=api_limit burst=5 nodelay;
-           proxy_pass http://127.0.0.1:5000;
-       }
-   }
-   ```
 
 3. **Logging**:
    - Log all access attempts and API calls for auditing.
-   ```python
-   import logging
-
-   logging.basicConfig(filename='server.log', level=logging.INFO)
-   logging.info(f"Client {client_id} accessed wallet_sign_transaction")
-   ```
 
 4. **Intrusion Detection**:
    - Monitor logs for suspicious activity and implement alerts for anomalies.
@@ -261,8 +185,5 @@ Secure Communication --> Rate Limiting --> Logging --> Intrusion Detection
 
 ---
 
-## **Conclusion**
-
-The security architecture of ICCHSMatter ensures robust protection for wallet API functions. By combining **dynamic PQC-SSL certificate loading** and **PQC-session-based PIN encryption**, ICCHSMatter provides a secure and scalable solution for HSM-based operations. This approach leverages cutting-edge PQC algorithms to future-proof the system against quantum threats.
 
 
