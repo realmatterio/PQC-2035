@@ -1,6 +1,6 @@
 # **Securing ICCHSMatter: A PQC-Secured HSM Server for Wallet API Functions**
 
-ICCHSMatter is a **Post-Quantum Cryptography (PQC)**-secured Hardware Security Module (HSM) server designed to provide secure wallet API functions for key access and transaction signing. This article outlines the security architecture of ICCHSMatter, focusing on four key aspects: **dynamic SSL certificate loading**, **session-based PIN encryption**, **login and authentication**, and **additional essential security measures**. The implementation leverages PQC OpenSSL certificates and PQC KEM keys to ensure robust protection against quantum threats.
+ICCHSMatter is a **Post-Quantum Cryptography (PQC)**-secured Hardware Security Module (HSM) server designed to provide secure wallet API functions for key access and transaction signing. This article outlines the security architecture of ICCHSMatter, focusing on four key aspects: **dynamic PQC-SSL certificate loading**, **PQC-session-based PIN encryption**, **login and authentication**, and **additional essential security measures**. The implementation leverages PQC OpenSSL certificates and PQC KEM keys to ensure robust protection against quantum threats.
 
 
 ## **Sequential Diagram: ICCHSMatter Server and PQC Wallet**
@@ -8,19 +8,19 @@ ICCHSMatter is a **Post-Quantum Cryptography (PQC)**-secured Hardware Security M
 Below is the sequential diagram emphasizing the secure communication between the **ICCHSMatter Server** and the **PQC Wallet**. The diagram highlights the security measures implemented during the interaction.
 
 ```plaintext
-+-----------------------+                           +-----------------------+
-|    PQC Wallet         |                           | ICCHSMatter Server    |
-+-----------------------+                           +-----------------------+
++-----------------------+                           +------------------------+
+|    PQC Wallet         |                           | PQC ICCHSMatter Server |
++-----------------------+                           +------------------------+
         |                                                   |
         | 1. Initiate API Request                           |
         |-------------------------------------------------->|
         |                                                   |
         |                                                   |
-        | 2. Nginx Validates PQC SSL Certificate            |
+        | 2. Nginx Validates PQC-SSL Certificate            |
         |<--------------------------------------------------|
         |                                                   |
         |                                                   |
-        | 3. Establish Session Key (PQC KEM)                |
+        | 3. Establish PQC Session Key (PQC KEM)            |
         |-------------------------------------------------->|
         |                                                   |
         |                                                   |
@@ -51,11 +51,11 @@ Below is the sequential diagram emphasizing the secure communication between the
 
 ### **Key Security Features in the Communication**
 
-1. **PQC SSL Certificate Validation**:
+1. **PQC-SSL Certificate Validation**:
    - Nginx dynamically loads a unique PQC SSL certificate for each wallet, ensuring secure HTTPS communication.
 
-2. **Session Key Establishment**:
-   - A session key is securely exchanged using PQC Key Encapsulation Mechanism (KEM), protecting the communication from quantum threats.
+2. **PQC Session Key Establishment**:
+   - A PQC session key is securely exchanged using PQC Key Encapsulation Mechanism (KEM), protecting the communication from quantum threats.
 
 3. **PIN Encryption**:
    - The wallet encrypts the PIN using the session key before transmitting it to the server, ensuring the PIN is never exposed in plaintext.
@@ -80,18 +80,18 @@ This communication diagram ensures robust security for wallet-server interaction
 
 ---
 
-## **1. Dynamic SSL Certificate Loading with PQC OpenSSL Certificates**
+## **1. Dynamic PQC-SSL Certificate Loading with PQC OpenSSL Certificates**
 
 ### **Overview**
 To ensure secure communication between the client and the ICCHSMatter server, Nginx is configured to dynamically load PQC OpenSSL certificates. Each client is assigned a unique PQC SSL certificate, ensuring one-to-one secure communication.
 
 ### **Flow Diagram**
 ```plaintext
-Client Request --> Nginx --> Dynamic SSL Cert Loading --> ICCHSMatter Server
+Client Request --> Nginx --> Dynamic PQC-SSL Cert Loading --> ICCHSMatter Server
 ```
 
 ### **Implementation Steps**
-1. **Generate PQC SSL Certificates**:
+1. **Generate PQC-SSL Certificates**:
    - Use OpenSSL with PQC algorithms (e.g., Kyber, Dilithium) to generate certificates for each client.
    ```bash
    openssl req -x509 -newkey rsa:2048 -keyout client-key.pem -out client-cert.pem -days 365
@@ -125,14 +125,14 @@ Client Request --> Nginx --> Dynamic SSL Cert Loading --> ICCHSMatter Server
 
 ---
 
-## **2. Session-Based PIN Encryption**
+## **2. PQC-Session-Based PIN Encryption**
 
 ### **Overview**
 The PIN used to unlock the HSM is encrypted using a session-based mechanism. A unique session key is established between the client and server using PQC KEM key exchange.
 
 ### **Flow Diagram**
 ```plaintext
-Client Passkey (PIN) --> Session Key Exchange --> Encrypted PIN --> ICCHSMatter Server
+Client Passkey (PIN) --> PQC-Session Key Exchange --> Encrypted PIN --> ICCHSMatter Server
 ```
 
 ### **Implementation Steps**
@@ -265,6 +265,6 @@ Secure Communication --> Rate Limiting --> Logging --> Intrusion Detection
 
 ## **Conclusion**
 
-The security architecture of ICCHSMatter ensures robust protection for wallet API functions. By combining **dynamic SSL certificate loading**, **session-based PIN encryption**, **login and authentication**, and **additional security measures**, ICCHSMatter provides a secure and scalable solution for HSM-based operations. This approach leverages cutting-edge PQC algorithms to future-proof the system against quantum threats.
+The security architecture of ICCHSMatter ensures robust protection for wallet API functions. By combining **dynamic PQC-SSL certificate loading** and **PQC-session-based PIN encryption**, ICCHSMatter provides a secure and scalable solution for HSM-based operations. This approach leverages cutting-edge PQC algorithms to future-proof the system against quantum threats.
 
-Let me know if you need further clarification or implementation details!
+
